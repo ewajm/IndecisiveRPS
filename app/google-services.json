@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "56605495761",
+    "firebase_url": "https://indecisiverps.firebaseio.com",
+    "project_id": "indecisiverps",
+    "storage_bucket": "indecisiverps.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:56605495761:android:a81c479d9b592b26",
+        "android_client_info": {
+          "package_name": "com.ewa.indecisiverps"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "56605495761-ctirbqnsvhnd9qjfhg2bushi4kv99oe5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ewa.indecisiverps",
+            "certificate_hash": "A077D3232D7D711A19715729E203D5D6E188ADCB"
+          }
+        },
+        {
+          "client_id": "56605495761-hth870gkkdiudlou6ec9rvcp2h0j6g51.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiF-nylg5YItTla0Qia5dZ43MVJ0VRQWM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "56605495761-hth870gkkdiudlou6ec9rvcp2h0j6g51.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
