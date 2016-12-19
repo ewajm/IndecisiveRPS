@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_new_choice"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ewa.indecisiverps.ui.NewChoiceActivity"
+    android:background="@color/colorPrimaryLight">
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/signpost2"
+        android:id="@+id/imageView2"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:text="Start Deciding!"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/formLinearLayout"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/headingTextView"
+        style="@style/SubHeading"
+        android:layout_marginBottom="15dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:padding="10dp"
+        android:layout_margin="10dp"
+        android:background="@color/colorPrimary"
+        android:id="@+id/formLinearLayout">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Choosing between: "
+            android:textStyle="bold"
+            android:textSize="18sp"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:padding="10dp"
+            android:hint="Option 1"
+            android:id="@+id/choiceOneEditText"
+            android:layout_marginTop="5dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="and "
+            android:layout_marginTop="5dp"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:padding="10dp"
+            android:hint="Option 2"
+            android:id="@+id/choiceTwoEditText"
+            android:layout_marginTop="5dp"
+            />
+
+        <CheckBox
+            android:text="Total Impartiality Mode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkBox"
+            android:layout_marginTop="10dp"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="-10dp"
+            android:layout_marginRight="-10dp"
+            android:layout_marginTop="10dp">
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Go Solo"
+                android:id="@+id/soloButton"
+                android:layout_weight="1"
+                />
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Grab a Friend"
+                android:id="@+id/friendButton"
+                android:layout_weight="1"
+                android:enabled="false"/>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
+

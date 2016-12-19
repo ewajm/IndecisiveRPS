@@ -20,7 +20,12 @@
     </style>
 
     <style name="Heading">
-        <item name="android:textSize">56sp</item>
+        <item name="android:textSize">62sp</item>
+        <item name="android:textColor">@color/colorAccentDark</item>
+    </style>
+
+    <style name="SubHeading">
+        <item name="android:textSize">30sp</item>
         <item name="android:textColor">@color/colorAccentDark</item>
     </style>
 

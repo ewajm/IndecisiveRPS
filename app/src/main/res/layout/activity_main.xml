@@ -5,7 +5,7 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ewa.indecisiverps.MainActivity">
+    tools:context="com.ewa.indecisiverps.ui.MainActivity">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -25,15 +25,14 @@
         style="@style/Heading"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp" />
+        android:layout_marginTop="10dp" />
 
     <TextView
         android:text="for the indecisive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/subheaadingTextView"
-        android:textSize="30sp"
-        android:textColor="@color/colorAccentDark"
+        style="@style/SubHeading"
         android:layout_below="@+id/headingTextView"
         android:layout_centerHorizontal="true" />
 
