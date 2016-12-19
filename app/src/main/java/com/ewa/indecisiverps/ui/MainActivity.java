@@ -32,6 +32,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Typeface headingFont = Typeface.createFromAsset(getAssets(), "fonts/titan_one_regular.ttf");
         mHeadingTextView.setTypeface(headingFont);
         mSubheadingTextView.setTypeface(headingFont);
+
+        mDecideNowButton.setOnClickListener(this);
+        mLoginButton.setOnClickListener(this);
+        mAboutButton.setOnClickListener(this);
     }
 
     @Override

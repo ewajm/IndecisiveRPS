@@ -1,83 +1,59 @@
 package com.ewa.indecisiverps.models;
 
+import org.parceler.Parcel;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by ewa on 12/19/2016.
  */
-
+@Parcel
 public class Choice {
-    String playerId;
-    String choiceOne;
-    String choiceTwo;
-    int choicePlayerOne;
-    int choicePlayerTwo;
-    String throwPlayerOne;
-    String throwPlayerTwo;
+    List<String> players = new ArrayList<>();
+    List<String> options = new ArrayList<>();
+    List<Integer> playersToOptions = new ArrayList<>();
+    List<String> playerMoves = new ArrayList<>();
     String pushId;
-    String mode;
+    int mode;
 
     public Choice() {
     }
 
-    public Choice(String choiceOne, String choiceTwo, String mode) {
-        this.choiceOne = choiceOne;
-        this.choiceTwo = choiceTwo;
-        this.mode = mode;
+    public Choice(List<String> options) {
+        this.options = options;
     }
 
-    public String getPlayerId() {
-        return playerId;
+    public List<String> getPlayers() {
+        return players;
     }
 
-    public void setPlayerId(String playerId) {
-        this.playerId = playerId;
+    public void setPlayers(List<String> players) {
+        this.players = players;
     }
 
-    public String getChoiceOne() {
-        return choiceOne;
+    public List<String> getOptions() {
+        return options;
     }
 
-    public void setChoiceOne(String choiceOne) {
-        this.choiceOne = choiceOne;
+    public void setOptions(List<String> options) {
+        this.options = options;
     }
 
-    public String getChoiceTwo() {
-        return choiceTwo;
+    public List<Integer> getPlayersToOptions() {
+        return playersToOptions;
     }
 
-    public void setChoiceTwo(String choiceTwo) {
-        this.choiceTwo = choiceTwo;
+    public void setPlayersToOptions(List<Integer> playersToOptions) {
+        this.playersToOptions = playersToOptions;
     }
 
-    public int getChoicePlayerOne() {
-        return choicePlayerOne;
+    public List<String> getPlayerMoves() {
+        return playerMoves;
     }
 
-    public void setChoicePlayerOne(int choicePlayerOne) {
-        this.choicePlayerOne = choicePlayerOne;
-    }
-
-    public int getChoicePlayerTwo() {
-        return choicePlayerTwo;
-    }
-
-    public void setChoicePlayerTwo(int choicePlayerTwo) {
-        this.choicePlayerTwo = choicePlayerTwo;
-    }
-
-    public String getThrowPlayerOne() {
-        return throwPlayerOne;
-    }
-
-    public void setThrowPlayerOne(String throwPlayerOne) {
-        this.throwPlayerOne = throwPlayerOne;
-    }
-
-    public String getThrowPlayerTwo() {
-        return throwPlayerTwo;
-    }
-
-    public void setThrowPlayerTwo(String throwPlayerTwo) {
-        this.throwPlayerTwo = throwPlayerTwo;
+    public void setPlayerMoves(List<String> playerMoves) {
+        this.playerMoves = playerMoves;
     }
 
     public String getPushId() {
@@ -88,11 +64,11 @@ public class Choice {
         this.pushId = pushId;
     }
 
-    public String getMode() {
+    public int getMode() {
         return mode;
     }
 
-    public void setMode(String mode) {
+    public void setMode(int mode) {
         this.mode = mode;
     }
 }
