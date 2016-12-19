@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">IndecisiveRPS</string>
+    <string name="playing_for">Playing For:</string>
+    <string name="what_s_your_move">What\'s your move?</string>
 </resources>

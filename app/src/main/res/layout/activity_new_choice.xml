@@ -24,7 +24,11 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/headingTextView"
         style="@style/SubHeading"
-        android:layout_marginBottom="15dp"/>
+        android:layout_marginBottom="15dp"
+        android:shadowColor="#ffffff"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="2" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,7 +37,7 @@
         android:layout_centerVertical="true"
         android:padding="10dp"
         android:layout_margin="10dp"
-        android:background="@color/colorPrimary"
+        android:background="#8000BCD4"
         android:id="@+id/formLinearLayout">
         <TextView
             android:layout_width="wrap_content"

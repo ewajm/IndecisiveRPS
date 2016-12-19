@@ -25,16 +25,11 @@
         style="@style/Heading"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp" />
-
-    <TextView
-        android:text="for the indecisive"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/subheaadingTextView"
-        style="@style/SubHeading"
-        android:layout_below="@+id/headingTextView"
-        android:layout_centerHorizontal="true" />
+        android:layout_marginTop="10dp"
+        android:shadowColor="@android:color/white"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="2" />
 
     <Button
         android:text="Decide Now"
@@ -55,6 +50,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="8dp"
         android:padding="15dp"
+        android:visibility="gone"
         android:id="@+id/decisionsButton"
         android:layout_below="@+id/decideNowButton"
         android:layout_centerHorizontal="true"/>
@@ -67,6 +63,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="8dp"
         android:padding="15dp"
+        android:visibility="gone"
         android:id="@+id/socialButton"
         android:layout_below="@+id/decisionsButton"
         android:layout_centerHorizontal="true" />
@@ -94,6 +91,19 @@
         android:id="@+id/aboutButton"
         android:layout_below="@id/loginButton"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="for the indecisive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/subheaadingTextView"
+        style="@style/SubHeading"
+        android:layout_below="@+id/headingTextView"
+        android:layout_centerHorizontal="true"
+        android:shadowColor="#ffffff"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="2" />
 
 
 </RelativeLayout>

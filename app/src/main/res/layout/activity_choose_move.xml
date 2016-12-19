@@ -4,10 +4,84 @@
     android:id="@+id/activity_choose_move"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.ewa.indecisiverps.ui.ChooseMoveActivity">
+    tools:context="com.ewa.indecisiverps.ui.ChooseMoveActivity"
+    android:background="@color/colorPrimaryDark">
 
+
+    <TextView
+        android:text="@string/playing_for"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/playingForTextView"
+        android:layout_alignParentTop="true"
+        style="@style/SubHeading"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:text="@string/what_s_your_move"
+        android:layout_below="@+id/playingForTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/SubHeading"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/headingTextView" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="160dp"
+            android:layout_below="@+id/headingTextView"
+            android:layout_marginTop="10dp"
+            android:id="@+id/buttonLinearLayout">
+
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/paper"
+                android:scaleType="fitCenter"
+                android:background="@drawable/apptheme_btn_default_holo_light"
+                android:id="@+id/paperButton"/>
+
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/scissors"
+                android:scaleType="fitCenter"
+                android:background="@drawable/apptheme_btn_default_holo_light"
+                android:id="@+id/scissorsButton"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_below="@id/buttonLinearLayout"
+            android:layout_marginTop="5dp"
+            android:weightSum="4"
+            >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="160dp"
+                android:padding="20dp"
+                android:layout_weight="2"
+                android:src="@drawable/rock"
+                android:scaleType="fitCenter"
+                android:background="@drawable/apptheme_btn_default_holo_light"
+                android:id="@+id/rockButton"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+        </LinearLayout>
+    </LinearLayout>
 </RelativeLayout>
