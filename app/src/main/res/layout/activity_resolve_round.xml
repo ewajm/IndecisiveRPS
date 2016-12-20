@@ -8,22 +8,19 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     >
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:paddingTop="5dp"
-            android:orientation="vertical">
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="140dp"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="5dp"
+                android:layout_alignParentTop="true"
+                android:id="@+id/linearLayout1">
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -33,7 +30,12 @@
                     android:visibility="invisible"
                     android:id="@+id/option1TextView"
                     style="@style/SubHeading"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center"
+                    android:shadowColor="#000000"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowRadius="2"
+                    android:textStyle="normal|italic" />
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -47,12 +49,17 @@
                 android:layout_height="wrap_content"
                 android:text="VS"
                 style="@style/SubHeading"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="5dp"/>
+                android:id="@+id/vsTextView"
+                android:layout_below="@+id/linearLayout1"
+                android:layout_marginTop="5dp"
+                android:textStyle="bold|italic"
+                android:layout_centerHorizontal="true"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="140dp"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/vsTextView"
+                android:id="@+id/linearLayout2">
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -68,10 +75,38 @@
                     android:visibility="invisible"
                     android:id="@+id/option2TextView"
                     style="@style/SubHeading"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center"
+                    android:shadowColor="#000000"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowRadius="2"
+                    android:textStyle="normal|italic" />
             </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/winnerTextView"
+                android:visibility="invisible"
+                style="@style/SubHeading"
+                android:layout_below="@+id/linearLayout2"
+                android:gravity="center"
+                android:layout_marginTop="20dp"/>
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Another Round"
+                    android:visibility="gone"
+                    android:layout_gravity="bottom"
+                    android:id="@+id/gameButton"
+                    android:layout_above="@+id/cancelButton"/>
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cancel"
+                    android:layout_gravity="bottom"
+                    android:id="@+id/cancelButton"
+                    android:layout_alignParentBottom="true"/>
+        </RelativeLayout>
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/bottom_sheet1"
         android:layout_width="match_parent"
