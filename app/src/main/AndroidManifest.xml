@@ -20,7 +20,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.NewChoiceActivity" />
-        <activity android:name=".ui.ResolveRoundActivity"
+        <activity
+            android:name=".ui.ResolveRoundActivity"
+            android:theme="@style/AppThemeNoBar" />
+        <activity android:name=".ui.LoginActivity"
+            android:theme="@style/AppThemeNoBar"/>
+        <activity android:name=".ui.CreateAccountActivity"
             android:theme="@style/AppThemeNoBar"></activity>
     </application>
 
