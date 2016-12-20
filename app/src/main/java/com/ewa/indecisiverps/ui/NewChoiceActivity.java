@@ -47,21 +47,24 @@ public class NewChoiceActivity extends AppCompatActivity implements View.OnClick
 
 
         if(option1.length() > 0 && option2.length() > 0){
-            List<String> optionList = new ArrayList<>();
-            optionList.add(option1);
-            optionList.add(option2);
-            Choice choice = new Choice(optionList);
+            Choice newChoice = new Choice(option1, option2);
             Random random = new Random();
-            choice.getPlayersToOptions().add(random.nextInt(optionList.size()));
+            if(random.nextInt(2) == 0){
+                newChoice.setPlayer1("user");
+                newChoice.setPlayer2("computer");
+            } else {
+                newChoice.setPlayer2("user");
+                newChoice.setPlayer1("computer");
+            }
             switch(view.getId()){
                 case R.id.soloButton:
-                    choice.setMode(1);
+                    newChoice.setMode(1);
                     Intent intent = new Intent(this, ChooseMoveActivity.class);
-                    intent.putExtra("choice", Parcels.wrap(choice));
+                    intent.putExtra("choice", Parcels.wrap(newChoice));
                     startActivity(intent);
                     break;
                 case R.id.friendButton:
-                    choice.setMode(2);
+                    newChoice.setMode(2);
                     break;
             }
         } else {

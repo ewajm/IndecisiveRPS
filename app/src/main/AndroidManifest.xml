@@ -21,7 +21,8 @@
         </activity>
         <activity android:name=".ui.NewChoiceActivity" />
         <activity android:name=".ui.ChooseMoveActivity" />
-        <activity android:name=".ui.ResolveRoundActivity"></activity>
+        <activity android:name=".ui.ResolveRoundActivity"
+            android:theme="@style/AppThemeNoBar"></activity>
     </application>
 
 </manifest>

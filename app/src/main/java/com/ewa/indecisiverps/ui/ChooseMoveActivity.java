@@ -38,7 +38,7 @@ public class ChooseMoveActivity extends AppCompatActivity implements View.OnClic
         //eventually add logic for determining which player is which
         //int playerposition = position of player in the array: playerlist.indexof(userid)
 
-        String yourChoice = mChoice.getOptions().get(mChoice.getPlayersToOptions().get(0));
+        String yourChoice = mChoice.getPlayer1().equals("user") ? mChoice.getOption1(): mChoice.getOption2();
         mPlayingForTextView.setText(String.format(getString(R.string.playing_for), yourChoice));
 
         Typeface headingFont = Typeface.createFromAsset(getAssets(), "fonts/titan_one_regular.ttf");
@@ -52,18 +52,18 @@ public class ChooseMoveActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View view) {
-        switch(view.getId()){
-            //change these to .add(playerposition, MOVE_CONSTANT)
-            case R.id.scissorsButton:
-                mChoice.getPlayerMoves().add(Constants.RPS_SCISSORS);
-                break;
-            case R.id.rockButton:
-                mChoice.getPlayerMoves().add(Constants.RPS_ROCK);
-                break;
-            case R.id.paperButton:
-                mChoice.getPlayerMoves().add(Constants.RPS_PAPER);
-                break;
-        }
+//        switch(view.getId()){
+//            //change these to .add(playerposition, MOVE_CONSTANT)
+//            case R.id.scissorsButton:
+//                mChoice.getPlayerMoves().add(Constants.RPS_SCISSORS);
+//                break;
+//            case R.id.rockButton:
+//                mChoice.getPlayerMoves().add(Constants.RPS_ROCK);
+//                break;
+//            case R.id.paperButton:
+//                mChoice.getPlayerMoves().add(Constants.RPS_PAPER);
+//                break;
+//        }
         Intent intent = new Intent(this, ResolveRoundActivity.class);
         intent.putExtra("choice", Parcels.wrap(mChoice));
         startActivity(intent);

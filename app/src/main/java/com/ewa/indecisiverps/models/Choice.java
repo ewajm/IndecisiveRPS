@@ -3,6 +3,7 @@ package com.ewa.indecisiverps.models;
 import org.parceler.Parcel;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -10,50 +11,70 @@ import java.util.List;
  */
 @Parcel
 public class Choice {
-    List<String> players = new ArrayList<>();
-    List<String> options = new ArrayList<>();
-    List<Integer> playersToOptions = new ArrayList<>();
-    List<String> playerMoves = new ArrayList<>();
+    String option1;
+    String option2;
+    String player1;
+    String player2;
     String pushId;
     int mode;
+    long timestamp;
+    String win;
 
     public Choice() {
     }
 
-    public Choice(List<String> options) {
-        this.options = options;
+    public Choice(String option1, String option2) {
+        this.option1 = option1;
+        this.option2 = option2;
+        this.timestamp = Calendar.getInstance().getTimeInMillis();
     }
 
-    public List<String> getPlayers() {
-        return players;
+    public String getOption1() {
+        return option1;
     }
 
-    public void setPlayers(List<String> players) {
-        this.players = players;
+    public void setOption1(String option1) {
+        this.option1 = option1;
     }
 
-    public List<String> getOptions() {
-        return options;
+    public String getOption2() {
+        return option2;
     }
 
-    public void setOptions(List<String> options) {
-        this.options = options;
+    public void setOption2(String option2) {
+        this.option2 = option2;
     }
 
-    public List<Integer> getPlayersToOptions() {
-        return playersToOptions;
+    public String getPlayer1() {
+        return player1;
     }
 
-    public void setPlayersToOptions(List<Integer> playersToOptions) {
-        this.playersToOptions = playersToOptions;
+    public void setPlayer1(String player1) {
+        this.player1 = player1;
     }
 
-    public List<String> getPlayerMoves() {
-        return playerMoves;
+    public String getPlayer2() {
+        return player2;
     }
 
-    public void setPlayerMoves(List<String> playerMoves) {
-        this.playerMoves = playerMoves;
+    public void setPlayer2(String player2) {
+        this.player2 = player2;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public String getWin() {
+        return win;
+    }
+
+    public void setWin(String win) {
+        this.win = win;
     }
 
     public String getPushId() {
