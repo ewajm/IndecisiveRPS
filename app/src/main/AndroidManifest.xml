@@ -20,7 +20,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.NewChoiceActivity" />
-        <activity android:name=".ui.ChooseMoveActivity"></activity>
+        <activity android:name=".ui.ChooseMoveActivity" />
+        <activity android:name=".ui.ResolveRoundActivity"></activity>
     </application>
 
 </manifest>

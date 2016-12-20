@@ -5,4 +5,7 @@ package com.ewa.indecisiverps;
  */
 
 public class Constants {
+    public static final String RPS_SCISSORS = "Scissors";
+    public static final String RPS_ROCK = "Rock";
+    public static final String RPS_PAPER = "Paper";
 }

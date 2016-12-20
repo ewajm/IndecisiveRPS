@@ -18,14 +18,16 @@
         android:id="@+id/playingForTextView"
         android:layout_alignParentTop="true"
         style="@style/SubHeading"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:gravity="center"/>
 
     <TextView
         android:text="@string/what_s_your_move"
-        android:layout_below="@+id/playingForTextView"
+        android:layout_alignParentBottom="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/SubHeading"
+        android:layout_marginBottom="10dp"
         android:layout_centerHorizontal="true"
         android:id="@+id/headingTextView" />
     <LinearLayout
