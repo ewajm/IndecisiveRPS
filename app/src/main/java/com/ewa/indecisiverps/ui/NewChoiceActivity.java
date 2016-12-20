@@ -59,7 +59,7 @@ public class NewChoiceActivity extends AppCompatActivity implements View.OnClick
             switch(view.getId()){
                 case R.id.soloButton:
                     newChoice.setMode(1);
-                    Intent intent = new Intent(this, ChooseMoveActivity.class);
+                    Intent intent = new Intent(this, ResolveRoundActivity.class);
                     intent.putExtra("choice", Parcels.wrap(newChoice));
                     startActivity(intent);
                     break;

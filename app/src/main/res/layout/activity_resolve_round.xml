@@ -30,6 +30,7 @@
                     android:gravity="center"
                     android:layout_weight="1"
                     android:text="Option 1"
+                    android:visibility="invisible"
                     android:id="@+id/option1TextView"
                     style="@style/SubHeading"
                     android:layout_gravity="center"/>
@@ -64,6 +65,7 @@
                     android:gravity="center"
                     android:layout_weight="1"
                     android:text="Option 2"
+                    android:visibility="invisible"
                     android:id="@+id/option2TextView"
                     style="@style/SubHeading"
                     android:layout_gravity="center"/>
