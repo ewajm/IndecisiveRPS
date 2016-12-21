@@ -42,6 +42,11 @@ public class NewChoiceActivity extends AppCompatActivity implements View.OnClick
         if(mAuth.getCurrentUser() != null){
             mUserName = mAuth.getCurrentUser().getDisplayName();
         }
+        Choice choice = Parcels.unwrap(getIntent().getParcelableExtra("choice"));
+        if(choice != null){
+            mChoiceOneEditText.setText(choice.getOption1());
+            mChoiceTwoEditText.setText(choice.getOption2());
+        }
         Typeface headingFont = Typeface.createFromAsset(getAssets(), "fonts/titan_one_regular.ttf");
         mHeadingTextView.setTypeface(headingFont);
         mSoloButton.setOnClickListener(this);
