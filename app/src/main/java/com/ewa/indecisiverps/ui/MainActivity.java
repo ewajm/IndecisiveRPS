@@ -62,14 +62,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mDecideNowButton.setOnClickListener(this);
         mLoginButton.setOnClickListener(this);
         mAboutButton.setOnClickListener(this);
+        mDecisionsButton.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.decideNowButton:
-                Intent intent = new Intent(this, NewChoiceActivity.class);
-                startActivity(intent);
+                Intent decideNowIntent = new Intent(this, NewChoiceActivity.class);
+                startActivity(decideNowIntent);
                 break;
             case R.id.aboutButton:
                 break;
@@ -81,6 +82,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     FirebaseAuth.getInstance().signOut();
                 }
                 break;
+            case R.id.decisionsButton:
+                Intent decisionsIntent = new Intent(this, DecisionsActivity.class);
+                startActivity(decisionsIntent);
         }
     }
 

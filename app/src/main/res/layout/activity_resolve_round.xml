@@ -151,7 +151,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:src="@drawable/paper"
+                    android:src="@drawable/paper2"
                     android:scaleType="fitCenter"
                     android:background="@drawable/apptheme_btn_default_holo_light"
                     android:id="@+id/paperButton"/>
@@ -160,7 +160,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:src="@drawable/scissors"
+                    android:src="@drawable/scissors2"
                     android:scaleType="fitCenter"
                     android:background="@drawable/apptheme_btn_default_holo_light"
                     android:id="@+id/scissorsButton"/>

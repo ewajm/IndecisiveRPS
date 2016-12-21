@@ -133,7 +133,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                 switch(view.getId()){
                     case R.id.scissorsButton:
                         mMoveArray[mPlayerNumber] = Constants.RPS_SCISSORS;
-                        mPlayersImageView.setImageResource(R.drawable.scissors);
+                        mPlayersImageView.setImageResource(R.drawable.scissors2);
                         break;
                     case R.id.rockButton:
                         mMoveArray[mPlayerNumber] = Constants.RPS_ROCK;
@@ -141,7 +141,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                         break;
                     case R.id.paperButton:
                         mMoveArray[mPlayerNumber] = Constants.RPS_PAPER;
-                        mPlayersImageView.setImageResource(R.drawable.paper);
+                        mPlayersImageView.setImageResource(R.drawable.paper2);
                         break;
                 }
                 mChoice.setStatus(Constants.STATUS_PENDING);
@@ -243,7 +243,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
 
     public void gameMove(){
         String[] rpsArray = {Constants.RPS_PAPER, Constants.RPS_ROCK, Constants.RPS_SCISSORS};
-        int[] rpsImageArray = {R.drawable.paper, R.drawable.rock, R.drawable.scissors};
+        int[] rpsImageArray = {R.drawable.paper2, R.drawable.rock, R.drawable.scissors2};
         Random random = new Random();
         int compMove = random.nextInt(rpsArray.length);
         mOpponentImageView.setImageResource(rpsImageArray[compMove]);
