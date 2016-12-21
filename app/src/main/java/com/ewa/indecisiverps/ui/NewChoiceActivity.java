@@ -39,7 +39,7 @@ public class NewChoiceActivity extends AppCompatActivity implements View.OnClick
         ButterKnife.bind(this);
 
         mAuth = FirebaseAuth.getInstance();
-        if(mAuth != null){
+        if(mAuth.getCurrentUser() != null){
             mUserName = mAuth.getCurrentUser().getDisplayName();
         }
         Typeface headingFont = Typeface.createFromAsset(getAssets(), "fonts/titan_one_regular.ttf");

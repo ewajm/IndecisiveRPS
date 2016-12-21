@@ -83,7 +83,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
 
         mBottomSheetBehavior1 = BottomSheetBehavior.from(mBottomSheet);
         mAuth = FirebaseAuth.getInstance();
-        if(mAuth != null){
+        if(mAuth.getCurrentUser() != null){
             mUserId = mAuth.getCurrentUser().getUid();
             mChoiceRef = FirebaseDatabase.getInstance().getReference("choices").child(mUserId);
         }
@@ -206,7 +206,9 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                 mWinnerTextView.setText("Lol nope!");
             }
             mChoice.setStatus(Constants.STATUS_RESOLVED);
-            mChoiceRef.child(mChoice.getPushId()).setValue(mChoice);
+            if(mUserId != null){
+                mChoiceRef.child(mChoice.getPushId()).setValue(mChoice);
+            }
             mWinningChoiceTextView.setText(mOptions[winPosition] + " wins!");
             mWinningChoiceTextView.setVisibility(View.VISIBLE);
             mGameButton.setText("New Decision");
