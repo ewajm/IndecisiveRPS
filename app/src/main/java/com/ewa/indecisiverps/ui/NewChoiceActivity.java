@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.ewa.indecisiverps.R;
 import com.ewa.indecisiverps.models.Choice;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.parceler.Parcels;
 
@@ -28,6 +29,8 @@ public class NewChoiceActivity extends AppCompatActivity implements View.OnClick
     @Bind(R.id.soloButton) Button mSoloButton;
     @Bind(R.id.friendButton) Button mFriendButton;
     @Bind(R.id.headingTextView) TextView mHeadingTextView;
+    String mUserName;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,10 @@ public class NewChoiceActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_new_choice);
         ButterKnife.bind(this);
 
+        mAuth = FirebaseAuth.getInstance();
+        if(mAuth != null){
+            mUserName = mAuth.getCurrentUser().getDisplayName();
+        }
         Typeface headingFont = Typeface.createFromAsset(getAssets(), "fonts/titan_one_regular.ttf");
         mHeadingTextView.setTypeface(headingFont);
         mSoloButton.setOnClickListener(this);
@@ -50,10 +57,18 @@ public class NewChoiceActivity extends AppCompatActivity implements View.OnClick
             Choice newChoice = new Choice(option1, option2);
             Random random = new Random();
             if(random.nextInt(2) == 0){
-                newChoice.setPlayer1("user");
+                if(mUserName != null){
+                    newChoice.setPlayer1(mUserName);
+                } else {
+                    newChoice.setPlayer1("user");
+                }
                 newChoice.setPlayer2("computer");
             } else {
-                newChoice.setPlayer2("user");
+                if(mUserName != null){
+                    newChoice.setPlayer2(mUserName);
+                } else {
+                    newChoice.setPlayer2("user");
+                }
                 newChoice.setPlayer1("computer");
             }
             switch(view.getId()){

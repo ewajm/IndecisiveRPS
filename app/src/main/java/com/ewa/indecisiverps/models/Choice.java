@@ -19,6 +19,7 @@ public class Choice {
     int mode;
     long timestamp;
     String win;
+    String status;
 
     public Choice() {
     }
@@ -27,6 +28,14 @@ public class Choice {
         this.option1 = option1;
         this.option2 = option2;
         this.timestamp = Calendar.getInstance().getTimeInMillis();
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getOption1() {

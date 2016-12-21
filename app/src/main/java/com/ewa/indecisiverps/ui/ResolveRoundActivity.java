@@ -6,7 +6,6 @@ import android.graphics.Typeface;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -19,6 +18,9 @@ import com.ewa.indecisiverps.Constants;
 import com.ewa.indecisiverps.R;
 import com.ewa.indecisiverps.models.Choice;
 import com.ewa.indecisiverps.models.Round;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.parceler.Parcels;
 
@@ -42,6 +44,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
     @Bind(R.id.winnerTextView) TextView mWinnerTextView;
     @Bind(R.id.gameButton) Button mGameButton;
     @Bind(R.id.cancelButton) Button mCancelButton;
+    @Bind(R.id.winningChoiceTextView) TextView mWinningChoiceTextView;
     private Choice mChoice;
     private Round mRound;
     private String[] mMoveArray;
@@ -50,6 +53,11 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
     private ImageView mOpponentImageView;
     private String[] mOptions;
     private String mComputerMove;
+    private int mPlayerNumber;
+    private DatabaseReference mChoiceRef;
+    private DatabaseReference mRoundRef;
+    String mUserId;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +67,11 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
 
         mRound = new Round();
         mChoice = Parcels.unwrap(getIntent().getParcelableExtra("choice"));
-        final int playerNumber = mChoice.getPlayer1().equals("user") ? 0: 1;
-        mPlayersImageView = playerNumber == 0 ? mOption1ImageView: mOption2ImageView;
-        mOpponentImageView = playerNumber == 0 ? mOption2ImageView: mOption1ImageView;
+        mPlayerNumber = mChoice.getPlayer1().equals("user") ? 0: 1;
+        mPlayersImageView = mPlayerNumber == 0 ? mOption1ImageView: mOption2ImageView;
+        mOpponentImageView = mPlayerNumber == 0 ? mOption2ImageView: mOption1ImageView;
         mOptions = new String[]{mChoice.getOption1(), mChoice.getOption2()};
-        mPlayingForTextView.setText(String.format(getString(R.string.playing_for), mOptions[playerNumber]));
+        mPlayingForTextView.setText(String.format(getString(R.string.playing_for), mOptions[mPlayerNumber]));
         mOption1TextView.setText(mOptions[0]);
         mOption2TextView.setText(mOptions[1]);
         Typeface headingFont = Typeface.createFromAsset(getAssets(), "fonts/titan_one_regular.ttf");
@@ -71,8 +79,14 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         mOption1TextView.setTypeface(headingFont);
         mOption2TextView.setTypeface(headingFont);
         mWinnerTextView.setTypeface(headingFont);
+        mWinningChoiceTextView.setTypeface(headingFont);
 
         mBottomSheetBehavior1 = BottomSheetBehavior.from(mBottomSheet);
+        mAuth = FirebaseAuth.getInstance();
+        if(mAuth != null){
+            mUserId = mAuth.getCurrentUser().getUid();
+            mChoiceRef = FirebaseDatabase.getInstance().getReference("choices").child(mUserId);
+        }
 
         Animation slideIn = AnimationUtils.loadAnimation(this, R.anim.slide_in_from_right);
         mOption1TextView.startAnimation(slideIn);
@@ -118,17 +132,23 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                 mMoveArray = new String[2];
                 switch(view.getId()){
                     case R.id.scissorsButton:
-                        mMoveArray[playerNumber] = Constants.RPS_SCISSORS;
+                        mMoveArray[mPlayerNumber] = Constants.RPS_SCISSORS;
                         mPlayersImageView.setImageResource(R.drawable.scissors);
                         break;
                     case R.id.rockButton:
-                        mMoveArray[playerNumber] = Constants.RPS_ROCK;
+                        mMoveArray[mPlayerNumber] = Constants.RPS_ROCK;
                         mPlayersImageView.setImageResource(R.drawable.rock);
                         break;
                     case R.id.paperButton:
-                        mMoveArray[playerNumber] = Constants.RPS_PAPER;
+                        mMoveArray[mPlayerNumber] = Constants.RPS_PAPER;
                         mPlayersImageView.setImageResource(R.drawable.paper);
                         break;
+                }
+                mChoice.setStatus(Constants.STATUS_PENDING);
+                if(mUserId != null && mChoice.getPushId() == null){
+                    DatabaseReference pushRef = mChoiceRef.push();
+                    mChoice.setPushId(pushRef.getKey());
+                    pushRef.setValue(mChoice);
                 }
                 mBottomSheetBehavior1.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 mPlayersImageView.setVisibility(View.INVISIBLE);
@@ -167,41 +187,33 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                 mMoveArray[i] = mComputerMove;
             }
         }
-        Log.i(TAG, "resolveRound: " + mMoveArray.toString());
-        if(mMoveArray[0].equals(mMoveArray[1])){
+        mRound.setPlayer1Move(mMoveArray[0]);
+        mRound.setPlayer2Move(mMoveArray[1]);
+        if(mUserId != null){
+            mRoundRef = FirebaseDatabase.getInstance().getReference("rounds").child(mChoice.getPushId());
+            DatabaseReference pushRef = mRoundRef.push();
+            mRound.setPushId(pushRef.getKey());
+            pushRef.setValue(mRound);
+        }
+        winPosition = mRound.checkWin();
+        if(winPosition == -1){
             mWinnerTextView.setText("It's a tie!");
             mGameButton.setText("Another Round");
-        }else {
-            switch(mMoveArray[0]){
-                case Constants.RPS_PAPER:
-                    if(mMoveArray[1].equals(Constants.RPS_ROCK)){
-                        winPosition = 0;
-                    } else {
-                        winPosition = 1;
-                    }
-                    break;
-                case Constants.RPS_ROCK:
-                    if(mMoveArray[1].equals(Constants.RPS_SCISSORS)){
-                        winPosition = 0;
-                    } else {
-                        winPosition = 1;
-                    }
-                    break;
-                case Constants.RPS_SCISSORS:
-                    if(mMoveArray[1].equals(Constants.RPS_PAPER)){
-                        winPosition = 0;
-                    } else {
-                        winPosition = 1;
-                    }
-                    break;
+        } else {
+            if(winPosition == mPlayerNumber){
+                mWinnerTextView.setText("Nice job!");
+            } else {
+                mWinnerTextView.setText("Lol nope!");
             }
-            mWinnerTextView.setText(mOptions[winPosition] + " wins!");
+            mChoice.setStatus(Constants.STATUS_RESOLVED);
+            mChoiceRef.child(mChoice.getPushId()).setValue(mChoice);
+            mWinningChoiceTextView.setText(mOptions[winPosition] + " wins!");
+            mWinningChoiceTextView.setVisibility(View.VISIBLE);
             mGameButton.setText("New Decision");
             mCancelButton.setText("Great! Done Now.");
         }
         mWinnerTextView.setVisibility(View.VISIBLE);
         mGameButton.setVisibility(View.VISIBLE);
-
     }
 
     @Override

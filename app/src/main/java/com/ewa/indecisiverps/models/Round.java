@@ -1,10 +1,12 @@
 package com.ewa.indecisiverps.models;
 
+import com.ewa.indecisiverps.Constants;
+
 import org.parceler.Parcel;
 
-/**
- * Created by ewa on 12/20/2016.
- */
+import java.util.Arrays;
+import java.util.List;
+
 @Parcel
 public class Round {
     String player1Move;
@@ -45,5 +47,19 @@ public class Round {
 
     public void setDecisionId(String decisionId) {
         this.decisionId = decisionId;
+    }
+
+    public int checkWin(){
+        int win=0;
+        List<String> baseArray = Arrays.asList(Constants.RPS_ROCK, Constants.RPS_PAPER, Constants.RPS_SCISSORS);
+        List<String> beatsArray = Arrays.asList(Constants.RPS_SCISSORS, Constants.RPS_ROCK, Constants.RPS_PAPER);
+        if(player1Move.equals(player2Move)){
+            win = -1;
+        } else if(baseArray.indexOf(player1Move) == beatsArray.indexOf(player2Move)){
+            win = 0;
+        } else {
+            win = 1;
+        }
+        return win;
     }
 }
