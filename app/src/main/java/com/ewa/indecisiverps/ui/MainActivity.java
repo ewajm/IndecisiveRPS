@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mLoginButton.setOnClickListener(this);
         mAboutButton.setOnClickListener(this);
         mDecisionsButton.setOnClickListener(this);
+        mSocialButton.setOnClickListener(this);
     }
 
     @Override
@@ -85,6 +86,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.decisionsButton:
                 Intent decisionsIntent = new Intent(this, DecisionsActivity.class);
                 startActivity(decisionsIntent);
+                break;
+            case R.id.socialButton:
+                Intent socialIntent = new Intent(this, SocialActivity.class);
+                startActivity(socialIntent);
         }
     }
 

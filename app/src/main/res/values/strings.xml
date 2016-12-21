@@ -2,9 +2,10 @@
     <string name="app_name">Indecisive RPS</string>
     <string name="playing_for">Playing For: %s</string>
     <string name="what_s_your_move">What\'s your move?</string>
-    <string name="title_activity_decisions">DecisionsActivity</string>
+    <string name="title_activity_decisions">Your decisions</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_social">Your social stuff</string>
 </resources>

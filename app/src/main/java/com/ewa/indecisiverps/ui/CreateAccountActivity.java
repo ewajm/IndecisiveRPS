@@ -13,28 +13,29 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ewa.indecisiverps.Constants;
 import com.ewa.indecisiverps.R;
+import com.ewa.indecisiverps.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class CreateAccountActivity extends AppCompatActivity implements View.OnClickListener{
     public static final String TAG = CreateAccountActivity.class.getSimpleName();
-    @Bind(R.id.createUserButton)
-    Button mCreateUserButton;
-    @Bind(R.id.nameEditText)
-    EditText mNameEditText;
+    @Bind(R.id.createUserButton) Button mCreateUserButton;
+    @Bind(R.id.nameEditText) EditText mNameEditText;
     @Bind(R.id.titleEditText) EditText mEmailEditText;
     @Bind(R.id.bodyEditText) EditText mPasswordEditText;
     @Bind(R.id.confirmPasswordEditText) EditText mConfirmPasswordEditText;
-    @Bind(R.id.loginTextView)
-    TextView mLoginTextView;
+    @Bind(R.id.loginTextView) TextView mLoginTextView;
     @Bind(R.id.createAccountTextView) TextView mCreateAccountTextView;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -159,6 +160,9 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Log.d(TAG, user.getDisplayName());
+                            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF);
+                            User newUser = new User(user.getDisplayName(), user.getUid(), user.getEmail());
+                            userRef.child(user.getUid()).setValue(newUser);
                         }
                     }
 

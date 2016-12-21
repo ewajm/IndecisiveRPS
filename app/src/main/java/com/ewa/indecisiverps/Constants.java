@@ -13,4 +13,5 @@ public class Constants {
     public static final String STATUS_RESOLVED = "Resolved";
     public static final String FIREBASE_CHOICE_REF = "choices";
     public static final String FIREBASE_ROUND_REF = "rounds";
+    public static final String FIREBASE_USER_REF = "users";
 }

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_social"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.ewa.indecisiverps.ui.SocialActivity"
+    tools:showIn="@layout/activity_social">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="5"
+        android:id="@+id/linearLayout3"
+        android:background="@drawable/user_layout_bg"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:id="@+id/userIconImageView"
+            android:scaleType="fitXY"
+            android:layout_height="75dp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="Username"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:id="@+id/usernameTextView"
+            android:textSize="30sp"
+            style="@style/Heading"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Edit"
+            android:textColor="@color/colorAccent"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:id="@+id/editProfileText"/>
+    </LinearLayout>
+
+    <Button
+        android:text="Add People To Decide Things WIth!"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/addFriendButton"
+        android:textSize="14sp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_below="@+id/linearLayout3"
+        android:layout_centerHorizontal="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="5dp"
+        android:layout_below="@id/addFriendButton"
+        android:id="@+id/invitationsLinearLayout">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="People who want to decide things with you"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:textSize="18sp"
+            android:id="@+id/invitationsHeadingTextView"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/invitationsRecyclerView">
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="5dp"
+        android:layout_below="@+id/invitationsLinearLayout"
+        android:id="@+id/friendsLinearLayout">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="People you are deciding things with"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:textSize="18sp"
+            android:id="@+id/friendsHeadingTextView"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/friendsHeadingTextView"
+            android:id="@+id/friendsRecyclerView">
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+</RelativeLayout>

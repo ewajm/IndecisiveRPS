@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="8"
+    android:id="@+id/friendListItemLayout"
+    android:background="@drawable/user_layout_bg"
+    android:layout_margin="10dp">
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:id="@+id/friendIconImageView"
+        android:scaleType="fitXY"
+        android:layout_height="40dp" />
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="6"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:id="@+id/friendNameTextView"
+            android:textSize="18sp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:textColor="@color/colorAccent"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:id="@+id/friendEmailTextView"
+            android:textSize="14sp"
+            android:textColor="@color/colorAccentDark"/>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:src="@drawable/ic_action_add"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:id="@+id/addFriendImageView"/>
+</LinearLayout>

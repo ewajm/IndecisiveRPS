@@ -19,10 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.NewChoiceActivity" >
+        <activity android:name=".ui.NewChoiceActivity">
             <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value="com.ewa.indecisiverps.ui.MainActivity" />
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ewa.indecisiverps.ui.MainActivity" />
         </activity>
         <activity
             android:name=".ui.ResolveRoundActivity"
@@ -36,6 +36,15 @@
         <activity
             android:name=".ui.DecisionsActivity"
             android:label="@string/title_activity_decisions"
+            android:parentActivityName=".ui.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ewa.indecisiverps.ui.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.SocialActivity"
+            android:label="@string/title_activity_social"
             android:parentActivityName=".ui.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
