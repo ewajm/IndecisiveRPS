@@ -19,7 +19,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.NewChoiceActivity" />
+        <activity android:name=".ui.NewChoiceActivity" >
+            <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.ewa.indecisiverps.ui.MainActivity" />
+        </activity>
         <activity
             android:name=".ui.ResolveRoundActivity"
             android:theme="@style/AppThemeNoBar" />
