@@ -51,6 +51,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ewa.indecisiverps.ui.MainActivity" />
         </activity>
+        <activity android:name=".ui.AddFriendActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ewa.indecisiverps.ui.SocialActivity" />
+        </activity>
     </application>
 
 </manifest>
