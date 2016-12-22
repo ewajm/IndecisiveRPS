@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ewa.indecisiverps">
+          package="com.ewa.indecisiverps">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -12,49 +12,63 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.MainActivity"
-            android:theme="@style/AppThemeNoBar">
+            android:theme="@style/AppThemeNoBar"
+            android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.NewChoiceActivity">
+        <activity android:name=".ui.NewChoiceActivity"
+                  android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ewa.indecisiverps.ui.MainActivity" />
+                android:value="com.ewa.indecisiverps.ui.MainActivity"/>
         </activity>
         <activity
             android:name=".ui.ResolveRoundActivity"
-            android:theme="@style/AppThemeNoBar" />
+            android:theme="@style/AppThemeNoBar"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.LoginActivity"
-            android:theme="@style/AppThemeNoBar" />
+            android:theme="@style/AppThemeNoBar"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.CreateAccountActivity"
-            android:theme="@style/AppThemeNoBar" />
+            android:theme="@style/AppThemeNoBar"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.DecisionsActivity"
             android:label="@string/title_activity_decisions"
             android:parentActivityName=".ui.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ewa.indecisiverps.ui.MainActivity" />
+                android:value="com.ewa.indecisiverps.ui.MainActivity"/>
         </activity>
         <activity
             android:name=".ui.SocialActivity"
             android:label="@string/title_activity_social"
             android:parentActivityName=".ui.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ewa.indecisiverps.ui.MainActivity" />
+                android:value="com.ewa.indecisiverps.ui.MainActivity"/>
         </activity>
-        <activity android:name=".ui.AddFriendActivity">
+        <activity android:name=".ui.AddFriendActivity"
+                  android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ewa.indecisiverps.ui.SocialActivity" />
+                android:value="com.ewa.indecisiverps.ui.SocialActivity"/>
+        </activity>
+        <activity android:name=".ui.AboutActivity"
+                  android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ewa.indecisiverps.ui.MainActivity"/>
         </activity>
     </application>
 

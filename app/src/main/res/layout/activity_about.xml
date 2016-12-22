@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_about"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ewa.indecisiverps.ui.AboutActivity">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/rps"
+        android:id="@+id/rpsImageView"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#dd00bcd4"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/SubHeading"
+            android:text="About Indecisive RPS"
+            android:gravity="center"
+            android:id="@+id/aboutHeading"
+            android:layout_marginTop="16dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/aboutHeading"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:layout_margin="16dp"
+            android:textColor="@color/colorAccentDark"
+            android:id="@+id/aboutSubHeading"
+            android:text="Settle important dilemmas like 'tacos or pizza' by playing Rock Paper Scissors with a friend or against the app!"/>
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:id="@+id/listLinearLayout"
+           android:layout_below="@+id/aboutSubHeading"
+           android:layout_marginTop="10dp"
+           android:layout_marginStart="32dp"
+           android:layout_marginLeft="32dp"
+           android:layout_marginEnd="16dp"
+           android:layout_marginRight="16dp"
+           android:orientation="vertical"
+           >
+           <TextView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:textSize="16sp"
+               android:textColor="@color/colorPrimaryText"
+               android:text="Create an account to play with a friend and record your decision history"/>
+           <View
+               android:layout_width="match_parent"
+               android:layout_height="1dp"
+               android:layout_margin="3dp"
+               android:background="@android:color/darker_gray"/>
+           <TextView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:textSize="16sp"
+               android:textColor="@color/colorPrimaryText"
+               android:layout_marginBottom="5dp"
+               android:text="Otherwise just play a quick round without logging in."/>
+           <View
+               android:layout_width="match_parent"
+               android:layout_height="1dp"
+               android:layout_margin="3dp"
+               android:background="@android:color/darker_gray"/>
+           <TextView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:textSize="16sp"
+               android:textColor="@color/colorPrimaryText"
+               android:layout_marginBottom="5dp"
+               android:text="The app will take care of assigning (and, more importantly, remembering) who gets which option. "/>
+           <View
+               android:layout_width="match_parent"
+               android:layout_height="1dp"
+               android:layout_margin="3dp"
+               android:background="@android:color/darker_gray"/>
+           <TextView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:textSize="16sp"
+               android:textColor="@color/colorPrimaryText"
+               android:layout_marginBottom="5dp"
+               android:text="No more debates along the lines of 'Wait, were you tacos or was I?'!"/>
+           <View
+               android:layout_width="match_parent"
+               android:layout_height="1dp"
+               android:layout_margin="3dp"
+               android:background="@android:color/darker_gray"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_margin="3dp"
+                android:textColor="@color/colorPrimaryText"
+                android:layout_marginBottom="5dp"
+                android:text="Just play a round and move on to the important tasks of taco (or pizza) acquisition and consumption."/>
+             </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

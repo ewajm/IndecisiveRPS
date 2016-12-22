@@ -74,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(decideNowIntent);
                 break;
             case R.id.aboutButton:
+                Intent aboutIntent = new Intent(this, AboutActivity.class);
+                startActivity(aboutIntent);
                 break;
             case R.id.loginButton:
                 if(mLoginButton.getText().toString().equals("Login")){
