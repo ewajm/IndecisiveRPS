@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -42,6 +43,7 @@ public class NewChoiceActivity extends AppCompatActivity implements View.OnClick
     @Bind(R.id.soloButton) Button mSoloButton;
     @Bind(R.id.friendButton) Button mFriendButton;
     @Bind(R.id.headingTextView) TextView mHeadingTextView;
+    @Bind(R.id.impartialityModeCheckbox) CheckBox mImpartialityModeCheckbox;
     String mUserName;
     String mUserId;
     private FirebaseAuth mAuth;
@@ -84,11 +86,10 @@ public class NewChoiceActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View view) {
         String option1 = mChoiceOneEditText.getText().toString().trim();
         String option2 = mChoiceTwoEditText.getText().toString().trim();
-
-
         if(option1.length() > 0 && option2.length() > 0){
             mNewChoice = new Choice(option1, option2);
             mNewChoice.setStartPlayerId(mUserId);
+            mNewChoice.setImpartialityMode(mImpartialityModeCheckbox.isChecked());
             Random random = new Random();
             if(random.nextInt(2) == 0){
                 if(mUserName != null){

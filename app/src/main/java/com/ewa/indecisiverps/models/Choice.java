@@ -22,6 +22,7 @@ public class Choice {
     long timestamp;
     String win;
     String status;
+    boolean impartialityMode=false;
 
     public Choice() {
     }
@@ -118,5 +119,13 @@ public class Choice {
 
     public void setMode(int mode) {
         this.mode = mode;
+    }
+
+    public boolean isImpartialityMode() {
+        return impartialityMode;
+    }
+
+    public void setImpartialityMode(boolean impartialityMode) {
+        this.impartialityMode = impartialityMode;
     }
 }

@@ -85,6 +85,9 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         } else {
             mPlayerNumber = mChoice.getPlayer1().equals("user") ? 0: 1;
         }
+        if(mChoice.isImpartialityMode()){
+            mPlayingForTextView.setVisibility(View.GONE);
+        }
         mOpponentNumber = mPlayerNumber == 0 ? 1:0;
         mPlayersImageView = mPlayerNumber == 0 ? mOption1ImageView: mOption2ImageView;
         mOpponentImageView = mPlayerNumber == 0 ? mOption2ImageView: mOption1ImageView;
