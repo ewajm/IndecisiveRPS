@@ -48,6 +48,7 @@ public class NewChoiceActivity extends AppCompatActivity implements View.OnClick
     @Bind(R.id.friendButton) Button mFriendButton;
     @Bind(R.id.headingTextView) TextView mHeadingTextView;
     String mUserName;
+    String mUserId;
     private FirebaseAuth mAuth;
     private User mOpponent;
     ArrayList<User> mFriends = new ArrayList<>();
@@ -65,6 +66,7 @@ public class NewChoiceActivity extends AppCompatActivity implements View.OnClick
         mAuth = FirebaseAuth.getInstance();
         if(mAuth.getCurrentUser() != null){
             mUserName = mAuth.getCurrentUser().getDisplayName();
+            mUserId = mAuth.getCurrentUser().getUid();
         } else {
             mFriendButton.setEnabled(false);
         }
@@ -91,6 +93,7 @@ public class NewChoiceActivity extends AppCompatActivity implements View.OnClick
 
         if(option1.length() > 0 && option2.length() > 0){
             mNewChoice = new Choice(option1, option2);
+            mNewChoice.setStartPlayerId(mUserId);
             Random random = new Random();
             if(random.nextInt(2) == 0){
                 if(mUserName != null){
@@ -98,14 +101,14 @@ public class NewChoiceActivity extends AppCompatActivity implements View.OnClick
                 } else {
                     mNewChoice.setPlayer1("user");
                 }
-                mNewChoice.setPlayer2("computer");
+                mNewChoice.setPlayer2("opponent");
             } else {
                 if(mUserName != null){
                     mNewChoice.setPlayer2(mUserName);
                 } else {
                     mNewChoice.setPlayer2("user");
                 }
-                mNewChoice.setPlayer1("computer");
+                mNewChoice.setPlayer1("opponent");
             }
             switch(view.getId()){
                 case R.id.soloButton:
@@ -119,9 +122,14 @@ public class NewChoiceActivity extends AppCompatActivity implements View.OnClick
                     if(mOpponent == null){
                        createFriendDialog();
                     } else {
+                        if(mNewChoice.getPlayer1().equals("opponent")){
+                            mNewChoice.setPlayer1(mOpponent.getUsername());
+                        } else {
+                            mNewChoice.setPlayer2(mOpponent.getUsername());
+                        }
+                        mNewChoice.setOpponentPlayerId(mOpponent.getUserId());
                         Intent friendIntent = new Intent(NewChoiceActivity.this, ResolveRoundActivity.class);
                         friendIntent.putExtra("choice", Parcels.wrap(mNewChoice));
-                        friendIntent.putExtra("opponent", Parcels.wrap(mOpponent));
                         startActivity(friendIntent);
                     }
                     break;
@@ -152,9 +160,14 @@ public class NewChoiceActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 mOpponent = mFriends.get(i);
+                if(mNewChoice.getPlayer1().equals("opponent")){
+                    mNewChoice.setPlayer1(mOpponent.getUsername());
+                } else {
+                    mNewChoice.setPlayer2(mOpponent.getUsername());
+                }
+                mNewChoice.setOpponentPlayerId(mOpponent.getUserId());
                 Intent intent = new Intent(NewChoiceActivity.this, ResolveRoundActivity.class);
                 intent.putExtra("choice", Parcels.wrap(mNewChoice));
-                intent.putExtra("opponent", Parcels.wrap(mOpponent));
                 startActivity(intent);
             }
         });

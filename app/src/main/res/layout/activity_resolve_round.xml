@@ -14,7 +14,6 @@
         android:layout_margin="10dp"
         android:paddingTop="5dp"
         >
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="140dp"
@@ -90,7 +89,7 @@
             style="@style/SubHeading"
             android:layout_below="@+id/linearLayout2"
             android:gravity="center"
-            android:layout_marginTop="20dp"/>
+            android:layout_marginTop="10dp"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -99,7 +98,7 @@
             style="@style/SubHeading"
             android:layout_below="@+id/winnerTextView"
             android:gravity="center"
-            android:layout_marginTop="20dp"/>
+            android:layout_marginTop="5dp"/>
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

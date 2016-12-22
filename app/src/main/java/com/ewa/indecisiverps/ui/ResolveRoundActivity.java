@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -13,17 +14,22 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ewa.indecisiverps.Constants;
 import com.ewa.indecisiverps.R;
 import com.ewa.indecisiverps.models.Choice;
 import com.ewa.indecisiverps.models.Round;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import butterknife.Bind;
@@ -47,6 +53,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
     @Bind(R.id.winningChoiceTextView) TextView mWinningChoiceTextView;
     private Choice mChoice;
     private Round mRound;
+    private ArrayList<Round> mRoundList = new ArrayList<>();
     private String[] mMoveArray;
     private ImageView mPlayersImageView;
     private ObjectAnimator mSlidInAnimator;
@@ -54,9 +61,11 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
     private String[] mOptions;
     private String mComputerMove;
     private int mPlayerNumber;
+    private int mOpponentNumber;
     private DatabaseReference mChoiceRef;
     private DatabaseReference mRoundRef;
     String mUserId;
+    String mUsername;
     private FirebaseAuth mAuth;
 
     @Override
@@ -67,7 +76,16 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
 
         mRound = new Round();
         mChoice = Parcels.unwrap(getIntent().getParcelableExtra("choice"));
-        mPlayerNumber = mChoice.getPlayer1().equals("user") ? 0: 1;
+        mAuth = FirebaseAuth.getInstance();
+        if(mAuth.getCurrentUser() != null){
+            mUserId = mAuth.getCurrentUser().getUid();
+            mUsername = mAuth.getCurrentUser().getDisplayName();
+            mChoiceRef = FirebaseDatabase.getInstance().getReference("choices").child(mUserId);
+            mPlayerNumber = mChoice.getPlayer1().equals(mUsername) ? 0: 1;
+        } else {
+            mPlayerNumber = mChoice.getPlayer1().equals("user") ? 0: 1;
+        }
+        mOpponentNumber = mPlayerNumber == 0 ? 1:0;
         mPlayersImageView = mPlayerNumber == 0 ? mOption1ImageView: mOption2ImageView;
         mOpponentImageView = mPlayerNumber == 0 ? mOption2ImageView: mOption1ImageView;
         mOptions = new String[]{mChoice.getOption1(), mChoice.getOption2()};
@@ -82,11 +100,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         mWinningChoiceTextView.setTypeface(headingFont);
 
         mBottomSheetBehavior1 = BottomSheetBehavior.from(mBottomSheet);
-        mAuth = FirebaseAuth.getInstance();
-        if(mAuth.getCurrentUser() != null){
-            mUserId = mAuth.getCurrentUser().getUid();
-            mChoiceRef = FirebaseDatabase.getInstance().getReference("choices").child(mUserId);
-        }
+
 
         Animation slideIn = AnimationUtils.loadAnimation(this, R.anim.slide_in_from_right);
         mOption1TextView.startAnimation(slideIn);
@@ -110,7 +124,11 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        mBottomSheetBehavior1.setState(BottomSheetBehavior.STATE_EXPANDED);
+                        if(mChoice.getWin() == null){
+                           mBottomSheetBehavior1.setState(BottomSheetBehavior.STATE_EXPANDED);
+                        } else {
+                           showFinishedRound();   
+                        }
                     }
 
                     @Override
@@ -144,7 +162,9 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                         mPlayersImageView.setImageResource(R.drawable.paper2);
                         break;
                 }
-                mChoice.setStatus(Constants.STATUS_PENDING);
+                if(mChoice.getStatus() == null){
+                    mChoice.setStatus(Constants.STATUS_PENDING);
+                }
                 if(mUserId != null && mChoice.getPushId() == null){
                     DatabaseReference pushRef = mChoiceRef.push();
                     mChoice.setPushId(pushRef.getKey());
@@ -163,7 +183,13 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        gameMove();
+                        if(mChoice.getMode() == 1){
+                            gameMove();
+                        } else if(mChoice.getStatus().equals(Constants.STATUS_PENDING)){
+                           resolveSocialStartRound();
+                        } else {
+                            getOpponentMove();
+                        }
                     }
 
                     @Override
@@ -180,7 +206,191 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         mCancelButton.setOnClickListener(this);
     }
 
-    private void resolveRound() {
+    private void showFinishedRound() {
+        mRoundRef = FirebaseDatabase.getInstance().getReference("rounds").child(mChoice.getPushId());
+        mRoundRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Round round = snapshot.getValue(Round.class);
+                    mRoundList.add(round);
+                }
+                mRound = mRoundList.get(mRoundList.size()-1);
+                if(mRound.getPlayer1Move().equals(Constants.RPS_PAPER)){
+                    mOpponentImageView.setImageResource(R.drawable.paper2);
+                } else if(mRound.getPlayer1Move().equals(Constants.RPS_ROCK)){
+                    mOpponentImageView.setImageResource(R.drawable.rock);
+                } else {
+                    mOpponentImageView.setImageResource(R.drawable.scissors2);
+                }
+                mOpponentImageView.setVisibility(View.INVISIBLE);
+                Animation slideInBottom = AnimationUtils.loadAnimation(ResolveRoundActivity.this, R.anim.slide_in_from_bottom);
+                mOpponentImageView.startAnimation(slideInBottom);
+                mOpponentImageView.setVisibility(View.VISIBLE);
+                slideInBottom.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        if(mRound.getPlayer2Move().equals(Constants.RPS_PAPER)){
+                            mPlayersImageView.setImageResource(R.drawable.paper2);
+                        } else if(mRound.getPlayer2Move().equals(Constants.RPS_ROCK)){
+                            mPlayersImageView.setImageResource(R.drawable.rock);
+                        } else {
+                            mPlayersImageView.setImageResource(R.drawable.scissors2);
+                        }
+                        mPlayersImageView.setVisibility(View.INVISIBLE);
+                        Animation slideInBottom = AnimationUtils.loadAnimation(ResolveRoundActivity.this, R.anim.slide_in_from_bottom);
+                        mPlayersImageView.startAnimation(slideInBottom);
+                        mPlayersImageView.setVisibility(View.VISIBLE);
+                        slideInBottom.setAnimationListener(new Animation.AnimationListener() {
+                            @Override
+                            public void onAnimationStart(Animation animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                mChoice.setStatus(Constants.STATUS_RESOLVED);
+                                resolveSocialEndRound();
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getOpponentMove() {
+        mRoundRef = FirebaseDatabase.getInstance().getReference("rounds").child(mChoice.getPushId());
+        mRoundRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Round round = snapshot.getValue(Round.class);
+                    mRoundList.add(round);
+                }
+                mRound = mRoundList.get(mRoundList.size()-1);
+                if(mRound.getPlayer1Move().length() == 0){
+                    mRound.setPlayer1Move(mMoveArray[mPlayerNumber]);
+                    mMoveArray[mOpponentNumber] = mRound.getPlayer2Move();
+                } else {
+                    mRound.setPlayer2Move(mMoveArray[mPlayerNumber]);
+                    mMoveArray[mOpponentNumber] = mRound.getPlayer1Move();
+                }
+                if(mMoveArray[mOpponentNumber].equals(Constants.RPS_PAPER)){
+                    mOpponentImageView.setImageResource(R.drawable.paper2);
+                } else if(mMoveArray[mOpponentNumber].equals(Constants.RPS_ROCK)){
+                    mOpponentImageView.setImageResource(R.drawable.rock);
+                } else {
+                    mOpponentImageView.setImageResource(R.drawable.scissors2);
+                }
+                mOpponentImageView.setVisibility(View.INVISIBLE);
+                Animation slideInBottom = AnimationUtils.loadAnimation(ResolveRoundActivity.this, R.anim.slide_in_from_bottom);
+                mOpponentImageView.startAnimation(slideInBottom);
+                mOpponentImageView.setVisibility(View.VISIBLE);
+                slideInBottom.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        resolveSocialEndRound();
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void resolveSocialEndRound() {
+        if(mRound.getPushId() != null && !mChoice.getStatus().equals(Constants.STATUS_RESOLVED)){
+            mRoundRef.child(mRound.getPushId()).setValue(mRound);
+        }
+        int winPosition = mRound.checkWin();
+        if(winPosition == -1){
+            mWinnerTextView.setText("It's a tie!");
+            mGameButton.setText("Another Round");
+            mChoice.setStatus(Constants.STATUS_PENDING);
+        } else {
+            if(winPosition == mPlayerNumber){
+                mWinnerTextView.setText("Nice job!");
+            } else {
+                if(mOpponentNumber == 0){
+                    mWinnerTextView.setText("Newp, " + mChoice.getPlayer1() + " wins it!");
+                } else {
+                    mWinnerTextView.setText("Newp, " + mChoice.getPlayer2() + " wins it!");
+                }
+            }
+            mChoice.setWin(mOptions[winPosition]);
+            if(!mChoice.getStatus().equals(Constants.STATUS_RESOLVED)){
+                Log.i(TAG, "resolveSocialEndRound: saving into opponents database");
+                String sendId = mChoice.getOpponentPlayerId().equals(mUserId) ? mChoice.getStartPlayerId() : mChoice.getOpponentPlayerId();
+                DatabaseReference opponentRef = FirebaseDatabase.getInstance().getReference("choices").child(sendId).child(mChoice.getPushId());
+                opponentRef.setValue(mChoice);
+                mChoice.setStatus(Constants.STATUS_RESOLVED);
+            }
+            mChoiceRef.child(mChoice.getPushId()).setValue(mChoice);
+            mWinningChoiceTextView.setText(mOptions[winPosition] + " wins!");
+            mWinningChoiceTextView.setVisibility(View.VISIBLE);
+            mGameButton.setText("New Decision");
+            mCancelButton.setText("Great! Done Now.");
+        }
+        mWinnerTextView.setVisibility(View.VISIBLE);
+        mGameButton.setVisibility(View.VISIBLE);
+    }
+
+    private void resolveSocialStartRound() {
+        for(int i = 0; i < mMoveArray.length; i++){
+            if(mMoveArray[i] == null){
+                mMoveArray[i] = "";
+            }
+        }
+        mRound.setPlayer1Move(mMoveArray[0]);
+        mRound.setPlayer2Move(mMoveArray[1]);
+        mRoundRef = FirebaseDatabase.getInstance().getReference("rounds").child(mChoice.getPushId());
+        DatabaseReference pushRef = mRoundRef.push();
+        mRound.setPushId(pushRef.getKey());
+        pushRef.setValue(mRound);
+        mChoice.setStatus(Constants.STATUS_READY);
+        String sendId = mChoice.getOpponentPlayerId().equals(mUserId) ? mChoice.getStartPlayerId() : mChoice.getOpponentPlayerId();
+        DatabaseReference opponentRef = FirebaseDatabase.getInstance().getReference("choices").child(sendId).child(mChoice.getPushId());
+        opponentRef.setValue(mChoice);
+        Toast.makeText(this, "Decision sent to opponent!", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(ResolveRoundActivity.this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    private void resolveSoloRound() {
         int winPosition=0;
         for(int i = 0; i < mMoveArray.length; i++){
             if(mMoveArray[i] == null){
@@ -206,6 +416,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                 mWinnerTextView.setText("Lol nope!");
             }
             mChoice.setStatus(Constants.STATUS_RESOLVED);
+            mChoice.setWin(mOptions[winPosition]);
             if(mUserId != null){
                 mChoiceRef.child(mChoice.getPushId()).setValue(mChoice);
             }
@@ -260,7 +471,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                resolveRound();
+                resolveSoloRound();
             }
 
             @Override

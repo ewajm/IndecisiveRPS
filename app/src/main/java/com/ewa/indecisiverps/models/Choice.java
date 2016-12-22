@@ -15,6 +15,8 @@ public class Choice {
     String option2;
     String player1;
     String player2;
+    String startPlayerId;
+    String opponentPlayerId;
     String pushId;
     int mode;
     long timestamp;
@@ -28,6 +30,22 @@ public class Choice {
         this.option1 = option1;
         this.option2 = option2;
         this.timestamp = Calendar.getInstance().getTimeInMillis();
+    }
+
+    public String getStartPlayerId() {
+        return startPlayerId;
+    }
+
+    public void setStartPlayerId(String startPlayerId) {
+        this.startPlayerId = startPlayerId;
+    }
+
+    public String getOpponentPlayerId() {
+        return opponentPlayerId;
+    }
+
+    public void setOpponentPlayerId(String opponentPlayerId) {
+        this.opponentPlayerId = opponentPlayerId;
     }
 
     public String getStatus() {
