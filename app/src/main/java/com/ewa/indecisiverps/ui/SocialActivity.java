@@ -33,7 +33,7 @@ import butterknife.ButterKnife;
 
 //TODO: delete icon instead of swipe to delete on friends activity because 1. i am lazy and 2.consistency
 //TODO: some sort of indication when you have a friend invite
-public class SocialActivity extends AppCompatActivity {
+public class SocialActivity extends AppCompatActivity implements View.OnClickListener{
     @Bind(R.id.addFriendButton) Button mAddFriendButton;
     @Bind(R.id.invitationsRecyclerView) RecyclerView mInvitationRecyclerView;
     @Bind(R.id.friendsRecyclerView) RecyclerView mFriendsRecyclerView;
@@ -42,6 +42,7 @@ public class SocialActivity extends AppCompatActivity {
     @Bind(R.id.invitationsLinearLayout) LinearLayout mInvitationsLinearLayout;
     @Bind(R.id.friendsLinearLayout) LinearLayout mFriendsLinearLayout;
     @Bind(R.id.emptyView) TextView mEmptyView;
+    @Bind(R.id.goBackButton) Button mBackButton;
     String mCurrentUserId;
     ArrayList<User> mInvites = new ArrayList<>();
     ArrayList<User> mFriends = new ArrayList<>();
@@ -64,13 +65,8 @@ public class SocialActivity extends AppCompatActivity {
         String initial =mCurrentUserName.substring(0, 1);
         String url = "https://dummyimage.com/80x80/0096a7/ffffff.png&text=" + initial;
         Picasso.with(this).load(url).fit().into(muUserIconImageView);
-        mAddFriendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent addFriendIntent = new Intent(SocialActivity.this, AddFriendActivity.class);
-                startActivity(addFriendIntent);
-            }
-        });
+        mAddFriendButton.setOnClickListener(this);
+        mBackButton.setOnClickListener(this);
         createUserLists();
         populateListViews();
     }
@@ -148,6 +144,20 @@ public class SocialActivity extends AppCompatActivity {
         super.onDestroy();
         if(mFriendsEventListener != null){
             mFriendsQuery.removeEventListener(mFriendsEventListener);
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch(view.getId()){
+            case R.id.addFriendButton:
+                Intent addFriendIntent = new Intent(SocialActivity.this, AddFriendActivity.class);
+                startActivity(addFriendIntent);
+                break;
+            case R.id.goBackButton:
+                Intent goBackIntent = new Intent(SocialActivity.this, MainActivity.class);
+                startActivity(goBackIntent);
+                break;
         }
     }
 }

@@ -16,6 +16,17 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/linearLayout">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Login"
+            android:textColor="@color/colorPrimaryLight"
+            android:textSize="30dp"
+            android:layout_marginBottom="20dp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:id="@+id/firebaseLoginTextView"/>
+
         <EditText
             android:id="@+id/titleEditText"
             android:layout_width="match_parent"
@@ -72,7 +83,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            android:textColor="@android:color/white"
+            android:textColor="@color/colorPrimaryLight"
             android:textStyle="bold"
             android:textSize="20sp"
             android:text="Why log in?!"
@@ -124,15 +135,4 @@
             android:layout_marginLeft="64dp" />
 
     </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Login"
-        android:textColor="@color/colorPrimaryLight"
-        android:textSize="30dp"
-        android:textStyle="bold"
-        android:layout_above="@+id/linearLayout"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/firebaseLoginTextView"/>
 </RelativeLayout>

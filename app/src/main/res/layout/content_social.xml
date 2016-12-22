@@ -52,24 +52,39 @@
             android:layout_gravity="center"
             android:id="@+id/editProfileText"/>
     </LinearLayout>
-
-    <Button
-        android:text="Add People To Decide Things WIth!"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/addFriendButton"
-        android:textSize="14sp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:layout_below="@+id/linearLayout3"
-        android:layout_centerHorizontal="true" />
-
+        android:layout_below="@id/linearLayout3"
+        android:orientation="horizontal"
+        android:id="@+id/buttonLinearLayout"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp">
+        <Button
+            android:text="Add People!"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/addFriendButton"
+            android:textSize="14sp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"/>
+        <Button
+            android:text="Go Back"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/goBackButton"
+            android:textSize="14sp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"/>
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_margin="5dp"
-        android:layout_below="@id/addFriendButton"
+        android:layout_below="@id/buttonLinearLayout"
         android:id="@+id/invitationsLinearLayout"
         android:visibility="gone">
         <TextView
@@ -127,5 +142,4 @@
             android:id="@+id/emptyView"
             android:text="looks like you need to find some people!"/>
     </LinearLayout>
-
 </RelativeLayout>
