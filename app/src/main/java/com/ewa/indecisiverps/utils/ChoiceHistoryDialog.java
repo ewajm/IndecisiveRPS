@@ -16,7 +16,6 @@ import com.ewa.indecisiverps.R;
 import com.ewa.indecisiverps.models.Choice;
 import com.ewa.indecisiverps.models.Round;
 import com.ewa.indecisiverps.models.User;
-import com.ewa.indecisiverps.ui.DecisionsActivity;
 import com.ewa.indecisiverps.ui.NewChoiceActivity;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DatabaseReference;
@@ -33,6 +32,7 @@ import java.util.ArrayList;
 public class ChoiceHistoryDialog extends DialogFragment implements View.OnClickListener {
     ArrayList<User> mRounds = new ArrayList<>();
     private ListView mRoundHistoryListView;
+    private TextView mOptionsTextView;
     private TextView mPlayersTextView;
     private TextView mWinnerTextView;
     private Button mDecideAgainButton;
@@ -65,13 +65,16 @@ public class ChoiceHistoryDialog extends DialogFragment implements View.OnClickL
         // Get field from view
         mChoice = Parcels.unwrap(getArguments().getParcelable("choice"));
         mRoundHistoryListView = (ListView) view.findViewById(R.id.roundHistoryListView);
+        mOptionsTextView = (TextView) view.findViewById(R.id.optionsTextView);
         mPlayersTextView = (TextView) view.findViewById(R.id.playersTextView);
         mWinnerTextView = (TextView) view.findViewById(R.id.winnerTextView);
         mCloseButton = (Button) view.findViewById(R.id.closeDialogButton);
         mDecideAgainButton = (Button) view.findViewById(R.id.decideAgainButton);
-        mCloseButton.setOnClickListener(this);
         mDecideAgainButton.setOnClickListener(this);
-        getDialog().setTitle(mChoice.getOption1() + " vs " + mChoice.getOption2());
+        mCloseButton.setOnClickListener(this);
+        mOptionsTextView.setText(mChoice.getOption1() + " vs " + mChoice.getOption2());
+        getDialog().requestWindowFeature(STYLE_NO_TITLE);
+        getDialog().getWindow().setBackgroundDrawableResource(R.color.colorPrimaryTranslucent);
         if (mChoice.getPlayer1().equals("opponent") || mChoice.getPlayer2().equals("opponent")) {
             mPlayersTextView.setText("Solo Mode");
         } else {
