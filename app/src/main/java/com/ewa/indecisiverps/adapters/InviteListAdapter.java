@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.ewa.indecisiverps.Constants;
@@ -24,10 +25,12 @@ public class InviteListAdapter extends RecyclerView.Adapter<InvitationViewHolder
     private ArrayList<User> mUsers = new ArrayList<>();
     private Context mContext;
     private String mUserId;
+    private LinearLayout mInviteLayout;
 
-    public InviteListAdapter(ArrayList<User> users, Context context) {
+    public InviteListAdapter(ArrayList<User> users, Context context, LinearLayout inviteLayout) {
         mUsers = users;
         mContext = context;
+        mInviteLayout = inviteLayout;
     }
 
     @Override
@@ -46,6 +49,9 @@ public class InviteListAdapter extends RecyclerView.Adapter<InvitationViewHolder
                 newFriendUserRef.setValue(Constants.STATUS_RESOLVED);
                 Toast.makeText(mContext, "Your are now friends with " + user.getUsername(), Toast.LENGTH_SHORT).show();
                 mUsers.remove(user);
+                if(mUsers.size() == 0){
+                    mInviteLayout.setVisibility(View.GONE);
+                }
                 notifyDataSetChanged();
             }
         });
@@ -57,6 +63,9 @@ public class InviteListAdapter extends RecyclerView.Adapter<InvitationViewHolder
                 DatabaseReference currentUserFriendRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).child(mUserId).child("friends").child(user.getUserId());
                 currentUserFriendRef.removeValue();
                 mUsers.remove(user);
+                if(mUsers.size() == 0){
+                    mInviteLayout.setVisibility(View.GONE);
+                }
                 notifyDataSetChanged();
             }
         });

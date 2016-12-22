@@ -41,6 +41,7 @@ public class SocialActivity extends AppCompatActivity {
     @Bind(R.id.usernameTextView) TextView mUsernameTextView;
     @Bind(R.id.invitationsLinearLayout) LinearLayout mInvitationsLinearLayout;
     @Bind(R.id.friendsLinearLayout) LinearLayout mFriendsLinearLayout;
+    @Bind(R.id.emptyView) TextView mEmptyView;
     String mCurrentUserId;
     ArrayList<User> mInvites = new ArrayList<>();
     ArrayList<User> mFriends = new ArrayList<>();
@@ -75,7 +76,7 @@ public class SocialActivity extends AppCompatActivity {
     }
 
     private void populateListViews() {
-        mInviteAdapter = new InviteListAdapter(mInvites, this);
+        mInviteAdapter = new InviteListAdapter(mInvites, this, mInvitationsLinearLayout);
         mInvitationRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mInvitationRecyclerView.setHasFixedSize(true);
         mInvitationRecyclerView.setAdapter(mInviteAdapter);
@@ -120,6 +121,9 @@ public class SocialActivity extends AppCompatActivity {
                                     User thisUser = dataSnapshot.getValue(User.class);
                                     mFriends.add(thisUser);
                                     mFriendsAdapter.notifyDataSetChanged();
+                                    if(mEmptyView.getVisibility() == View.VISIBLE){
+                                        mEmptyView.setVisibility(View.GONE);
+                                    }
                                 }
 
                                 @Override
