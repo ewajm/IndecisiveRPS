@@ -151,6 +151,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void onClick(View view) {
                 mMoveArray = new String[2];
+                mGameButton.setText("Another Round");
                 switch(view.getId()){
                     case R.id.scissorsButton:
                         mMoveArray[mPlayerNumber] = Constants.RPS_SCISSORS;
@@ -443,12 +444,14 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                 if(mGameButton.getText().toString().equals("Another Round")){
                     mBottomSheetBehavior1.setState(BottomSheetBehavior.STATE_EXPANDED);
                     mWinnerTextView.setVisibility(View.GONE);
-                    mGameButton.setVisibility(View.GONE);
                     mOption1ImageView.setVisibility(View.INVISIBLE);
                     mOption2ImageView.setVisibility(View.INVISIBLE);
-                } else {
+                    mGameButton.setText("Choose Move");
+                } else if (mGameButton.getText().toString().equals("New Decision")){
                     Intent newGameIntent = new Intent(this, NewChoiceActivity.class);
                     startActivity(newGameIntent);
+                } else {
+                    mBottomSheetBehavior1.setState(BottomSheetBehavior.STATE_EXPANDED);
                 }
                 break;
         }

@@ -109,8 +109,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Another Round"
-            android:visibility="gone"
+            android:text="Choose Move"
             android:layout_gravity="bottom"
             android:id="@+id/gameButton"
             android:layout_above="@+id/cancelButton"/>

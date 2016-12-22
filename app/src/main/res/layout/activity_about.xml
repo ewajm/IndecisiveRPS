@@ -70,7 +70,7 @@
                android:textSize="16sp"
                android:textColor="@color/colorPrimaryText"
                android:layout_marginBottom="5dp"
-               android:text="Otherwise just play a quick round without logging in."/>
+               android:text="Otherwise just play a quick round without logging in"/>
            <View
                android:layout_width="match_parent"
                android:layout_height="1dp"
@@ -82,7 +82,7 @@
                android:textSize="16sp"
                android:textColor="@color/colorPrimaryText"
                android:layout_marginBottom="5dp"
-               android:text="The app will take care of assigning (and, more importantly, remembering) who gets which option. "/>
+               android:text="The app will take care of assigning (and, more importantly, remembering) who gets which option"/>
            <View
                android:layout_width="match_parent"
                android:layout_height="1dp"
@@ -94,7 +94,7 @@
                android:textSize="16sp"
                android:textColor="@color/colorPrimaryText"
                android:layout_marginBottom="5dp"
-               android:text="No more debates along the lines of 'Wait, were you tacos or was I?'!"/>
+               android:text="No more debates along the lines of 'Wait, were you tacos or was I?'"/>
            <View
                android:layout_width="match_parent"
                android:layout_height="1dp"
@@ -107,7 +107,7 @@
                 android:layout_margin="3dp"
                 android:textColor="@color/colorPrimaryText"
                 android:layout_marginBottom="5dp"
-                android:text="Just play a round and move on to the important tasks of taco (or pizza) acquisition and consumption."/>
+                android:text="Just play a round and move on to the important tasks of taco (or pizza) acquisition and consumption"/>
              </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>
