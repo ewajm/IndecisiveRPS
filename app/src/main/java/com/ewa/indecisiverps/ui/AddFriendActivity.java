@@ -89,21 +89,21 @@ public class AddFriendActivity extends AppCompatActivity {
             }
         };
 
-//        mFirebaseQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                if(!dataSnapshot.hasChildren()){
-//                    mEmptyView.setVisibility(View.VISIBLE);
-//                } else {
-//                    mEmptyView.setVisibility(View.GONE);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
+        mFirebaseQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.hasChildren()){
+                    mEmptyView.setVisibility(View.VISIBLE);
+                } else {
+                    mEmptyView.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         mAddFriendRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAddFriendRecyclerView.setAdapter(mFirebaseAdapter);

@@ -70,7 +70,6 @@ public class SocialActivity extends AppCompatActivity {
                 startActivity(addFriendIntent);
             }
         });
-
         createUserLists();
         populateListViews();
     }

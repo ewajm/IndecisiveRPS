@@ -8,7 +8,12 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.ewa.indecisiverps.ui.SocialActivity"
     tools:showIn="@layout/activity_social">
-
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/people"
+        android:scaleType="centerCrop"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -73,8 +78,9 @@
             android:text="People who want to decide things with you"
             android:gravity="center_horizontal"
             android:layout_marginTop="5dp"
-            android:textSize="18sp"
-            android:id="@+id/invitationsHeadingTextView"/>
+            android:textSize="19sp"
+            android:id="@+id/invitationsHeadingTextView"
+            android:textColor="@android:color/black"/>
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
@@ -95,8 +101,14 @@
             android:text="People you are deciding things with"
             android:gravity="center_horizontal"
             android:layout_marginTop="5dp"
-            android:textSize="18sp"
-            android:id="@+id/friendsHeadingTextView"/>
+            android:textSize="19sp"
+            android:id="@+id/friendsHeadingTextView"
+            android:textColor="#000000"
+            android:shadowColor="#ffffff"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="5"
+            android:textStyle="normal|bold"/>
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
