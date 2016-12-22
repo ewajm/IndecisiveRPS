@@ -65,7 +65,8 @@
         android:orientation="vertical"
         android:layout_margin="5dp"
         android:layout_below="@id/addFriendButton"
-        android:id="@+id/invitationsLinearLayout">
+        android:id="@+id/invitationsLinearLayout"
+        android:visibility="gone">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -104,4 +105,5 @@
             android:id="@+id/friendsRecyclerView">
         </android.support.v7.widget.RecyclerView>
     </LinearLayout>
+
 </RelativeLayout>

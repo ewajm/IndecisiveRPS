@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="Choose Your Opponent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/headingView"
+        android:gravity="center"
+        style="@style/SubHeading"
+        android:layout_margin="5dp"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/friendListView"
+        android:layout_below="@+id/headingView"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@android:id/empty"
+        android:text="Please wait a moment"
+        android:textSize="16dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/friendListView"/>
+</RelativeLayout>

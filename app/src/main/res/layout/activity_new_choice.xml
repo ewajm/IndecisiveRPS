@@ -98,8 +98,7 @@
                 android:layout_height="wrap_content"
                 android:text="Grab a Friend"
                 android:id="@+id/friendButton"
-                android:layout_weight="1"
-                android:enabled="false"/>
+                android:layout_weight="1" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

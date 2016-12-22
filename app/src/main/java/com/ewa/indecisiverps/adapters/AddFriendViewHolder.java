@@ -1,12 +1,8 @@
 package com.ewa.indecisiverps.adapters;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Typeface;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,12 +11,10 @@ import android.widget.Toast;
 import com.ewa.indecisiverps.Constants;
 import com.ewa.indecisiverps.R;
 import com.ewa.indecisiverps.models.User;
-import com.ewa.indecisiverps.ui.ResolveRoundActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import org.parceler.Parcels;
+import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -55,12 +49,13 @@ public class AddFriendViewHolder extends RecyclerView.ViewHolder implements View
         Typeface headingFont = Typeface.createFromAsset(mContext.getAssets(), "fonts/titan_one_regular.ttf");
         mFriendNameTextView.setTypeface(headingFont);
         String initial = mUser.getUsername().substring(0, 1);
-
+        String url = "https://dummyimage.com/80x80/0096a7/ffffff.png&text=" + initial;
+        Picasso.with(mContext).load(url).fit().into(mFriendIconImageView);
     }
 
     @Override
     public void onClick(View view) {
-        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).child(mUser.getUserId()).child("friends").child(mCurrentUserId);
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).child(mUser.getUserId()).child("friends").child(mCurrentUserId).child("status");
         userRef.setValue(Constants.STATUS_PENDING);
         Toast.makeText(mContext, "Invitation sent!", Toast.LENGTH_SHORT).show();
     }

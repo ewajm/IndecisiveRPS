@@ -23,7 +23,7 @@
         android:gravity="center"
         android:id="@+id/friendNameTextView"
         android:textSize="24sp"
-        android:textColor="@color/colorAccent"/>
+        android:textColor="@color/colorAccentDark"/>
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
