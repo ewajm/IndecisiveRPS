@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              >
+
+    <TextView
+        android:text="Players: A, B"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/playersTextView"
+        android:gravity="center_horizontal"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="24sp"
+        />
+    <TextView
+        android:text="Winner: X"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/winnerTextView"
+        android:gravity="center_horizontal"
+        style="@style/Heading"
+        />
+    <TextView
+        android:text="Round History"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/roundHistoryTextView"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="16sp"
+        />
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:id="@+id/roundHistoryListView">
+    </ListView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/closeDialogButton"
+            android:text="Close"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/decideAgainButton"
+            android:text="Decide Again"/>
+    </LinearLayout>
+</LinearLayout>

@@ -6,7 +6,6 @@ import android.graphics.Typeface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,7 +20,6 @@ import com.ewa.indecisiverps.Constants;
 import com.ewa.indecisiverps.R;
 import com.ewa.indecisiverps.models.Choice;
 import com.ewa.indecisiverps.models.User;
-import com.ewa.indecisiverps.utils.ChooseFriendDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,13 +31,10 @@ import com.google.firebase.database.ValueEventListener;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
-import static java.security.AccessController.getContext;
 
 public class NewChoiceActivity extends AppCompatActivity implements View.OnClickListener{
     @Bind(R.id.choiceOneEditText) EditText mChoiceOneEditText;

@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,8 +17,10 @@ import android.widget.TextView;
 import com.ewa.indecisiverps.Constants;
 import com.ewa.indecisiverps.R;
 import com.ewa.indecisiverps.models.Choice;
+import com.ewa.indecisiverps.ui.DecisionsActivity;
 import com.ewa.indecisiverps.ui.NewChoiceActivity;
 import com.ewa.indecisiverps.ui.ResolveRoundActivity;
+import com.ewa.indecisiverps.utils.ChoiceHistoryDialog;
 
 import org.parceler.Parcels;
 
@@ -54,28 +57,18 @@ public class ChoiceViewHolder extends RecyclerView.ViewHolder implements View.On
     public void onClick(View view) {
         Log.i("viewholder", "onClick: ");
         if(mChoice.getStatus().equals(Constants.STATUS_RESOLVED)){
-            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-            String message = "Play this decision again?";
-            builder.setMessage(message);
-            builder.setPositiveButton("Yeppers", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    Intent playAgainIntent = new Intent(mContext, NewChoiceActivity.class);
-                    playAgainIntent.putExtra("choice", Parcels.wrap(mChoice));
-                    mContext.startActivity(playAgainIntent);
-                }
-            });
-            builder.setNegativeButton("Nah", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-
-                }
-            });
-            builder.create().show();
+            showChoiceHistoryDialog();
         } else if(mChoice.getStatus().equals(Constants.STATUS_READY)){
             Intent resolveIntent = new Intent(mContext, ResolveRoundActivity.class);
             resolveIntent.putExtra("choice", Parcels.wrap(mChoice));
             mContext.startActivity(resolveIntent);
         }
+    }
+
+    private void showChoiceHistoryDialog(){
+        DecisionsActivity decisionsActivity = (DecisionsActivity) mContext;
+        FragmentManager fm = decisionsActivity.getSupportFragmentManager();
+        ChoiceHistoryDialog choiceHistoryDialog = ChoiceHistoryDialog.newInstance(mChoice);
+        choiceHistoryDialog.show(fm, "fragment_edit_name");
     }
 }
