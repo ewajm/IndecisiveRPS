@@ -1,7 +1,9 @@
 package com.ewa.indecisiverps.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +26,7 @@ import java.util.ArrayList;
  * Created by ewa on 12/21/2016.
  */
 
-public class FriendListAdapter  extends RecyclerView.Adapter<FriendViewHolder> implements View.OnClickListener{
+public class FriendListAdapter  extends RecyclerView.Adapter<FriendViewHolder> {
     private ArrayList<User> mUsers = new ArrayList<>();
     private Context mContext;
     private FriendViewHolder mViewHolder;
@@ -38,10 +40,43 @@ public class FriendListAdapter  extends RecyclerView.Adapter<FriendViewHolder> i
     @Override
     public FriendViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.friend_list_item, parent, false);
-        mViewHolder = new FriendViewHolder(view);
-        mViewHolder.mDecideTextView.setOnClickListener(this);
+        final FriendViewHolder viewHolder = new FriendViewHolder(view);
+        viewHolder.mDecideNowImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int clickPosition = viewHolder.getAdapterPosition();
+                User user = mUsers.get(clickPosition);
+                Intent intent = new Intent(mContext, NewChoiceActivity.class);
+                intent.putExtra("opponent", Parcels.wrap(user));
+                mContext.startActivity(intent);
+            }
+        });
+        viewHolder.mRemoveFriendImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int clickPosition = viewHolder.getAdapterPosition();
+                final User user = mUsers.get(clickPosition);
+                new AlertDialog.Builder(mContext)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("Remove Friend")
+                        .setMessage("Are you sure you want to DESTROY YOUR RELATIONSHIP with " + user.getUsername() + "?!?!")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                DatabaseReference currentUserFriendRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).child(mUserId).child("friends").child(user.getUserId());
+                                currentUserFriendRef.removeValue();
+                                mUsers.remove(user);
+                                notifyDataSetChanged();
+                            }
+
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+            }
+        });
         mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        return mViewHolder;
+        return viewHolder;
     }
 
     @Override
@@ -54,20 +89,4 @@ public class FriendListAdapter  extends RecyclerView.Adapter<FriendViewHolder> i
         return mUsers.size();
     }
 
-    @Override
-    public void onClick(View view) {
-        int clickPosition = mViewHolder.getAdapterPosition();
-        User user = mUsers.get(clickPosition);
-        if(view.getId() == R.id.decideTextView){
-            Intent intent = new Intent(mContext, NewChoiceActivity.class);
-            intent.putExtra("opponent", Parcels.wrap(user));
-            mContext.startActivity(intent);
-        }
-//        else {
-//            DatabaseReference currentUserFriendRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).child(mUserId).child("friends").child(user.getUserId());
-//            currentUserFriendRef.removeValue();
-//        }
-//        mUsers.remove(clickPosition);
-//        notifyItemRemoved(clickPosition);
-    }
 }

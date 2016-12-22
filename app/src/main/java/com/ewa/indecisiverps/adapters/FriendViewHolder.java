@@ -22,7 +22,8 @@ import butterknife.ButterKnife;
 public class FriendViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.friendIconImageView) ImageView mFriendIconImageView;
     @Bind(R.id.friendNameTextView) TextView mFriendNameTextView;
-    @Bind(R.id.decideTextView) TextView mDecideTextView;
+    @Bind(R.id.decideNowImageView) ImageView mDecideNowImageView;
+    @Bind(R.id.removeFriendImageView) ImageView mRemoveFriendImageView;
     User mUser;
     Context mContext;
 

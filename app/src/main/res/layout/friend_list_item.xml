@@ -24,13 +24,20 @@
         android:id="@+id/friendNameTextView"
         android:textSize="24sp"
         android:textColor="@color/colorAccentDark"/>
-    <TextView
+    <ImageView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:text="Let's Go!"
-        android:textColor="@color/colorAccent"
+        android:layout_weight="1"
+        android:src="@drawable/ic_action_refuse"
         android:gravity="center"
         android:layout_gravity="center"
-        android:id="@+id/decideTextView"/>
+        android:id="@+id/removeFriendImageView"/>
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:src="@drawable/ic_action_go"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:id="@+id/decideNowImageView"/>
 </LinearLayout>
