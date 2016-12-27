@@ -88,6 +88,8 @@ public class AddFriendViewHolder extends RecyclerView.ViewHolder implements View
             DatabaseReference userRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).child(mUser.getUserId()).child("friends").child(mCurrentUserId).child("status");
             userRef.setValue(Constants.STATUS_PENDING);
             Toast.makeText(mContext, "Invitation sent!", Toast.LENGTH_SHORT).show();
+            mAddFriendImageView.setImageResource(R.drawable.ic_action_accept);
+            mIsFriend = true;
         }
     }
 }
