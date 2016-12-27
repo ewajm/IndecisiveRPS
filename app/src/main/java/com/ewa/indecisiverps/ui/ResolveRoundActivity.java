@@ -77,21 +77,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         mRound = new Round();
         mChoice = Parcels.unwrap(getIntent().getParcelableExtra("choice"));
         mAuth = FirebaseAuth.getInstance();
-        if(mAuth.getCurrentUser() != null){
-            mUserId = mAuth.getCurrentUser().getUid();
-            mUsername = mAuth.getCurrentUser().getDisplayName();
-            mChoiceRef = FirebaseDatabase.getInstance().getReference("choices").child(mUserId);
-            mPlayerNumber = mChoice.getPlayer1().equals(mUsername) ? 0: 1;
-        } else {
-            mPlayerNumber = mChoice.getPlayer1().equals("user") ? 0: 1;
-        }
-        if(mChoice.isImpartialityMode()){
-            mPlayingForTextView.setVisibility(View.GONE);
-        }
-        mOpponentNumber = mPlayerNumber == 0 ? 1:0;
-        mPlayersImageView = mPlayerNumber == 0 ? mOption1ImageView: mOption2ImageView;
-        mOpponentImageView = mPlayerNumber == 0 ? mOption2ImageView: mOption1ImageView;
-        mOptions = new String[]{mChoice.getOption1(), mChoice.getOption2()};
+        setUpPlayersAndOptions();
         mPlayingForTextView.setText(String.format(getString(R.string.playing_for), mOptions[mPlayerNumber]));
         mOption1TextView.setText(mOptions[0]);
         mOption2TextView.setText(mOptions[1]);
@@ -152,6 +138,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
             public void onClick(View view) {
                 mMoveArray = new String[2];
                 mGameButton.setText("Another Round");
+                mPlayersImageView.setVisibility(View.INVISIBLE);
                 switch(view.getId()){
                     case R.id.scissorsButton:
                         mMoveArray[mPlayerNumber] = Constants.RPS_SCISSORS;
@@ -175,7 +162,6 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                     pushRef.setValue(mChoice);
                 }
                 mBottomSheetBehavior1.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                mPlayersImageView.setVisibility(View.INVISIBLE);
                 Animation slideInBottom = AnimationUtils.loadAnimation(ResolveRoundActivity.this, R.anim.slide_in_from_bottom);
                 mPlayersImageView.startAnimation(slideInBottom);
                 mPlayersImageView.setVisibility(View.VISIBLE);
@@ -210,6 +196,25 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         mCancelButton.setOnClickListener(this);
     }
 
+    //sets up game variables
+    private void setUpPlayersAndOptions() {
+        if(mAuth.getCurrentUser() != null){
+            mUserId = mAuth.getCurrentUser().getUid();
+            mUsername = mAuth.getCurrentUser().getDisplayName();
+            mChoiceRef = FirebaseDatabase.getInstance().getReference("choices").child(mUserId);
+            mPlayerNumber = mChoice.getPlayer1().equals(mUsername) ? 0: 1;
+        } else {
+            mPlayerNumber = mChoice.getPlayer1().equals("user") ? 0: 1;
+        }
+        if(mChoice.isImpartialityMode()){
+            mPlayingForTextView.setVisibility(View.GONE);
+        }
+        mOpponentNumber = mPlayerNumber == 0 ? 1:0;
+        mPlayersImageView = mPlayerNumber == 0 ? mOption1ImageView: mOption2ImageView;
+        mOpponentImageView = mPlayerNumber == 0 ? mOption2ImageView: mOption1ImageView;
+        mOptions = new String[]{mChoice.getOption1(), mChoice.getOption2()};
+    }
+
     private void showFinishedRound() {
         mRoundRef = FirebaseDatabase.getInstance().getReference("rounds").child(mChoice.getPushId());
         mRoundRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -219,18 +224,26 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                     Round round = snapshot.getValue(Round.class);
                     mRoundList.add(round);
                 }
+                mPlayersImageView.setVisibility(View.INVISIBLE);
+                mOption1ImageView.setVisibility(View.INVISIBLE);
                 mRound = mRoundList.get(mRoundList.size()-1);
                 if(mRound.getPlayer1Move().equals(Constants.RPS_PAPER)){
-                    mOpponentImageView.setImageResource(R.drawable.paper2);
+                    mOption1ImageView.setImageResource(R.drawable.paper2);
                 } else if(mRound.getPlayer1Move().equals(Constants.RPS_ROCK)){
-                    mOpponentImageView.setImageResource(R.drawable.rock);
+                    mOption1ImageView.setImageResource(R.drawable.rock);
                 } else {
-                    mOpponentImageView.setImageResource(R.drawable.scissors2);
+                    mOption1ImageView.setImageResource(R.drawable.scissors2);
                 }
-                mOpponentImageView.setVisibility(View.INVISIBLE);
+                if(mRound.getPlayer2Move().equals(Constants.RPS_PAPER)){
+                    mOption2ImageView.setImageResource(R.drawable.paper2);
+                } else if(mRound.getPlayer2Move().equals(Constants.RPS_ROCK)){
+                    mOption2ImageView.setImageResource(R.drawable.rock);
+                } else {
+                    mOption2ImageView.setImageResource(R.drawable.scissors2);
+                }
                 Animation slideInBottom = AnimationUtils.loadAnimation(ResolveRoundActivity.this, R.anim.slide_in_from_bottom);
-                mOpponentImageView.startAnimation(slideInBottom);
-                mOpponentImageView.setVisibility(View.VISIBLE);
+                mPlayersImageView.startAnimation(slideInBottom);
+                mPlayersImageView.setVisibility(View.VISIBLE);
                 slideInBottom.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
@@ -239,17 +252,9 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        if(mRound.getPlayer2Move().equals(Constants.RPS_PAPER)){
-                            mPlayersImageView.setImageResource(R.drawable.paper2);
-                        } else if(mRound.getPlayer2Move().equals(Constants.RPS_ROCK)){
-                            mPlayersImageView.setImageResource(R.drawable.rock);
-                        } else {
-                            mPlayersImageView.setImageResource(R.drawable.scissors2);
-                        }
-                        mPlayersImageView.setVisibility(View.INVISIBLE);
                         Animation slideInBottom = AnimationUtils.loadAnimation(ResolveRoundActivity.this, R.anim.slide_in_from_bottom);
-                        mPlayersImageView.startAnimation(slideInBottom);
-                        mPlayersImageView.setVisibility(View.VISIBLE);
+                        mOpponentImageView.startAnimation(slideInBottom);
+                        mOpponentImageView.setVisibility(View.VISIBLE);
                         slideInBottom.setAnimationListener(new Animation.AnimationListener() {
                             @Override
                             public void onAnimationStart(Animation animation) {
@@ -293,6 +298,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                     mRoundList.add(round);
                 }
                 mRound = mRoundList.get(mRoundList.size()-1);
+                mOpponentImageView.setVisibility(View.INVISIBLE);
                 if(mRound.getPlayer1Move().length() == 0){
                     mRound.setPlayer1Move(mMoveArray[mPlayerNumber]);
                     mMoveArray[mOpponentNumber] = mRound.getPlayer2Move();
@@ -307,7 +313,6 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                 } else {
                     mOpponentImageView.setImageResource(R.drawable.scissors2);
                 }
-                mOpponentImageView.setVisibility(View.INVISIBLE);
                 Animation slideInBottom = AnimationUtils.loadAnimation(ResolveRoundActivity.this, R.anim.slide_in_from_bottom);
                 mOpponentImageView.startAnimation(slideInBottom);
                 mOpponentImageView.setVisibility(View.VISIBLE);
@@ -463,8 +468,8 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         int[] rpsImageArray = {R.drawable.paper2, R.drawable.rock, R.drawable.scissors2};
         Random random = new Random();
         int compMove = random.nextInt(rpsArray.length);
-        mOpponentImageView.setImageResource(rpsImageArray[compMove]);
         mOpponentImageView.setVisibility(View.INVISIBLE);
+        mOpponentImageView.setImageResource(rpsImageArray[compMove]);
         Animation slideInBottom = AnimationUtils.loadAnimation(ResolveRoundActivity.this, R.anim.slide_in_from_bottom);
         mOpponentImageView.startAnimation(slideInBottom);
         mOpponentImageView.setVisibility(View.VISIBLE);
