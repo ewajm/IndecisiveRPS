@@ -11,9 +11,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.ewa.indecisiverps.Constants;
 import com.ewa.indecisiverps.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -29,6 +37,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     String mUserName;
+    String mUserId;
+    private Query mReadyGameQuery;
+    private ValueEventListener mReadyValueListener;
+    private Query mUserInviteQuery;
+    private ValueEventListener mUserEventListeneer;
 
 
     @Override
@@ -48,9 +61,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     mUserName =  user.getDisplayName();
+                    mUserId = user.getUid();
                     mLoginButton.setText("Logout");
                     mDecisionsButton.setVisibility(View.VISIBLE);
                     mSocialButton.setVisibility(View.VISIBLE);
+                    setUpNotificationListeners();
                 } else {
                     mLoginButton.setText("Login");
                     mDecisionsButton.setVisibility(View.GONE);
@@ -107,5 +122,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
+        if(mReadyGameQuery != null){
+            mReadyGameQuery.removeEventListener(mReadyValueListener);
+            mUserInviteQuery.removeEventListener(mUserEventListeneer);
+        }
     }
+
+    public void setUpNotificationListeners(){
+        mReadyGameQuery = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_CHOICE_REF).child(mUserId).orderByChild("status").equalTo(Constants.STATUS_READY);
+        mReadyValueListener = mReadyGameQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChildren()){
+                    mDecisionsButton.setText("My Decisions - Found Decisions!");
+                } else {
+                    mDecisionsButton.setText("My Decisions");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        mUserInviteQuery = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).child(mUserId).child("friends").orderByChild("status").equalTo(Constants.STATUS_PENDING);
+        mUserEventListeneer = mUserInviteQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChildren()){
+                    mSocialButton.setText("Social - Found Invites!");
+                } else {
+                    mSocialButton.setText("Social");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
 }
