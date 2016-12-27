@@ -447,6 +447,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                     mOption1ImageView.setVisibility(View.INVISIBLE);
                     mOption2ImageView.setVisibility(View.INVISIBLE);
                     mGameButton.setText("Choose Move");
+                    mChoice.setStatus(Constants.STATUS_PENDING);
                 } else if (mGameButton.getText().toString().equals("New Decision")){
                     Intent newGameIntent = new Intent(this, NewChoiceActivity.class);
                     startActivity(newGameIntent);

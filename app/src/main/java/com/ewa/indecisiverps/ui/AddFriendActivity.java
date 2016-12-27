@@ -63,7 +63,7 @@ public class AddFriendActivity extends AppCompatActivity {
                 }
                 mAddFriendRecyclerView.setVisibility(View.VISIBLE);
                 mEmptyView.setVisibility(View.INVISIBLE);
-                searchUsers(query);
+                searchUsers(query.trim());
                 return false;
             }
 
