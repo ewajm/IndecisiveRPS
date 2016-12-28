@@ -228,7 +228,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                     mRoundList.add(round);
                 }
                 mPlayersImageView.setVisibility(View.INVISIBLE);
-                mOption1ImageView.setVisibility(View.INVISIBLE);
+                mOpponentImageView.setVisibility(View.INVISIBLE);
                 if(mChoice.getWin().equals(Constants.STATUS_TIE)){
                     mRound = mRoundList.get(mRoundList.size()-2);
                 } else {
