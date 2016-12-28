@@ -87,36 +87,38 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         mOption2TextView.setTypeface(headingFont);
         mWinnerTextView.setTypeface(headingFont);
         mWinningChoiceTextView.setTypeface(headingFont);
+        mGameButton.setEnabled(false);
 
         mBottomSheetBehavior1 = BottomSheetBehavior.from(mBottomSheet);
 
 
         Animation slideIn = AnimationUtils.loadAnimation(this, R.anim.slide_in_from_right);
         mOption1TextView.startAnimation(slideIn);
-        mOption1TextView.setVisibility(View.VISIBLE);
+
         slideIn.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-
+                mOption1TextView.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
                 Animation slideIn2 = AnimationUtils.loadAnimation(ResolveRoundActivity.this, R.anim.slide_in_from_left);
                 mOption2TextView.startAnimation(slideIn2);
-                mOption2TextView.setVisibility(View.VISIBLE);
+
                 slideIn2.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
-
+                        mOption2TextView.setVisibility(View.VISIBLE);
                     }
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         if(mChoice.getWin() == null){
                            mBottomSheetBehavior1.setState(BottomSheetBehavior.STATE_EXPANDED);
+                            mGameButton.setEnabled(true);
                         } else {
-                           showFinishedRound();   
+                            showFinishedRound();
                         }
                     }
 
@@ -164,11 +166,11 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                 mBottomSheetBehavior1.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 Animation slideInBottom = AnimationUtils.loadAnimation(ResolveRoundActivity.this, R.anim.slide_in_from_bottom);
                 mPlayersImageView.startAnimation(slideInBottom);
-                mPlayersImageView.setVisibility(View.VISIBLE);
+
                 slideInBottom.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
-
+                        mPlayersImageView.setVisibility(View.VISIBLE);
                     }
 
                     @Override
@@ -176,7 +178,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                         if(mChoice.getMode() == 1){
                             gameMove();
                         } else if(mChoice.getStatus().equals(Constants.STATUS_PENDING)){
-                           resolveSocialStartRound();
+                            resolveSocialStartRound();
                         } else {
                             getOpponentMove();
                         }
@@ -195,6 +197,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         mGameButton.setOnClickListener(this);
         mCancelButton.setOnClickListener(this);
     }
+
 
     //sets up game variables
     private void setUpPlayersAndOptions() {
@@ -226,7 +229,11 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                 }
                 mPlayersImageView.setVisibility(View.INVISIBLE);
                 mOption1ImageView.setVisibility(View.INVISIBLE);
-                mRound = mRoundList.get(mRoundList.size()-1);
+                if(mChoice.getWin().equals(Constants.STATUS_TIE)){
+                    mRound = mRoundList.get(mRoundList.size()-2);
+                } else {
+                    mRound = mRoundList.get(mRoundList.size()-1);
+                }
                 if(mRound.getPlayer1Move().equals(Constants.RPS_PAPER)){
                     mOption1ImageView.setImageResource(R.drawable.paper2);
                 } else if(mRound.getPlayer1Move().equals(Constants.RPS_ROCK)){
@@ -243,27 +250,30 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                 }
                 Animation slideInBottom = AnimationUtils.loadAnimation(ResolveRoundActivity.this, R.anim.slide_in_from_bottom);
                 mPlayersImageView.startAnimation(slideInBottom);
-                mPlayersImageView.setVisibility(View.VISIBLE);
+
                 slideInBottom.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
-
+                        mPlayersImageView.setVisibility(View.VISIBLE);
                     }
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         Animation slideInBottom = AnimationUtils.loadAnimation(ResolveRoundActivity.this, R.anim.slide_in_from_bottom);
                         mOpponentImageView.startAnimation(slideInBottom);
-                        mOpponentImageView.setVisibility(View.VISIBLE);
+
                         slideInBottom.setAnimationListener(new Animation.AnimationListener() {
                             @Override
                             public void onAnimationStart(Animation animation) {
-
+                                mOpponentImageView.setVisibility(View.VISIBLE);
                             }
 
                             @Override
                             public void onAnimationEnd(Animation animation) {
-                                mChoice.setStatus(Constants.STATUS_RESOLVED);
+                                mGameButton.setEnabled(true);
+                                if(!mChoice.getWin().equals(Constants.STATUS_TIE)){
+                                    mChoice.setStatus(Constants.STATUS_RESOLVED);
+                                }
                                 resolveSocialEndRound();
                             }
 
@@ -315,11 +325,11 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                 }
                 Animation slideInBottom = AnimationUtils.loadAnimation(ResolveRoundActivity.this, R.anim.slide_in_from_bottom);
                 mOpponentImageView.startAnimation(slideInBottom);
-                mOpponentImageView.setVisibility(View.VISIBLE);
+
                 slideInBottom.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
-
+                        mOpponentImageView.setVisibility(View.VISIBLE);
                     }
 
                     @Override
@@ -349,7 +359,13 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         if(winPosition == -1){
             mWinnerTextView.setText("It's a tie!");
             mGameButton.setText("Another Round");
-            mChoice.setStatus(Constants.STATUS_PENDING);
+            if(mChoice.getWin() == null){
+                mChoice.setWin(Constants.STATUS_TIE);
+                mChoice.setStatus(Constants.STATUS_PENDING);
+                mChoiceRef.child(mChoice.getPushId()).setValue(mChoice);
+            } else {
+                mChoice.setWin(null);
+            }
         } else {
             if(winPosition == mPlayerNumber){
                 mWinnerTextView.setText("Nice job!");
@@ -362,7 +378,6 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
             }
             mChoice.setWin(mOptions[winPosition]);
             if(!mChoice.getStatus().equals(Constants.STATUS_RESOLVED)){
-                Log.i(TAG, "resolveSocialEndRound: saving into opponents database");
                 String sendId = mChoice.getOpponentPlayerId().equals(mUserId) ? mChoice.getStartPlayerId() : mChoice.getOpponentPlayerId();
                 DatabaseReference opponentRef = FirebaseDatabase.getInstance().getReference("choices").child(sendId).child(mChoice.getPushId());
                 opponentRef.setValue(mChoice);
@@ -388,6 +403,9 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         mRound.setPlayer2Move(mMoveArray[1]);
         mRoundRef = FirebaseDatabase.getInstance().getReference("rounds").child(mChoice.getPushId());
         DatabaseReference pushRef = mRoundRef.push();
+        if(!mChoice.getStatus().equals(Constants.STATUS_PENDING)){
+            mChoice.setStatus(Constants.STATUS_PENDING);
+        }
         mRound.setPushId(pushRef.getKey());
         pushRef.setValue(mRound);
         mChoice.setStatus(Constants.STATUS_READY);
@@ -452,7 +470,6 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                     mOption1ImageView.setVisibility(View.INVISIBLE);
                     mOption2ImageView.setVisibility(View.INVISIBLE);
                     mGameButton.setText("Choose Move");
-                    mChoice.setStatus(Constants.STATUS_PENDING);
                 } else if (mGameButton.getText().toString().equals("New Decision")){
                     Intent newGameIntent = new Intent(this, NewChoiceActivity.class);
                     startActivity(newGameIntent);
@@ -473,12 +490,12 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         mOpponentImageView.setImageResource(rpsImageArray[compMove]);
         Animation slideInBottom = AnimationUtils.loadAnimation(ResolveRoundActivity.this, R.anim.slide_in_from_bottom);
         mOpponentImageView.startAnimation(slideInBottom);
-        mOpponentImageView.setVisibility(View.VISIBLE);
+
         mComputerMove = rpsArray[compMove];
         slideInBottom.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-
+                mOpponentImageView.setVisibility(View.VISIBLE);
             }
 
             @Override
