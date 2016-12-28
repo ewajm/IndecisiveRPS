@@ -10,14 +10,18 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 
+import com.ewa.indecisiverps.Constants;
 import com.ewa.indecisiverps.R;
 import com.ewa.indecisiverps.models.Choice;
 import com.ewa.indecisiverps.utils.OnStartDragListener;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import org.parceler.Parcels;
 
@@ -33,6 +37,7 @@ public class FirebaseChoiceListAdapter extends FirebaseRecyclerAdapter<Choice, C
     private Context mContext;
     private ChildEventListener mChildEventListener;
     private ArrayList<Choice> mChoices;
+    private String mUserId;
     private int mOrientation;
 
     public FirebaseChoiceListAdapter(Class<Choice> modelClass, int modelLayout,
@@ -43,6 +48,7 @@ public class FirebaseChoiceListAdapter extends FirebaseRecyclerAdapter<Choice, C
         mOnStartDragListener = onStartDragListener;
         mContext = context;
         mChoices = new ArrayList<>();
+        mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         mChildEventListener = ref.addChildEventListener(new ChildEventListener() {
             @Override
@@ -85,7 +91,23 @@ public class FirebaseChoiceListAdapter extends FirebaseRecyclerAdapter<Choice, C
 
     @Override
     public void onItemDismiss(int position) {
+        final Choice choice = mChoices.get(position);
+        String mOtherUserId = choice.getStartPlayerId().equals(mUserId) ? choice.getOpponentPlayerId() : choice.getStartPlayerId();
+        FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_CHOICE_REF).child(mOtherUserId).child(choice.getPushId()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists()){
+                    FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_ROUND_REF).child(choice.getPushId()).removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         mChoices.remove(position);
+        notifyDataSetChanged();
         getRef(position).removeValue();
     }
 
