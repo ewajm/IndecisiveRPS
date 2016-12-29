@@ -2,10 +2,13 @@ package com.ewa.indecisiverps.ui;
 
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
+import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -51,6 +54,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
     @Bind(R.id.winnerTextView) TextView mWinnerTextView;
     @Bind(R.id.gameButton) Button mGameButton;
     @Bind(R.id.cancelButton) Button mCancelButton;
+    @Bind(R.id.soundButton) ImageButton mSoundButton;
     @Bind(R.id.winningChoiceTextView) TextView mWinningChoiceTextView;
     private Choice mChoice;
     private Round mRound;
@@ -74,6 +78,9 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
     private int mScissorsSound;
     private int mRockSound;
     private int mSoundToPlay;
+    private boolean mSFX;
+    private SharedPreferences mSharedPreferences;
+    private SharedPreferences.Editor mEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +91,14 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         mRound = new Round();
         mChoice = Parcels.unwrap(getIntent().getParcelableExtra("choice"));
         mAuth = FirebaseAuth.getInstance();
-        
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mEditor = mSharedPreferences.edit();
+        mSFX = mSharedPreferences.getBoolean(Constants.PREFS_SFX_KEY, true);
+        if(!mSFX){
+            mSoundButton.setImageResource(R.drawable.ic_action_mute);
+        }
+
+
         setUpPlayersAndOptions();
         setUpSounds();
         
@@ -113,7 +127,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                mSoundPool.play(mEntranceSound, 1.0F, 1.0F, 0, 0, 1.0F);
+                playSound(mEntranceSound);
                 Animation slideIn2 = AnimationUtils.loadAnimation(ResolveRoundActivity.this, R.anim.slide_in_from_left);
                 mOption2TextView.startAnimation(slideIn2);
 
@@ -125,7 +139,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        mSoundPool.play(mEntranceSound, 1.0F, 1.0F, 0, 0, 1.0F);
+                        playSound(mEntranceSound);
                         if(mChoice.getWin() == null){
                             mBottomSheetBehavior1.setState(BottomSheetBehavior.STATE_EXPANDED);
                             mGameButton.setEnabled(true);
@@ -181,7 +195,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                     @Override
                     public void onAnimationStart(Animation animation) {
                         mPlayersImageView.setVisibility(View.VISIBLE);
-                        mSoundPool.play(mSoundToPlay, 1.0F, 1.0F, 0, 0, 1.0F);
+                        playSound(mSoundToPlay);
                     }
 
                     @Override
@@ -208,6 +222,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         mRockButton.setOnClickListener(moveClickListener);
         mGameButton.setOnClickListener(this);
         mCancelButton.setOnClickListener(this);
+        mSoundButton.setOnClickListener(this);
     }
 
     private void setUpSounds() {
@@ -273,11 +288,11 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                     @Override
                     public void onAnimationStart(Animation animation) {
                         mPlayersImageView.setVisibility(View.VISIBLE);
+                        playSound(mSoundToPlay);
                     }
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        mSoundPool.play(mSoundToPlay, 1.0F, 1.0F, 0, 0, 1.0F);
                         if(mOpponentNumber == 0){
                             setMoveImageAndSound(mRound.getPlayer1Move(), mOption1ImageView);
                         } else {
@@ -289,7 +304,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                             @Override
                             public void onAnimationStart(Animation animation) {
                                 mOpponentImageView.setVisibility(View.VISIBLE);
-                                mSoundPool.play(mSoundToPlay, 1.0F, 1.0F, 0, 0, 1.0F);
+                                playSound(mSoundToPlay);
                             }
 
                             @Override
@@ -361,7 +376,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                 slideInBottom.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
-                        mSoundPool.play(mSoundToPlay, 1.0F, 1.0F, 0, 0, 1.0F);
+                        playSound(mSoundToPlay);
                         mOpponentImageView.setVisibility(View.VISIBLE);
                     }
 
@@ -510,8 +525,34 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                     mBottomSheetBehavior1.setState(BottomSheetBehavior.STATE_EXPANDED);
                 }
                 break;
+            case R.id.soundButton:
+                mSFX = !mSFX;
+                if(mSFX){
+                    mSoundButton.setImageResource(R.drawable.ic_action_sound);
+                } else {
+                    mSoundButton.setImageResource(R.drawable.ic_action_mute);
+                }
+                mEditor.putBoolean(Constants.PREFS_SFX_KEY, mSFX).apply();
+                break;
         }
 
+    }
+
+    public void playSound(final int soundToPlay){
+        if(mSFX){
+            if(soundToPlay == mEntranceSound){
+                mSoundPool.play(soundToPlay, 1.0F, 1.0F, 0, 0, 1.0F);
+            } else {
+                new Handler().postDelayed(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        mSoundPool.play(soundToPlay, 1.0F, 1.0F, 0, 0, 1.0F);
+                    }
+                }, 100);
+            }
+        }
     }
 
     public void gameMove(){
@@ -530,7 +571,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void onAnimationStart(Animation animation) {
                 mOpponentImageView.setVisibility(View.VISIBLE);
-                mSoundPool.play(mSoundToPlay, 1.0F, 1.0F, 0, 0, 1.0F);
+                playSound(mSoundToPlay);
             }
 
             @Override

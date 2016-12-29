@@ -15,4 +15,5 @@ public class Constants {
     public static final String FIREBASE_ROUND_REF = "rounds";
     public static final String FIREBASE_USER_REF = "users";
     public static final String STATUS_TIE = "tie";
+    public static final String PREFS_SFX_KEY = "sfx";
 }
