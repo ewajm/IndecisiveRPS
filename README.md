@@ -25,6 +25,12 @@ This project is ready for use with Android studio.
 * Android Studio
 * Firebase
 
+
+## Sound Effects Credit
+
+* [PacdV](http://www.pacdv.com/sounds/)
+* [oblius](http://www.planetoblius.27south.com)
+
 ## Licensing
 
 * MIT

@@ -3,10 +3,11 @@ package com.ewa.indecisiverps.ui;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -67,6 +68,12 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
     String mUserId;
     String mUsername;
     private FirebaseAuth mAuth;
+    private SoundPool mSoundPool;
+    private int mEntranceSound;
+    private int mPaperSound;
+    private int mScissorsSound;
+    private int mRockSound;
+    private int mSoundToPlay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +84,10 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         mRound = new Round();
         mChoice = Parcels.unwrap(getIntent().getParcelableExtra("choice"));
         mAuth = FirebaseAuth.getInstance();
+        
         setUpPlayersAndOptions();
+        setUpSounds();
+        
         mPlayingForTextView.setText(String.format(getString(R.string.playing_for), mOptions[mPlayerNumber]));
         mOption1TextView.setText(mOptions[0]);
         mOption2TextView.setText(mOptions[1]);
@@ -103,6 +113,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
 
             @Override
             public void onAnimationEnd(Animation animation) {
+                mSoundPool.play(mEntranceSound, 1.0F, 1.0F, 0, 0, 1.0F);
                 Animation slideIn2 = AnimationUtils.loadAnimation(ResolveRoundActivity.this, R.anim.slide_in_from_left);
                 mOption2TextView.startAnimation(slideIn2);
 
@@ -114,8 +125,9 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
+                        mSoundPool.play(mEntranceSound, 1.0F, 1.0F, 0, 0, 1.0F);
                         if(mChoice.getWin() == null){
-                           mBottomSheetBehavior1.setState(BottomSheetBehavior.STATE_EXPANDED);
+                            mBottomSheetBehavior1.setState(BottomSheetBehavior.STATE_EXPANDED);
                             mGameButton.setEnabled(true);
                         } else {
                             showFinishedRound();
@@ -144,17 +156,15 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                 switch(view.getId()){
                     case R.id.scissorsButton:
                         mMoveArray[mPlayerNumber] = Constants.RPS_SCISSORS;
-                        mPlayersImageView.setImageResource(R.drawable.scissors2);
                         break;
                     case R.id.rockButton:
                         mMoveArray[mPlayerNumber] = Constants.RPS_ROCK;
-                        mPlayersImageView.setImageResource(R.drawable.rock);
                         break;
                     case R.id.paperButton:
                         mMoveArray[mPlayerNumber] = Constants.RPS_PAPER;
-                        mPlayersImageView.setImageResource(R.drawable.paper2);
                         break;
                 }
+                setMoveImageAndSound(mMoveArray[mPlayerNumber], mPlayersImageView);
                 if(mChoice.getStatus() == null){
                     mChoice.setStatus(Constants.STATUS_PENDING);
                 }
@@ -171,10 +181,12 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                     @Override
                     public void onAnimationStart(Animation animation) {
                         mPlayersImageView.setVisibility(View.VISIBLE);
+                        mSoundPool.play(mSoundToPlay, 1.0F, 1.0F, 0, 0, 1.0F);
                     }
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
+
                         if(mChoice.getMode() == 1){
                             gameMove();
                         } else if(mChoice.getStatus().equals(Constants.STATUS_PENDING)){
@@ -196,6 +208,19 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         mRockButton.setOnClickListener(moveClickListener);
         mGameButton.setOnClickListener(this);
         mCancelButton.setOnClickListener(this);
+    }
+
+    private void setUpSounds() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            mSoundPool = (new SoundPool.Builder()).setMaxStreams(5).build();
+        }else{
+            mSoundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 5);
+        }
+        mEntranceSound = mSoundPool.load(this, R.raw.entrance1, 1);
+        mPaperSound = mSoundPool.load(this, R.raw.paper, 1);
+        mScissorsSound = mSoundPool.load(this, R.raw.scissors, 1);
+        mRockSound = mSoundPool.load(this, R.raw.rock, 1);
+
     }
 
 
@@ -234,20 +259,13 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                 } else {
                     mRound = mRoundList.get(mRoundList.size()-1);
                 }
-                if(mRound.getPlayer1Move().equals(Constants.RPS_PAPER)){
-                    mOption1ImageView.setImageResource(R.drawable.paper2);
-                } else if(mRound.getPlayer1Move().equals(Constants.RPS_ROCK)){
-                    mOption1ImageView.setImageResource(R.drawable.rock);
+                if(mPlayerNumber == 0){
+                    setMoveImageAndSound(mRound.getPlayer1Move(), mOption1ImageView);
                 } else {
-                    mOption1ImageView.setImageResource(R.drawable.scissors2);
+                    setMoveImageAndSound(mRound.getPlayer2Move(), mOption2ImageView);
                 }
-                if(mRound.getPlayer2Move().equals(Constants.RPS_PAPER)){
-                    mOption2ImageView.setImageResource(R.drawable.paper2);
-                } else if(mRound.getPlayer2Move().equals(Constants.RPS_ROCK)){
-                    mOption2ImageView.setImageResource(R.drawable.rock);
-                } else {
-                    mOption2ImageView.setImageResource(R.drawable.scissors2);
-                }
+
+
                 Animation slideInBottom = AnimationUtils.loadAnimation(ResolveRoundActivity.this, R.anim.slide_in_from_bottom);
                 mPlayersImageView.startAnimation(slideInBottom);
 
@@ -259,17 +277,24 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
+                        mSoundPool.play(mSoundToPlay, 1.0F, 1.0F, 0, 0, 1.0F);
+                        if(mOpponentNumber == 0){
+                            setMoveImageAndSound(mRound.getPlayer1Move(), mOption1ImageView);
+                        } else {
+                            setMoveImageAndSound(mRound.getPlayer2Move(), mOption2ImageView);
+                        }
                         Animation slideInBottom = AnimationUtils.loadAnimation(ResolveRoundActivity.this, R.anim.slide_in_from_bottom);
                         mOpponentImageView.startAnimation(slideInBottom);
-
                         slideInBottom.setAnimationListener(new Animation.AnimationListener() {
                             @Override
                             public void onAnimationStart(Animation animation) {
                                 mOpponentImageView.setVisibility(View.VISIBLE);
+                                mSoundPool.play(mSoundToPlay, 1.0F, 1.0F, 0, 0, 1.0F);
                             }
 
                             @Override
                             public void onAnimationEnd(Animation animation) {
+
                                 mGameButton.setEnabled(true);
                                 if(!mChoice.getWin().equals(Constants.STATUS_TIE)){
                                     mChoice.setStatus(Constants.STATUS_RESOLVED);
@@ -298,6 +323,19 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         });
     }
 
+    private void setMoveImageAndSound(String move, ImageView targetView) {
+        if(move.equals(Constants.RPS_PAPER)){
+            targetView.setImageResource(R.drawable.paper2);
+            mSoundToPlay = mPaperSound;
+        } else if(move.equals(Constants.RPS_ROCK)){
+            targetView.setImageResource(R.drawable.rock);
+            mSoundToPlay = mRockSound;
+        } else {
+            targetView.setImageResource(R.drawable.scissors2);
+            mSoundToPlay = mScissorsSound;
+        }
+    }
+
     private void getOpponentMove() {
         mRoundRef = FirebaseDatabase.getInstance().getReference("rounds").child(mChoice.getPushId());
         mRoundRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -316,19 +354,14 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                     mRound.setPlayer2Move(mMoveArray[mPlayerNumber]);
                     mMoveArray[mOpponentNumber] = mRound.getPlayer1Move();
                 }
-                if(mMoveArray[mOpponentNumber].equals(Constants.RPS_PAPER)){
-                    mOpponentImageView.setImageResource(R.drawable.paper2);
-                } else if(mMoveArray[mOpponentNumber].equals(Constants.RPS_ROCK)){
-                    mOpponentImageView.setImageResource(R.drawable.rock);
-                } else {
-                    mOpponentImageView.setImageResource(R.drawable.scissors2);
-                }
+                setMoveImageAndSound(mMoveArray[mOpponentNumber], mOpponentImageView);
                 Animation slideInBottom = AnimationUtils.loadAnimation(ResolveRoundActivity.this, R.anim.slide_in_from_bottom);
                 mOpponentImageView.startAnimation(slideInBottom);
 
                 slideInBottom.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
+                        mSoundPool.play(mSoundToPlay, 1.0F, 1.0F, 0, 0, 1.0F);
                         mOpponentImageView.setVisibility(View.VISIBLE);
                     }
 
@@ -486,16 +519,18 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         int[] rpsImageArray = {R.drawable.paper2, R.drawable.rock, R.drawable.scissors2};
         Random random = new Random();
         int compMove = random.nextInt(rpsArray.length);
+        mComputerMove = rpsArray[compMove];
         mOpponentImageView.setVisibility(View.INVISIBLE);
-        mOpponentImageView.setImageResource(rpsImageArray[compMove]);
+        setMoveImageAndSound(mComputerMove, mOpponentImageView);
         Animation slideInBottom = AnimationUtils.loadAnimation(ResolveRoundActivity.this, R.anim.slide_in_from_bottom);
         mOpponentImageView.startAnimation(slideInBottom);
 
-        mComputerMove = rpsArray[compMove];
+
         slideInBottom.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
                 mOpponentImageView.setVisibility(View.VISIBLE);
+                mSoundPool.play(mSoundToPlay, 1.0F, 1.0F, 0, 0, 1.0F);
             }
 
             @Override
