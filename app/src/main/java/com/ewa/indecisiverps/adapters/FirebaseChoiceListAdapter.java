@@ -92,20 +92,24 @@ public class FirebaseChoiceListAdapter extends FirebaseRecyclerAdapter<Choice, C
     @Override
     public void onItemDismiss(int position) {
         final Choice choice = mChoices.get(position);
-        String mOtherUserId = choice.getStartPlayerId().equals(mUserId) ? choice.getOpponentPlayerId() : choice.getStartPlayerId();
-        FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_CHOICE_REF).child(mOtherUserId).child(choice.getPushId()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.exists()){
-                    FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_ROUND_REF).child(choice.getPushId()).removeValue();
+        if(choice.getMode() == 2){
+            String mOtherUserId = choice.getStartPlayerId().equals(mUserId) ? choice.getOpponentPlayerId() : choice.getStartPlayerId();
+            FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_CHOICE_REF).child(mOtherUserId).child(choice.getPushId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if(!dataSnapshot.exists()){
+                        FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_ROUND_REF).child(choice.getPushId()).removeValue();
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        } else {
+            FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_ROUND_REF).child(choice.getPushId()).removeValue();
+        }
         mChoices.remove(position);
         notifyDataSetChanged();
         getRef(position).removeValue();

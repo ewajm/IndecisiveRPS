@@ -602,6 +602,14 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        if(mChoice.getMode()==1 && mChoice.getPushId() != null && mChoice.getStatus().equals(Constants.STATUS_PENDING)){
+            mChoiceRef.child(mChoice.getPushId()).removeValue();
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         mSoundPool.release();
