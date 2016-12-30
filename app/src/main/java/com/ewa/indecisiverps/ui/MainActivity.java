@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,6 +25,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    private static final String TAG = MainActivity.class.getSimpleName();
     @Bind(R.id.headingTextView) TextView mHeadingTextView;
     @Bind(R.id.subheaadingTextView) TextView mSubheadingTextView;
     @Bind(R.id.decideNowButton) Button mDecideNowButton;
@@ -63,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mDecisionsButton.setVisibility(View.VISIBLE);
                     mSocialButton.setVisibility(View.VISIBLE);
                     setUpNotificationListeners();
+
                 } else {
                     mLoginButton.setText("Login");
                     mDecisionsButton.setVisibility(View.GONE);
@@ -76,10 +79,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAboutButton.setOnClickListener(this);
         mDecisionsButton.setOnClickListener(this);
         mSocialButton.setOnClickListener(this);
-
-        if(mUserId != null){
-            FirebaseMessaging.getInstance().subscribeToTopic("user_Ewa");
-        }
     }
 
     @Override
@@ -99,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     startActivity(loginIntent);
                 } else {
                     FirebaseAuth.getInstance().signOut();
-                    FirebaseMessaging.getInstance().unsubscribeFromTopic("user_Ewa" );
+                    FirebaseMessaging.getInstance().unsubscribeFromTopic("user_" + mUserId );
                 }
                 break;
             case R.id.decisionsButton:
@@ -131,6 +130,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void setUpNotificationListeners(){
+        Log.i(TAG, "setUpNotificationListeners: subscribing!" + mUserId);
+        FirebaseMessaging.getInstance().subscribeToTopic("user_" + mUserId);
         mReadyGameQuery = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_CHOICE_REF).child(mUserId).orderByChild("status").equalTo(Constants.STATUS_READY);
         mReadyValueListener = mReadyGameQuery.addValueEventListener(new ValueEventListener() {
             @Override

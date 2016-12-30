@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -431,6 +432,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                 String sendId = mChoice.getOpponentPlayerId().equals(mUserId) ? mChoice.getStartPlayerId() : mChoice.getOpponentPlayerId();
                 DatabaseReference opponentRef = FirebaseDatabase.getInstance().getReference("choices").child(sendId).child(mChoice.getPushId());
                 opponentRef.setValue(mChoice);
+                sendNotificationToOpponent(mChoice.getOption1() + " vs " + mChoice.getOption2() + " has been resolved!");
                 mChoice.setStatus(Constants.STATUS_RESOLVED);
             }
             mChoiceRef.child(mChoice.getPushId()).setValue(mChoice);
@@ -463,15 +465,16 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         DatabaseReference opponentRef = FirebaseDatabase.getInstance().getReference("choices").child(sendId).child(mChoice.getPushId());
         opponentRef.setValue(mChoice);
         Toast.makeText(this, "Decision sent to opponent!", Toast.LENGTH_SHORT).show();
-        sendNotificationToUser("Ewa", "Oh look a thing");
+        sendNotificationToOpponent(mUsername + " has started a round with you!");
         Intent intent = new Intent(ResolveRoundActivity.this, MainActivity.class);
         startActivity(intent);
     }
 
-    private void sendNotificationToUser(String opponentPlayerId, String message) {
+    private void sendNotificationToOpponent(String message) {
         DatabaseReference notificationsRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_NOTIFICATIONS_REF);
         Map notification = new HashMap();
-        notification.put("username", opponentPlayerId);
+        String opponentId = mUserId.equals(mChoice.getStartPlayerId()) ? mChoice.getOpponentPlayerId(): mChoice.getStartPlayerId();
+        notification.put("user", opponentId);
         notification.put("message", message);
 
         notificationsRef.push().setValue(notification);
