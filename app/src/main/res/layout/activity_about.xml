@@ -109,5 +109,14 @@
                 android:layout_marginBottom="5dp"
                 android:text="Just play a round and move on to the important tasks of taco (or pizza) acquisition and consumption"/>
              </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:textSize="12sp"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="Credit for Sound Effects goes to PacDV and oblius (www.planetoblius.27south.com)"
+            android:layout_margin="5dp"/>
     </RelativeLayout>
 </RelativeLayout>

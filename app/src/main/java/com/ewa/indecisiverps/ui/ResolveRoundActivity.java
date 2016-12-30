@@ -34,6 +34,8 @@ import com.google.firebase.database.ValueEventListener;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import butterknife.Bind;
@@ -461,8 +463,18 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         DatabaseReference opponentRef = FirebaseDatabase.getInstance().getReference("choices").child(sendId).child(mChoice.getPushId());
         opponentRef.setValue(mChoice);
         Toast.makeText(this, "Decision sent to opponent!", Toast.LENGTH_SHORT).show();
+        sendNotificationToUser("Ewa", "Oh look a thing");
         Intent intent = new Intent(ResolveRoundActivity.this, MainActivity.class);
         startActivity(intent);
+    }
+
+    private void sendNotificationToUser(String opponentPlayerId, String message) {
+        DatabaseReference notificationsRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_NOTIFICATIONS_REF);
+        Map notification = new HashMap();
+        notification.put("username", opponentPlayerId);
+        notification.put("message", message);
+
+        notificationsRef.push().setValue(notification);
     }
 
     private void resolveSoloRound() {
@@ -584,5 +596,12 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
 
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mSoundPool.release();
+        mSoundPool = null;
     }
 }
