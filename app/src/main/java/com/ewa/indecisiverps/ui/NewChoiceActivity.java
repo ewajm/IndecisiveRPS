@@ -71,7 +71,9 @@ public class NewChoiceActivity extends AppCompatActivity implements View.OnClick
         if(choice != null){
             mChoiceOneEditText.setText(choice.getOption1());
             mChoiceTwoEditText.setText(choice.getOption2());
+            mNewChoice = choice;
         }
+
         mOpponent = Parcels.unwrap(getIntent().getParcelableExtra("opponent"));
         if(mOpponent != null){
             mSoloButton.setEnabled(false);
@@ -87,7 +89,12 @@ public class NewChoiceActivity extends AppCompatActivity implements View.OnClick
         String option1 = mChoiceOneEditText.getText().toString().trim();
         String option2 = mChoiceTwoEditText.getText().toString().trim();
         if(option1.length() > 0 && option2.length() > 0){
-            mNewChoice = new Choice(option1, option2);
+            if(mNewChoice == null){
+                mNewChoice = new Choice(option1, option2);
+            } else {
+                mNewChoice.setOption1(option1);
+                mNewChoice.setOption2(option2);
+            }
             mNewChoice.setStartPlayerId(mUserId);
             mNewChoice.setImpartialityMode(mImpartialityModeCheckbox.isChecked());
             Random random = new Random();

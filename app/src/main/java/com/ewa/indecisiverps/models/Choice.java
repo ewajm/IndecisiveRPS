@@ -19,7 +19,7 @@ public class Choice {
     String opponentPlayerId;
     String pushId;
     int mode;
-    long timestamp;
+
     String win;
     String status;
     boolean impartialityMode=false;
@@ -30,7 +30,7 @@ public class Choice {
     public Choice(String option1, String option2) {
         this.option1 = option1;
         this.option2 = option2;
-        this.timestamp = Calendar.getInstance().getTimeInMillis();
+
     }
 
     public String getStartPlayerId() {
@@ -87,14 +87,6 @@ public class Choice {
 
     public void setPlayer2(String player2) {
         this.player2 = player2;
-    }
-
-    public long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
     }
 
     public String getWin() {

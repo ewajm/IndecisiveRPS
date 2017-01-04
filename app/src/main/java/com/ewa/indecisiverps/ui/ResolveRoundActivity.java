@@ -35,6 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -91,7 +92,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_resolve_round);
         ButterKnife.bind(this);
 
-        mRound = new Round();
+        mRound = new Round(Calendar.getInstance().getTimeInMillis());
         mChoice = Parcels.unwrap(getIntent().getParcelableExtra("choice"));
         mAuth = FirebaseAuth.getInstance();
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);

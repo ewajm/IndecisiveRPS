@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ValueEventListener mReadyValueListener;
     private Query mUserInviteQuery;
     private ValueEventListener mUserEventListeneer;
+    static boolean isInitialized = false;
 
 
     @Override
@@ -52,7 +53,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Typeface headingFont = Typeface.createFromAsset(getAssets(), "fonts/titan_one_regular.ttf");
         mHeadingTextView.setTypeface(headingFont);
         mSubheadingTextView.setTypeface(headingFont);
-
+        if(!isInitialized){
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            isInitialized = true;
+        }else {
+            Log.d(TAG,"Already Initialized");
+        }
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override

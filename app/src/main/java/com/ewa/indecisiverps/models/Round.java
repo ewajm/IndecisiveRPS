@@ -5,6 +5,7 @@ import com.ewa.indecisiverps.Constants;
 import org.parceler.Parcel;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 @Parcel
@@ -13,8 +14,13 @@ public class Round {
     String player2Move;
     String pushId;
     String decisionId;
+    long timestamp;
 
     public Round() {
+    }
+
+    public Round(long timestamp){
+        this.timestamp = timestamp;
     }
 
     public String getPlayer1Move() {
@@ -39,6 +45,14 @@ public class Round {
 
     public void setPushId(String pushId) {
         this.pushId = pushId;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 
     public String getDecisionId() {

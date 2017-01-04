@@ -23,7 +23,10 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import org.parceler.Parcels;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by ewa on 12/21/2016.
@@ -85,8 +88,13 @@ public class ChoiceHistoryDialog extends DialogFragment implements View.OnClickL
         FirebaseListAdapter<Round> firebaseAdapter = new FirebaseListAdapter<Round>(getActivity(), Round.class, android.R.layout.two_line_list_item, roundRef) {
             @Override
             protected void populateView(View v, Round model, int position) {
-                ((TextView) v.findViewById(android.R.id.text1)).setText(mChoice.getPlayer1() + " " + model.getPlayer1Move());
-                ((TextView) v.findViewById(android.R.id.text2)).setText(mChoice.getPlayer2() + " " + model.getPlayer2Move());
+                if(model.getTimestamp() == 0){
+                    ((TextView) v.findViewById(android.R.id.text1)).setText("Date Unknown");
+                } else {
+                    String dateString = new SimpleDateFormat("MM/dd/yyyy h:mm a", Locale.getDefault()).format(new Date(model.getTimestamp()));
+                    ((TextView) v.findViewById(android.R.id.text1)).setText(dateString);
+                }
+                ((TextView) v.findViewById(android.R.id.text2)).setText(mChoice.getPlayer1() + ": " + model.getPlayer1Move() + " vs " + mChoice.getPlayer2() + ": " + model.getPlayer2Move());
             }
         };
         mRoundHistoryListView.setAdapter(firebaseAdapter);
