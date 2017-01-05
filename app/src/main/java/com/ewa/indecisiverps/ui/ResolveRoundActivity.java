@@ -25,6 +25,7 @@ import com.ewa.indecisiverps.Constants;
 import com.ewa.indecisiverps.R;
 import com.ewa.indecisiverps.models.Choice;
 import com.ewa.indecisiverps.models.Round;
+import com.ewa.indecisiverps.utils.NotificationHelper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -85,6 +86,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
     private boolean mSFX;
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor mEditor;
+    private NotificationHelper mNotificationHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -253,6 +255,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
             mUsername = mAuth.getCurrentUser().getDisplayName();
             mChoiceRef = FirebaseDatabase.getInstance().getReference("choices").child(mUserId);
             mPlayerNumber = mChoice.getPlayer1().equals(mUsername) ? 0: 1;
+            mNotificationHelper = new NotificationHelper(this);
         } else {
             mPlayerNumber = mChoice.getPlayer1().equals("user") ? 0: 1;
         }
@@ -387,7 +390,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                 String sendId = mChoice.getOpponentPlayerId().equals(mUserId) ? mChoice.getStartPlayerId() : mChoice.getOpponentPlayerId();
                 DatabaseReference opponentRef = FirebaseDatabase.getInstance().getReference("choices").child(sendId).child(mChoice.getPushId());
                 opponentRef.setValue(mChoice);
-                sendNotificationToOpponent(mChoice.getOption1() + " vs " + mChoice.getOption2() + " has been resolved!");
+                mNotificationHelper.sendNotificationToOpponent(mChoice.getOption1() + " vs " + mChoice.getOption2() + " has been resolved!", mChoice);
                 //set status to resolved at the end in order to save into current user's database
                 mChoice.setStatus(Constants.STATUS_RESOLVED);
             }
@@ -423,19 +426,9 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         DatabaseReference opponentRef = FirebaseDatabase.getInstance().getReference("choices").child(sendId).child(mChoice.getPushId());
         opponentRef.setValue(mChoice);
         Toast.makeText(this, "Decision sent to opponent!", Toast.LENGTH_SHORT).show();
-        sendNotificationToOpponent(mUsername + " has started a round with you!");
+        mNotificationHelper.sendNotificationToOpponent(mUsername + " has started a round with you!", mChoice);
         Intent intent = new Intent(ResolveRoundActivity.this, MainActivity.class);
         startActivity(intent);
-    }
-
-    private void sendNotificationToOpponent(String message) {
-        DatabaseReference notificationsRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_NOTIFICATIONS_REF);
-        Map notification = new HashMap();
-        String opponentId = mUserId.equals(mChoice.getStartPlayerId()) ? mChoice.getOpponentPlayerId(): mChoice.getStartPlayerId();
-        notification.put("user", opponentId);
-        notification.put("message", message);
-
-        notificationsRef.push().setValue(notification);
     }
 
     //solo rounds are always resolved immediately and have two database transaction (one for round, one for choice)

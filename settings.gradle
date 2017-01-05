@@ -1,1 +1,1 @@
-include ':app', ':jackson-databind-2.6.6'
+include ':app'

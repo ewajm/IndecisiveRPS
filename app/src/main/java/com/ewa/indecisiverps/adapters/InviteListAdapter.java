@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.ewa.indecisiverps.Constants;
 import com.ewa.indecisiverps.R;
 import com.ewa.indecisiverps.models.User;
+import com.ewa.indecisiverps.utils.NotificationHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -106,6 +107,9 @@ public class InviteListAdapter extends FirebaseRecyclerAdapter<User, InvitationV
                 updateFriendsList.put(currentUserPath+ Constants.STATUS_RESOLVED + "/" + user.getUserId(), friendMap);
                 updateFriendsList.put(friendUserPath+ Constants.STATUS_RESOLVED + "/" +mUserId, userMap);
                 FirebaseDatabase.getInstance().getReference().updateChildren(updateFriendsList);
+                NotificationHelper helper = new NotificationHelper(mContext);
+                helper.sendFriendNotification("You can now decide things with " + mUser.getUsername(), user);
+                helper.sendFriendNotification("You can now decide things with " + mUser.getUsername(), user);
                 Toast.makeText(mContext, "Your are now friends with " + user.getUsername(), Toast.LENGTH_SHORT).show();
                 mUsers.remove(user);
                 if(mUsers.size() == 0){
@@ -126,10 +130,7 @@ public class InviteListAdapter extends FirebaseRecyclerAdapter<User, InvitationV
                 deleteFriendMap.put(currentUserPath + Constants.STATUS_RESOLVED + "/" + user.getUserId(), null);
                 deleteFriendMap.put(friendUserPath+ Constants.STATUS_RESOLVED + "/" +mUserId, null);
                 FirebaseDatabase.getInstance().getReference().updateChildren(deleteFriendMap);
-//                DatabaseReference currentUserFriendRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(mUserId).child(Constants.STATUS_PENDING).child(user.getUserId());
-//                currentUserFriendRef.removeValue();
-//                DatabaseReference requestFriendRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(user.getUserId()).child(Constants.STATUS_PENDING).child(mUserId);
-//                currentUserFriendRef.removeValue();
+
                 mUsers.remove(user);
                 if(mUsers.size() == 0){
                     mInviteLayout.setVisibility(View.GONE);

@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/IndecisiveRPS.iml" filepath="$PROJECT_DIR$/IndecisiveRPS.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/jackson-databind-2.6.6/jackson-databind-2.6.6.iml" filepath="$PROJECT_DIR$/jackson-databind-2.6.6/jackson-databind-2.6.6.iml" />
     </modules>
   </component>
 </project>
