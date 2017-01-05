@@ -105,6 +105,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     FirebaseAuth.getInstance().signOut();
                     FirebaseMessaging.getInstance().unsubscribeFromTopic("user_" + mUserId );
+                    mReadyGameQuery.removeEventListener(mReadyValueListener);
+                    mUserInviteQuery.removeEventListener(mUserEventListeneer);
                 }
                 break;
             case R.id.decisionsButton:
@@ -154,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
-        mUserInviteQuery = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).child(mUserId).child("friends").orderByChild("status").equalTo(Constants.STATUS_PENDING);
+        mUserInviteQuery = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(mUserId).child(Constants.STATUS_PENDING);
         mUserEventListeneer = mUserInviteQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
