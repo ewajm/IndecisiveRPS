@@ -105,6 +105,7 @@ public class FriendListAdapter  extends FirebaseRecyclerAdapter<User, FriendView
                         {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                //update children hashmap
                                 DatabaseReference currentUserFriendRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(mUserId).child(Constants.STATUS_RESOLVED).child(user.getUserId());
                                 currentUserFriendRef.removeValue();
                                 DatabaseReference friendUserRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(user.getUserId()).child(Constants.STATUS_RESOLVED).child(mUserId);
