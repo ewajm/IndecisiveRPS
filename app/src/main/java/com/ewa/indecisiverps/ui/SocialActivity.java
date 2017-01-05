@@ -15,8 +15,11 @@ import android.widget.TextView;
 import com.ewa.indecisiverps.Constants;
 import com.ewa.indecisiverps.R;
 import com.ewa.indecisiverps.adapters.FriendListAdapter;
+import com.ewa.indecisiverps.adapters.FriendViewHolder;
+import com.ewa.indecisiverps.adapters.InvitationViewHolder;
 import com.ewa.indecisiverps.adapters.InviteListAdapter;
 import com.ewa.indecisiverps.models.User;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,8 +34,6 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-//TODO: delete icon instead of swipe to delete on friends activity because 1. i am lazy and 2.consistency
-//TODO: some sort of indication when you have a friend invite
 public class SocialActivity extends AppCompatActivity implements View.OnClickListener{
     @Bind(R.id.addFriendButton) Button mAddFriendButton;
     @Bind(R.id.invitationsRecyclerView) RecyclerView mInvitationRecyclerView;
@@ -51,6 +52,7 @@ public class SocialActivity extends AppCompatActivity implements View.OnClickLis
     private String mCurrentUserName;
     private ValueEventListener mFriendsEventListener;
     private Query mFriendsQuery;
+    private DatabaseReference mPendingFriendQuery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,82 +70,25 @@ public class SocialActivity extends AppCompatActivity implements View.OnClickLis
         mAddFriendButton.setOnClickListener(this);
         mBackButton.setOnClickListener(this);
         createUserLists();
-        populateListViews();
-    }
-
-    private void populateListViews() {
-        mInviteAdapter = new InviteListAdapter(mInvites, this, mInvitationsLinearLayout);
-        mInvitationRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mInvitationRecyclerView.setHasFixedSize(true);
-        mInvitationRecyclerView.setAdapter(mInviteAdapter);
-        mFriendsAdapter = new FriendListAdapter(mFriends, this);
-        mFriendsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mFriendsRecyclerView.setHasFixedSize(true);
-        mFriendsRecyclerView.setAdapter(mFriendsAdapter);
     }
 
     private void createUserLists() {
-        mFriendsQuery = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).child(mCurrentUserId).child("friends");
-        mFriendsEventListener = mFriendsQuery.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                mInvites.clear();
-                mFriends.clear();
-                if(dataSnapshot.hasChildren()){
-                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                        String thisUserId =  snapshot.getKey();
-                        String thisStatus = (String) snapshot.child("status").getValue();
-                        if(thisStatus.equals(Constants.STATUS_PENDING)){
-                            DatabaseReference thisUserRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).child(thisUserId);
-                            thisUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    User thisUser = dataSnapshot.getValue(User.class);
-                                    mInvites.add(thisUser);
-                                    mInviteAdapter.notifyDataSetChanged();
-                                    mInvitationsLinearLayout.setVisibility(View.VISIBLE);
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
-                        } else {
-                            DatabaseReference thisUserRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).child(thisUserId);
-                            thisUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    User thisUser = dataSnapshot.getValue(User.class);
-                                    mFriends.add(thisUser);
-                                    mFriendsAdapter.notifyDataSetChanged();
-                                    if(mEmptyView.getVisibility() == View.VISIBLE){
-                                        mEmptyView.setVisibility(View.GONE);
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        mFriendsQuery = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(mCurrentUserId).child(Constants.STATUS_RESOLVED);
+        mPendingFriendQuery = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(mCurrentUserId).child(Constants.STATUS_PENDING);
+        mInviteAdapter = new InviteListAdapter(User.class, R.layout.invitation_list_item, InvitationViewHolder.class, mPendingFriendQuery, mInvitationsLinearLayout, this);
+        mInvitationRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mInvitationRecyclerView.setAdapter(mInviteAdapter);
+        mFriendsAdapter = new FriendListAdapter(User.class, R.layout.friend_list_item, FriendViewHolder.class, mFriendsQuery, mEmptyView, this);
+        mFriendsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mFriendsRecyclerView.setAdapter(mFriendsAdapter);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mFriendsEventListener != null){
-            mFriendsQuery.removeEventListener(mFriendsEventListener);
+        if(mFriendsAdapter != null){
+            mFriendsAdapter.cleanup();
+            mInviteAdapter.cleanup();
         }
     }
 

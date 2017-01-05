@@ -11,74 +11,122 @@ import android.widget.Toast;
 import com.ewa.indecisiverps.Constants;
 import com.ewa.indecisiverps.R;
 import com.ewa.indecisiverps.models.User;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+
+import static android.R.attr.value;
 
 /**
  * Created by ewa on 12/21/2016.
  */
 
-public class InviteListAdapter extends RecyclerView.Adapter<InvitationViewHolder>{
+public class InviteListAdapter extends FirebaseRecyclerAdapter<User, InvitationViewHolder>{
     private ArrayList<User> mUsers = new ArrayList<>();
+    private ChildEventListener mChildEventListener;
     private Context mContext;
+    private Query mRef;
     private String mUserId;
     private LinearLayout mInviteLayout;
+    private User mUser;
 
-    public InviteListAdapter(ArrayList<User> users, Context context, LinearLayout inviteLayout) {
-        mUsers = users;
-        mContext = context;
+    public InviteListAdapter(Class<User> modelClass, int modelLayout, Class<InvitationViewHolder> viewHolderClass, Query ref, LinearLayout inviteLayout, Context context) {
+        super(modelClass, modelLayout, viewHolderClass, ref);
+        mRef = ref;
         mInviteLayout = inviteLayout;
+        mContext = context;
+        mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).child(mUserId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mUser = dataSnapshot.getValue(User.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        mChildEventListener = mRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                mUsers.add(dataSnapshot.getValue(User.class));
+                mInviteLayout.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
-    public InvitationViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.invitation_list_item, parent, false);
-        final InvitationViewHolder viewHolder = new InvitationViewHolder(view);
-        mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        viewHolder.mAcceptRequestImageView.setOnClickListener(new View.OnClickListener() {
+    public void populateViewHolder(final InvitationViewHolder holder, User model, int position) {
+        holder.bindUser(model);
+        holder.mAcceptRequestImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int clickPosition = viewHolder.getAdapterPosition();
+                int clickPosition = holder.getAdapterPosition();
                 User user = mUsers.get(clickPosition);
-                DatabaseReference currentUserFriendRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).child(mUserId).child("friends").child(user.getUserId()).child("status");
-                DatabaseReference newFriendUserRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).child(user.getUserId()).child("friends").child(mUserId).child("status");
-                currentUserFriendRef.setValue(Constants.STATUS_RESOLVED);
-                newFriendUserRef.setValue(Constants.STATUS_RESOLVED);
+
+                //this needs to be an update children hashmap
+                FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(mUserId).child(Constants.STATUS_PENDING).child(user.getUserId()).removeValue();
+                FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(mUserId).child(Constants.STATUS_RESOLVED).child(user.getUserId()).setValue(user);
+                FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(user.getUserId()).child(Constants.STATUS_PENDING).child(mUserId).removeValue();
+                FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(user.getUserId()).child(Constants.STATUS_RESOLVED).child(mUserId).setValue(mUser);
+
                 Toast.makeText(mContext, "Your are now friends with " + user.getUsername(), Toast.LENGTH_SHORT).show();
                 mUsers.remove(user);
                 if(mUsers.size() == 0){
                     mInviteLayout.setVisibility(View.GONE);
                 }
-                notifyDataSetChanged();
             }
         });
-        viewHolder.mRefuseRequestImageView.setOnClickListener(new View.OnClickListener() {
+        holder.mRefuseRequestImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int clickPosition = viewHolder.getAdapterPosition();
+                int clickPosition = holder.getAdapterPosition();
                 User user = mUsers.get(clickPosition);
-                DatabaseReference currentUserFriendRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).child(mUserId).child("friends").child(user.getUserId());
+                DatabaseReference currentUserFriendRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(mUserId).child(Constants.STATUS_PENDING).child(user.getUserId());
+                currentUserFriendRef.removeValue();
+                DatabaseReference requestFriendRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(user.getUserId()).child(Constants.STATUS_PENDING).child(mUserId);
                 currentUserFriendRef.removeValue();
                 mUsers.remove(user);
                 if(mUsers.size() == 0){
                     mInviteLayout.setVisibility(View.GONE);
                 }
-                notifyDataSetChanged();
             }
         });
-        return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(InvitationViewHolder holder, int position) {
-        holder.bindUser(mUsers.get(position));
-    }
-
-    @Override
-    public int getItemCount() {
-        return mUsers.size();
+    public void cleanup() {
+        super.cleanup();
+        mRef.removeEventListener(mChildEventListener);
     }
 }

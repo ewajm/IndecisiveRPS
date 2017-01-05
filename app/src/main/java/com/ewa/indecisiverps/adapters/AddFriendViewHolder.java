@@ -37,6 +37,7 @@ public class AddFriendViewHolder extends RecyclerView.ViewHolder implements View
     String mCurrentUserId;
     FirebaseAuth mAuth;
     boolean mIsFriend = false;
+    private User mCurrentUser;
 
     public AddFriendViewHolder(View itemView) {
         super(itemView);
@@ -46,6 +47,17 @@ public class AddFriendViewHolder extends RecyclerView.ViewHolder implements View
         mAddFriendImageView.setOnClickListener(this);
         mAuth = FirebaseAuth.getInstance();
         mCurrentUserId = mAuth.getCurrentUser().getUid();
+        FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).child(mCurrentUserId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mCurrentUser = dataSnapshot.getValue(User.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void bindUser(User user) {
@@ -57,7 +69,7 @@ public class AddFriendViewHolder extends RecyclerView.ViewHolder implements View
             mAddFriendImageView.setVisibility(View.VISIBLE);
             mFriendNameTextView.setText(mUser.getUsername());
         }
-        DatabaseReference friendRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).child(mCurrentUserId).child("friends").child(mUser.getUserId());
+        DatabaseReference friendRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(mCurrentUserId).child(Constants.STATUS_RESOLVED).child(mUser.getUserId());
         friendRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -85,8 +97,8 @@ public class AddFriendViewHolder extends RecyclerView.ViewHolder implements View
         if(mIsFriend){
             Toast.makeText(mContext, "You are already friends with this person!", Toast.LENGTH_SHORT).show();
         } else {
-            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).child(mUser.getUserId()).child("friends").child(mCurrentUserId).child("status");
-            userRef.setValue(Constants.STATUS_PENDING);
+            DatabaseReference friendRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(mUser.getUserId()).child(Constants.STATUS_PENDING).child(mCurrentUserId);
+            friendRef.setValue(mCurrentUser);
             Toast.makeText(mContext, "Invitation sent!", Toast.LENGTH_SHORT).show();
             mAddFriendImageView.setImageResource(R.drawable.ic_action_accept);
             mIsFriend = true;

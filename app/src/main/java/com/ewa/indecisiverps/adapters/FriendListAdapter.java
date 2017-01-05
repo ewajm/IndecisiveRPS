@@ -8,15 +8,23 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ewa.indecisiverps.Constants;
 import com.ewa.indecisiverps.R;
 import com.ewa.indecisiverps.models.User;
 import com.ewa.indecisiverps.ui.NewChoiceActivity;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import org.parceler.Parcels;
 
@@ -26,35 +34,68 @@ import java.util.ArrayList;
  * Created by ewa on 12/21/2016.
  */
 
-public class FriendListAdapter  extends RecyclerView.Adapter<FriendViewHolder> {
+public class FriendListAdapter  extends FirebaseRecyclerAdapter<User, FriendViewHolder> {
+    private final Query mRef;
+    private final ChildEventListener mChildEventListener;
     private ArrayList<User> mUsers = new ArrayList<>();
     private Context mContext;
     private FriendViewHolder mViewHolder;
     private String mUserId;
+    private TextView mEmptyView;
 
-    public FriendListAdapter(ArrayList<User> users, Context context) {
-        mUsers = users;
+    public FriendListAdapter(Class<User> modelClass, int modelLayout, Class<FriendViewHolder> viewHolderClass, Query ref, TextView emptyView, Context context) {
+        super(modelClass, modelLayout, viewHolderClass, ref);
+        mRef = ref;
+        mEmptyView = emptyView;
         mContext = context;
+        mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        mChildEventListener = mRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                mUsers.add(dataSnapshot.getValue(User.class));
+                mEmptyView.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
-    public FriendViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.friend_list_item, parent, false);
-        final FriendViewHolder viewHolder = new FriendViewHolder(view);
-        viewHolder.mDecideNowImageView.setOnClickListener(new View.OnClickListener() {
+    public void populateViewHolder(final FriendViewHolder holder, User model, int position) {
+        holder.bindUser(model);
+        holder.mDecideNowImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int clickPosition = viewHolder.getAdapterPosition();
+                int clickPosition = holder.getAdapterPosition();
                 User user = mUsers.get(clickPosition);
                 Intent intent = new Intent(mContext, NewChoiceActivity.class);
                 intent.putExtra("opponent", Parcels.wrap(user));
                 mContext.startActivity(intent);
             }
         });
-        viewHolder.mRemoveFriendImageView.setOnClickListener(new View.OnClickListener() {
+        holder.mRemoveFriendImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int clickPosition = viewHolder.getAdapterPosition();
+                int clickPosition = holder.getAdapterPosition();
                 final User user = mUsers.get(clickPosition);
                 new AlertDialog.Builder(mContext)
                         .setIcon(android.R.drawable.ic_dialog_alert)
@@ -64,9 +105,14 @@ public class FriendListAdapter  extends RecyclerView.Adapter<FriendViewHolder> {
                         {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                DatabaseReference currentUserFriendRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).child(mUserId).child("friends").child(user.getUserId());
+                                DatabaseReference currentUserFriendRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(mUserId).child(Constants.STATUS_RESOLVED).child(user.getUserId());
                                 currentUserFriendRef.removeValue();
+                                DatabaseReference friendUserRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(user.getUserId()).child(Constants.STATUS_RESOLVED).child(mUserId);
+                                friendUserRef.removeValue();
                                 mUsers.remove(user);
+                                if(mUsers.size() == 0){
+                                   mEmptyView.setVisibility(View.VISIBLE);
+                                }
                                 notifyDataSetChanged();
                             }
 
@@ -75,18 +121,12 @@ public class FriendListAdapter  extends RecyclerView.Adapter<FriendViewHolder> {
                         .show();
             }
         });
-        mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(FriendViewHolder holder, int position) {
-        holder.bindUser(mUsers.get(position));
-    }
-
-    @Override
-    public int getItemCount() {
-        return mUsers.size();
+    public void cleanup() {
+        super.cleanup();
+        mRef.removeEventListener(mChildEventListener);
     }
 
 }

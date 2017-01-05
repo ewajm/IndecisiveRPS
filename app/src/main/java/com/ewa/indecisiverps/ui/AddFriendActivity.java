@@ -34,6 +34,7 @@ public class AddFriendActivity extends AppCompatActivity {
     @Bind(R.id.emptyView) TextView mEmptyView;
     FirebaseRecyclerAdapter mFirebaseAdapter;
     Query mFirebaseQuery;
+    boolean mSearchDone = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,8 @@ public class AddFriendActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_search, menu);
         ButterKnife.bind(this);
-
+        mEmptyView.setVisibility(View.INVISIBLE);
+        mAddFriendRecyclerView.setVisibility(View.VISIBLE);
         MenuItem menuItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -63,12 +65,19 @@ public class AddFriendActivity extends AppCompatActivity {
                 }
                 mAddFriendRecyclerView.setVisibility(View.VISIBLE);
                 mEmptyView.setVisibility(View.INVISIBLE);
+                mSearchDone = true;
                 searchUsers(query.trim());
                 return false;
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
+            public boolean onQueryTextChange(String query) {
+                if(query.length() > 1){
+                    if(mFirebaseAdapter != null){
+                        mFirebaseAdapter.cleanup();
+                    }
+                    searchUsers(query.trim());
+                }
                 return false;
             }
 
@@ -80,7 +89,7 @@ public class AddFriendActivity extends AppCompatActivity {
         if(isEmail(query)){
             mFirebaseQuery = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).orderByChild("email").equalTo(query);
         } else {
-            mFirebaseQuery = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).orderByChild("username").equalTo(query);
+            mFirebaseQuery = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).orderByChild("username").startAt(query).endAt(query + "~");
         }
         mFirebaseAdapter = new FirebaseRecyclerAdapter<User, AddFriendViewHolder>(User.class, R.layout.add_friend_list_item, AddFriendViewHolder.class, mFirebaseQuery) {
             @Override
@@ -88,23 +97,23 @@ public class AddFriendActivity extends AppCompatActivity {
                 viewHolder.bindUser(model);
             }
         };
-
-        mFirebaseQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.hasChildren()){
-                    mEmptyView.setVisibility(View.VISIBLE);
-                } else {
-                    mEmptyView.setVisibility(View.GONE);
+        if(mSearchDone){
+            mFirebaseQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if(!dataSnapshot.hasChildren()){
+                        mEmptyView.setVisibility(View.VISIBLE);
+                    } else {
+                        mEmptyView.setVisibility(View.GONE);
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
-
+                }
+            });
+        }
         mAddFriendRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAddFriendRecyclerView.setAdapter(mFirebaseAdapter);
 

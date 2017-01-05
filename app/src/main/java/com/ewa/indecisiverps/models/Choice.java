@@ -30,7 +30,6 @@ public class Choice {
     public Choice(String option1, String option2) {
         this.option1 = option1;
         this.option2 = option2;
-
     }
 
     public String getStartPlayerId() {
