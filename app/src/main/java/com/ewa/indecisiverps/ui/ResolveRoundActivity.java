@@ -354,7 +354,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
 
     private void resolveSocialEndRound() {
         //update round in database if coming from getOpponentMove
-        if(mRound.getPushId() != null && !mChoice.getStatus().equals(Constants.STATUS_RESOLVED) && !mChoice.getWin().equals(Constants.STATUS_TIE)){
+        if(mRound.getPushId() != null && !mChoice.getStatus().equals(Constants.STATUS_RESOLVED)){
             mRoundRef.child(mRound.getPushId()).setValue(mRound);
         }
         int winPosition = mRound.checkWin();
