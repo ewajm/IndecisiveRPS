@@ -101,11 +101,11 @@ public class InviteListAdapter extends FirebaseRecyclerAdapter<User, InvitationV
                 HashMap<String, Object> updateFriendsList = new HashMap<>();
                 String currentUserPath = "/" + Constants.FIREBASE_USER_FRIEND_REF + "/" + mUserId + "/";
                 String friendUserPath = "/" + Constants.FIREBASE_USER_FRIEND_REF + "/" + user.getUserId() + "/";
-                updateFriendsList.put(currentUserPath+ Constants.STATUS_PENDING + "/" + user.getUserId(), null);
                 Map<String, Object> friendMap = new ObjectMapper().convertValue(user, Map.class);
                 Map<String, Object> userMap = new ObjectMapper().convertValue(mUser, Map.class);
                 updateFriendsList.put(currentUserPath+ Constants.STATUS_RESOLVED + "/" + user.getUserId(), friendMap);
                 updateFriendsList.put(friendUserPath+ Constants.STATUS_RESOLVED + "/" +mUserId, userMap);
+                updateFriendsList.put(currentUserPath+ Constants.STATUS_PENDING + "/" + user.getUserId(), null);
                 FirebaseDatabase.getInstance().getReference().updateChildren(updateFriendsList);
                 NotificationHelper helper = new NotificationHelper(mContext);
                 helper.sendFriendNotification("You can now decide things with " + mUser.getUsername(), user);
@@ -122,15 +122,7 @@ public class InviteListAdapter extends FirebaseRecyclerAdapter<User, InvitationV
             public void onClick(View view) {
                 int clickPosition = holder.getAdapterPosition();
                 User user = mUsers.get(clickPosition);
-
-                //update children hashmap
-                HashMap<String, Object> deleteFriendMap = new HashMap<>();
-                String currentUserPath = "/" + Constants.FIREBASE_USER_FRIEND_REF + "/" + mUserId + "/";
-                String friendUserPath = "/" + Constants.FIREBASE_USER_FRIEND_REF + "/" + user.getUserId() + "/";
-                deleteFriendMap.put(currentUserPath + Constants.STATUS_RESOLVED + "/" + user.getUserId(), null);
-                deleteFriendMap.put(friendUserPath+ Constants.STATUS_RESOLVED + "/" +mUserId, null);
-                FirebaseDatabase.getInstance().getReference().updateChildren(deleteFriendMap);
-
+                FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(mUserId).child(Constants.STATUS_PENDING).child(user.getUserId()).removeValue();
                 mUsers.remove(user);
                 if(mUsers.size() == 0){
                     mInviteLayout.setVisibility(View.GONE);

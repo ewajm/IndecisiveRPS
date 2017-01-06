@@ -29,6 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by ewa on 12/21/2016.
@@ -106,10 +107,13 @@ public class FriendListAdapter  extends FirebaseRecyclerAdapter<User, FriendView
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //update children hashmap
-                                DatabaseReference currentUserFriendRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(mUserId).child(Constants.STATUS_RESOLVED).child(user.getUserId());
-                                currentUserFriendRef.removeValue();
-                                DatabaseReference friendUserRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(user.getUserId()).child(Constants.STATUS_RESOLVED).child(mUserId);
-                                friendUserRef.removeValue();
+                                //update children hashmap
+                                HashMap<String, Object> deleteFriendMap = new HashMap<>();
+                                String currentUserPath = "/" + Constants.FIREBASE_USER_FRIEND_REF + "/" + mUserId + "/";
+                                String friendUserPath = "/" + Constants.FIREBASE_USER_FRIEND_REF + "/" + user.getUserId() + "/";
+                                deleteFriendMap.put(friendUserPath+ Constants.STATUS_RESOLVED + "/" +mUserId, null);
+                                deleteFriendMap.put(currentUserPath + Constants.STATUS_RESOLVED + "/" + user.getUserId(), null);
+                                FirebaseDatabase.getInstance().getReference().updateChildren(deleteFriendMap);
                                 mUsers.remove(user);
                                 if(mUsers.size() == 0){
                                    mEmptyView.setVisibility(View.VISIBLE);
