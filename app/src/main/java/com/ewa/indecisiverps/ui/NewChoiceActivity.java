@@ -21,6 +21,7 @@ import com.ewa.indecisiverps.Constants;
 import com.ewa.indecisiverps.R;
 import com.ewa.indecisiverps.models.Choice;
 import com.ewa.indecisiverps.models.User;
+import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -51,7 +52,7 @@ public class NewChoiceActivity extends AppCompatActivity implements View.OnClick
     ArrayList<User> mFriends = new ArrayList<>();
     ArrayList<String> mFriendNames = new ArrayList<>();
     ListView mListView;
-    private ArrayAdapter<String> mFriendsAdapter;
+    private FirebaseListAdapter mFriendsAdapter;
     private Choice mNewChoice;
 
     @Override
@@ -151,10 +152,15 @@ public class NewChoiceActivity extends AppCompatActivity implements View.OnClick
         // Pass null as the parent view because its going in the dialog layout
         View v = inflater.inflate(R.layout.choose_friend_dialog_layout, null);
         builder.setView(v);
-        if(mFriends.size() == 0){
-            createUserLists();
-        }
-        mFriendsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mFriendNames);
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference friendQuery = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(userId).child(Constants.STATUS_RESOLVED);
+        mFriendsAdapter = new FirebaseListAdapter<User>(this, User.class, android.R.layout.simple_list_item_1, friendQuery) {
+            @Override
+            protected void populateView(View v, User model, int position) {
+                ((TextView)v.findViewById(android.R.id.text1)).setText(model.getUsername());
+                mFriends.add(model);
+            }
+        };
         mListView = (ListView) v.findViewById(R.id.friendListView);
         TextView empty = (TextView) v.findViewById(android.R.id.empty);
         mListView.setEmptyView(empty);
@@ -162,13 +168,13 @@ public class NewChoiceActivity extends AppCompatActivity implements View.OnClick
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                mOpponent = mFriends.get(i);
+                User opponent = mFriends.get(i);
                 if(mNewChoice.getPlayer1().equals("opponent")){
-                    mNewChoice.setPlayer1(mOpponent.getUsername());
+                    mNewChoice.setPlayer1(opponent.getUsername());
                 } else {
-                    mNewChoice.setPlayer2(mOpponent.getUsername());
+                    mNewChoice.setPlayer2(opponent.getUsername());
                 }
-                mNewChoice.setOpponentPlayerId(mOpponent.getUserId());
+                mNewChoice.setOpponentPlayerId(opponent.getUserId());
                 Intent intent = new Intent(NewChoiceActivity.this, ResolveRoundActivity.class);
                 intent.putExtra("choice", Parcels.wrap(mNewChoice));
                 startActivity(intent);
@@ -184,39 +190,39 @@ public class NewChoiceActivity extends AppCompatActivity implements View.OnClick
         builder.create().show();
     }
 
-    private void createUserLists() {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Query friendQuery = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).child(userId).child("friends").orderByChild("status").equalTo(Constants.STATUS_RESOLVED);
-        friendQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.hasChildren()){
-                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                        String thisUserId =  snapshot.getKey();
-                        DatabaseReference thisUserRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).child(thisUserId);
-                        thisUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                User thisUser = dataSnapshot.getValue(User.class);
-                                mFriends.add(thisUser);
-                                mFriendNames.add(thisUser.getUsername());
-                                mFriendsAdapter.notifyDataSetChanged();
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
+//    private void createUserLists() {
+//        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//        Query friendQuery = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).child(userId).child("friends").orderByChild("status").equalTo(Constants.STATUS_RESOLVED);
+//        friendQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                if(dataSnapshot.hasChildren()){
+//                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+//                        String thisUserId =  snapshot.getKey();
+//                        DatabaseReference thisUserRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).child(thisUserId);
+//                        thisUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(DataSnapshot dataSnapshot) {
+//                                User thisUser = dataSnapshot.getValue(User.class);
+//                                mFriends.add(thisUser);
+//                                mFriendNames.add(thisUser.getUsername());
+//                                mFriendsAdapter.notifyDataSetChanged();
+//                            }
+//
+//                            @Override
+//                            public void onCancelled(DatabaseError databaseError) {
+//
+//                            }
+//                        });
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
 }
