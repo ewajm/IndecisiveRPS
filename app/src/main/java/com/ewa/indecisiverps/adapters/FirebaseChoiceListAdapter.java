@@ -13,6 +13,7 @@ import android.view.ViewPropertyAnimator;
 import com.ewa.indecisiverps.Constants;
 import com.ewa.indecisiverps.R;
 import com.ewa.indecisiverps.models.Choice;
+import com.ewa.indecisiverps.utils.DatabaseUtil;
 import com.ewa.indecisiverps.utils.OnStartDragListener;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -94,11 +95,11 @@ public class FirebaseChoiceListAdapter extends FirebaseRecyclerAdapter<Choice, C
         final Choice choice = mChoices.get(position);
         if(choice.getMode() == 2){
             String mOtherUserId = choice.getStartPlayerId().equals(mUserId) ? choice.getOpponentPlayerId() : choice.getStartPlayerId();
-            FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_CHOICE_REF).child(mOtherUserId).child(choice.getPushId()).addListenerForSingleValueEvent(new ValueEventListener() {
+            DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_CHOICE_REF).child(mOtherUserId).child(choice.getPushId()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if(!dataSnapshot.exists()){
-                        FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_ROUND_REF).child(choice.getPushId()).removeValue();
+                        DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_ROUND_REF).child(choice.getPushId()).removeValue();
                     }
                 }
 
@@ -108,7 +109,7 @@ public class FirebaseChoiceListAdapter extends FirebaseRecyclerAdapter<Choice, C
                 }
             });
         } else {
-            FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_ROUND_REF).child(choice.getPushId()).removeValue();
+            DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_ROUND_REF).child(choice.getPushId()).removeValue();
         }
         mChoices.remove(position);
         notifyDataSetChanged();

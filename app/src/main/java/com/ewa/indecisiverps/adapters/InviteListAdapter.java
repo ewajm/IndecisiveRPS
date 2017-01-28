@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.ewa.indecisiverps.Constants;
 import com.ewa.indecisiverps.R;
 import com.ewa.indecisiverps.models.User;
+import com.ewa.indecisiverps.utils.DatabaseUtil;
 import com.ewa.indecisiverps.utils.NotificationHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -48,7 +49,7 @@ public class InviteListAdapter extends FirebaseRecyclerAdapter<User, InvitationV
         mInviteLayout = inviteLayout;
         mContext = context;
         mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).child(mUserId).addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_USER_REF).child(mUserId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mUser = dataSnapshot.getValue(User.class);
@@ -106,7 +107,7 @@ public class InviteListAdapter extends FirebaseRecyclerAdapter<User, InvitationV
                 updateFriendsList.put(currentUserPath+ Constants.STATUS_RESOLVED + "/" + user.getUserId(), friendMap);
                 updateFriendsList.put(friendUserPath+ Constants.STATUS_RESOLVED + "/" +mUserId, userMap);
                 updateFriendsList.put(currentUserPath+ Constants.STATUS_PENDING + "/" + user.getUserId(), null);
-                FirebaseDatabase.getInstance().getReference().updateChildren(updateFriendsList);
+                DatabaseUtil.getDatabase().getInstance().getReference().updateChildren(updateFriendsList);
                 NotificationHelper helper = new NotificationHelper(mContext);
                 helper.sendFriendNotification("You can now decide things with " + mUser.getUsername(), user);
                 helper.sendFriendNotification("You can now decide things with " + mUser.getUsername(), user);
@@ -122,7 +123,7 @@ public class InviteListAdapter extends FirebaseRecyclerAdapter<User, InvitationV
             public void onClick(View view) {
                 int clickPosition = holder.getAdapterPosition();
                 User user = mUsers.get(clickPosition);
-                FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(mUserId).child(Constants.STATUS_PENDING).child(user.getUserId()).removeValue();
+                DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(mUserId).child(Constants.STATUS_PENDING).child(user.getUserId()).removeValue();
                 mUsers.remove(user);
                 if(mUsers.size() == 0){
                     mInviteLayout.setVisibility(View.GONE);

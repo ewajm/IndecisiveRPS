@@ -21,6 +21,7 @@ import com.ewa.indecisiverps.Constants;
 import com.ewa.indecisiverps.R;
 import com.ewa.indecisiverps.models.Choice;
 import com.ewa.indecisiverps.models.User;
+import com.ewa.indecisiverps.utils.DatabaseUtil;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -153,7 +154,7 @@ public class NewChoiceActivity extends AppCompatActivity implements View.OnClick
         View v = inflater.inflate(R.layout.choose_friend_dialog_layout, null);
         builder.setView(v);
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference friendQuery = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(userId).child(Constants.STATUS_RESOLVED);
+        DatabaseReference friendQuery = DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(userId).child(Constants.STATUS_RESOLVED);
         mFriendsAdapter = new FirebaseListAdapter<User>(this, User.class, android.R.layout.simple_list_item_1, friendQuery) {
             @Override
             protected void populateView(View v, User model, int position) {

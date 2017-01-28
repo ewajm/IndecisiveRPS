@@ -20,6 +20,7 @@ import com.ewa.indecisiverps.R;
 import com.ewa.indecisiverps.adapters.ChoiceViewHolder;
 import com.ewa.indecisiverps.adapters.FirebaseChoiceListAdapter;
 import com.ewa.indecisiverps.models.Choice;
+import com.ewa.indecisiverps.utils.DatabaseUtil;
 import com.ewa.indecisiverps.utils.OnStartDragListener;
 import com.ewa.indecisiverps.utils.SimpleItemTouchHelperCallback;
 import com.google.firebase.auth.FirebaseAuth;
@@ -86,7 +87,7 @@ public class DecisionsFragment extends Fragment implements OnStartDragListener {
     }
 
     private void setUpFirebaseAdapter() {
-        mChoiceRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_CHOICE_REF).child(mUserId).orderByChild("status").equalTo(mStatus);
+        mChoiceRef = DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_CHOICE_REF).child(mUserId).orderByChild("status").equalTo(mStatus);
         mFirebaseAdapter = new FirebaseChoiceListAdapter(Choice.class, R.layout.decision_list_item_layout, ChoiceViewHolder.class, mChoiceRef, this, getActivity());
         mChoiceRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

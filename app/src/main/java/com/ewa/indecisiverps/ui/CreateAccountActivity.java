@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.ewa.indecisiverps.Constants;
 import com.ewa.indecisiverps.R;
 import com.ewa.indecisiverps.models.User;
+import com.ewa.indecisiverps.utils.DatabaseUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -160,7 +161,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Log.d(TAG, user.getDisplayName());
-                            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF);
+                            DatabaseReference userRef = DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_USER_REF);
                             User newUser = new User(user.getDisplayName(), user.getUid(), user.getEmail());
                             userRef.child(user.getUid()).setValue(newUser);
                         }

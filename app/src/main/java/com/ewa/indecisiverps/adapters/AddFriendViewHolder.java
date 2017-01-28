@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.ewa.indecisiverps.Constants;
 import com.ewa.indecisiverps.R;
 import com.ewa.indecisiverps.models.User;
+import com.ewa.indecisiverps.utils.DatabaseUtil;
 import com.ewa.indecisiverps.utils.NotificationHelper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -48,7 +49,7 @@ public class AddFriendViewHolder extends RecyclerView.ViewHolder implements View
         mAddFriendImageView.setOnClickListener(this);
         mAuth = FirebaseAuth.getInstance();
         mCurrentUserId = mAuth.getCurrentUser().getUid();
-        FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).child(mCurrentUserId).addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_USER_REF).child(mCurrentUserId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mCurrentUser = dataSnapshot.getValue(User.class);
@@ -70,7 +71,7 @@ public class AddFriendViewHolder extends RecyclerView.ViewHolder implements View
             mAddFriendImageView.setVisibility(View.VISIBLE);
             mFriendNameTextView.setText(mUser.getUsername());
         }
-        DatabaseReference friendRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(mCurrentUserId).child(Constants.STATUS_RESOLVED).child(mUser.getUserId());
+        DatabaseReference friendRef = DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(mCurrentUserId).child(Constants.STATUS_RESOLVED).child(mUser.getUserId());
         friendRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -100,7 +101,7 @@ public class AddFriendViewHolder extends RecyclerView.ViewHolder implements View
         } else {
             NotificationHelper helper = new NotificationHelper(mContext);
             helper.sendFriendNotification(mCurrentUser.getUsername() + " wants to decide things with you!", mUser);
-            DatabaseReference friendRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(mUser.getUserId()).child(Constants.STATUS_PENDING).child(mCurrentUserId);
+            DatabaseReference friendRef = DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(mUser.getUserId()).child(Constants.STATUS_PENDING).child(mCurrentUserId);
             friendRef.setValue(mCurrentUser);
             Toast.makeText(mContext, "Invitation sent!", Toast.LENGTH_SHORT).show();
             mAddFriendImageView.setImageResource(R.drawable.ic_action_accept);

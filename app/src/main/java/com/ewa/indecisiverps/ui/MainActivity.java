@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.ewa.indecisiverps.Constants;
 import com.ewa.indecisiverps.R;
+import com.ewa.indecisiverps.utils.DatabaseUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -53,12 +54,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Typeface headingFont = Typeface.createFromAsset(getAssets(), "fonts/titan_one_regular.ttf");
         mHeadingTextView.setTypeface(headingFont);
         mSubheadingTextView.setTypeface(headingFont);
-        if(!isInitialized){
-            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-            isInitialized = true;
-        }else {
-            Log.d(TAG,"Already Initialized");
-        }
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -140,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void setUpNotificationListeners(){
         Log.i(TAG, "setUpNotificationListeners: subscribing!" + mUserId);
         FirebaseMessaging.getInstance().subscribeToTopic("user_" + mUserId);
-        mReadyGameQuery = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_CHOICE_REF).child(mUserId).orderByChild("status").equalTo(Constants.STATUS_READY);
+        mReadyGameQuery = DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_CHOICE_REF).child(mUserId).orderByChild("status").equalTo(Constants.STATUS_READY);
         mReadyValueListener = mReadyGameQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -156,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
-        mUserInviteQuery = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(mUserId).child(Constants.STATUS_PENDING);
+        mUserInviteQuery = DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(mUserId).child(Constants.STATUS_PENDING);
         mUserEventListeneer = mUserInviteQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

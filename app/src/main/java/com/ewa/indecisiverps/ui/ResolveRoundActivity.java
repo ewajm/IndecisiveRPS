@@ -11,7 +11,6 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -25,12 +24,12 @@ import com.ewa.indecisiverps.Constants;
 import com.ewa.indecisiverps.R;
 import com.ewa.indecisiverps.models.Choice;
 import com.ewa.indecisiverps.models.Round;
+import com.ewa.indecisiverps.utils.DatabaseUtil;
 import com.ewa.indecisiverps.utils.NotificationHelper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.parceler.Parcels;
@@ -253,7 +252,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         if(mAuth.getCurrentUser() != null){
             mUserId = mAuth.getCurrentUser().getUid();
             mUsername = mAuth.getCurrentUser().getDisplayName();
-            mChoiceRef = FirebaseDatabase.getInstance().getReference("choices").child(mUserId);
+            mChoiceRef = DatabaseUtil.getDatabase().getInstance().getReference("choices").child(mUserId);
             mPlayerNumber = mChoice.getPlayer1().equals(mUsername) ? 0: 1;
             mNotificationHelper = new NotificationHelper(this);
         } else {
@@ -270,7 +269,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
 
     //plays most recent round and triggers resolveSocialEndRound (note: this is where status is set to resolved if most recent round not a tie)
     private void showFinishedRound() {
-        mRoundRef = FirebaseDatabase.getInstance().getReference("rounds").child(mChoice.getPushId());
+        mRoundRef = DatabaseUtil.getDatabase().getInstance().getReference("rounds").child(mChoice.getPushId());
         mRoundRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -388,7 +387,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
             //Currently not going to make this into an update hashmap despite the multiple operations because 1. it will only ever be at most two things at a time, 2. saving mChoice in its exact state at the time of the operation is vital to app's operation; in order to create an update hashmap that would have the same effect, mChoice would need to be converted into a hashmap of values instead of passed in directly
             if(!mChoice.getStatus().equals(Constants.STATUS_RESOLVED)){
                 String sendId = mChoice.getOpponentPlayerId().equals(mUserId) ? mChoice.getStartPlayerId() : mChoice.getOpponentPlayerId();
-                DatabaseReference opponentRef = FirebaseDatabase.getInstance().getReference("choices").child(sendId).child(mChoice.getPushId());
+                DatabaseReference opponentRef = DatabaseUtil.getDatabase().getInstance().getReference("choices").child(sendId).child(mChoice.getPushId());
                 opponentRef.setValue(mChoice);
                 mNotificationHelper.sendNotificationToOpponent(mChoice.getOption1() + " vs " + mChoice.getOption2() + " has been resolved!", mChoice);
                 //set status to resolved at the end in order to save into current user's database
@@ -414,7 +413,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         }
         mRound.setPlayer1Move(mMoveArray[0]);
         mRound.setPlayer2Move(mMoveArray[1]);
-        mRoundRef = FirebaseDatabase.getInstance().getReference("rounds").child(mChoice.getPushId());
+        mRoundRef = DatabaseUtil.getDatabase().getInstance().getReference("rounds").child(mChoice.getPushId());
         DatabaseReference pushRef = mRoundRef.push();
         if(!mChoice.getStatus().equals(Constants.STATUS_PENDING)){
             mChoice.setStatus(Constants.STATUS_PENDING);
@@ -423,7 +422,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         pushRef.setValue(mRound);
         mChoice.setStatus(Constants.STATUS_READY);
         String sendId = mChoice.getOpponentPlayerId().equals(mUserId) ? mChoice.getStartPlayerId() : mChoice.getOpponentPlayerId();
-        DatabaseReference opponentRef = FirebaseDatabase.getInstance().getReference("choices").child(sendId).child(mChoice.getPushId());
+        DatabaseReference opponentRef = DatabaseUtil.getDatabase().getInstance().getReference("choices").child(sendId).child(mChoice.getPushId());
         opponentRef.setValue(mChoice);
         Toast.makeText(this, "Decision sent to opponent!", Toast.LENGTH_SHORT).show();
         mNotificationHelper.sendNotificationToOpponent(mUsername + " has started a round with you!", mChoice);
@@ -442,7 +441,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         mRound.setPlayer1Move(mMoveArray[0]);
         mRound.setPlayer2Move(mMoveArray[1]);
         if(mUserId != null){
-            mRoundRef = FirebaseDatabase.getInstance().getReference("rounds").child(mChoice.getPushId());
+            mRoundRef = DatabaseUtil.getDatabase().getInstance().getReference("rounds").child(mChoice.getPushId());
             DatabaseReference pushRef = mRoundRef.push();
             mRound.setPushId(pushRef.getKey());
             pushRef.setValue(mRound);
@@ -537,7 +536,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void getOpponentMove() {
-        mRoundRef = FirebaseDatabase.getInstance().getReference("rounds").child(mChoice.getPushId());
+        mRoundRef = DatabaseUtil.getDatabase().getInstance().getReference("rounds").child(mChoice.getPushId());
         mRoundRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

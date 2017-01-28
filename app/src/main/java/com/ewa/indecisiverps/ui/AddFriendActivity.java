@@ -18,10 +18,10 @@ import com.ewa.indecisiverps.Constants;
 import com.ewa.indecisiverps.R;
 import com.ewa.indecisiverps.adapters.AddFriendViewHolder;
 import com.ewa.indecisiverps.models.User;
+import com.ewa.indecisiverps.utils.DatabaseUtil;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
@@ -87,9 +87,9 @@ public class AddFriendActivity extends AppCompatActivity {
 
     private void searchUsers(String query) {
         if(isEmail(query)){
-            mFirebaseQuery = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).orderByChild("email").equalTo(query);
+            mFirebaseQuery = DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_USER_REF).orderByChild("email").equalTo(query);
         } else {
-            mFirebaseQuery = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).orderByChild("username").startAt(query).endAt(query + "~");
+            mFirebaseQuery = DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_USER_REF).orderByChild("username").startAt(query).endAt(query + "~");
         }
         mFirebaseAdapter = new FirebaseRecyclerAdapter<User, AddFriendViewHolder>(User.class, R.layout.add_friend_list_item, AddFriendViewHolder.class, mFirebaseQuery) {
             @Override
