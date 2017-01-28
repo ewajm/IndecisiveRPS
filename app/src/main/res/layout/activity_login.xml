@@ -28,13 +28,13 @@
             android:id="@+id/firebaseLoginTextView"/>
 
         <EditText
-            android:id="@+id/titleEditText"
+            android:id="@+id/emailEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/white"
             android:hint="Email"
             android:inputType="textEmailAddress"
-            android:nextFocusDown="@+id/bodyEditText"
+            android:nextFocusDown="@+id/passwordEditText"
             android:padding="10dp"
             android:layout_marginBottom="10dp"
             android:textColor="@android:color/black"
@@ -44,13 +44,12 @@
             android:layout_marginLeft="5dp"/>
 
         <EditText
-            android:id="@+id/bodyEditText"
+            android:id="@+id/passwordEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/white"
             android:hint="Password"
             android:inputType="textPassword"
-            android:nextFocusDown="@+id/bodyEditText"
             android:padding="10dp"
             android:textColor="@android:color/black"
             android:textColorHint="@color/colorDivider"
@@ -59,30 +58,44 @@
             android:layout_marginLeft="5dp"/>
 
 
+
         <Button
             android:id="@+id/loginButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Log in"
             android:padding="15dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:textColor="@android:color/white" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:textColor="@android:color/white"
+            android:textColor="@color/colorAccentDark"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:text="Forgotten password? Reset it here!"
+            android:id="@+id/forgotPasswordTextView"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/colorAccentDark"
             android:textStyle="bold"
             android:textSize="15sp"
             android:text="Don't have an account? Sign up here!"
             android:id="@+id/registerTextView"
             android:layout_gravity="center_horizontal" />
 
+
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="20dp"
             android:textColor="@color/colorPrimaryLight"
             android:textStyle="bold"
             android:textSize="20sp"
@@ -133,6 +146,8 @@
             android:textSize="15sp"
             android:text=" - Play them again!!!!!"
             android:layout_marginLeft="64dp" />
+
+
 
     </LinearLayout>
 </RelativeLayout>

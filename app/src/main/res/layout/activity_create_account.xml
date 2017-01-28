@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/white"
             android:hint="Name"
-            android:nextFocusDown="@+id/bodyEditText"
+            android:nextFocusDown="@+id/passwordEditText"
             android:padding="10dp"
             android:layout_marginBottom="10dp"
             android:textColor="@android:color/black"
@@ -32,13 +32,13 @@
             android:layout_marginLeft="5dp"/>
 
         <EditText
-            android:id="@+id/titleEditText"
+            android:id="@+id/emailEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/white"
             android:hint="Email"
             android:inputType="textEmailAddress"
-            android:nextFocusDown="@+id/bodyEditText"
+            android:nextFocusDown="@+id/passwordEditText"
             android:padding="10dp"
             android:layout_marginBottom="10dp"
             android:textColor="@android:color/black"
@@ -48,13 +48,13 @@
             android:layout_marginLeft="5dp"/>
 
         <EditText
-            android:id="@+id/bodyEditText"
+            android:id="@+id/passwordEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/white"
             android:hint="Password"
             android:inputType="textPassword"
-            android:nextFocusDown="@+id/bodyEditText"
+            android:nextFocusDown="@+id/passwordEditText"
             android:padding="10dp"
             android:layout_marginBottom="10dp"
             android:textColor="@android:color/black"
@@ -70,7 +70,7 @@
             android:background="@android:color/white"
             android:hint="Confirm Password"
             android:inputType="textPassword"
-            android:nextFocusDown="@+id/bodyEditText"
+            android:nextFocusDown="@+id/passwordEditText"
             android:padding="10dp"
             android:layout_marginBottom="10dp"
             android:textColor="@android:color/black"

@@ -191,39 +191,4 @@ public class NewChoiceActivity extends AppCompatActivity implements View.OnClick
         builder.create().show();
     }
 
-//    private void createUserLists() {
-//        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-//        Query friendQuery = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).child(userId).child("friends").orderByChild("status").equalTo(Constants.STATUS_RESOLVED);
-//        friendQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                if(dataSnapshot.hasChildren()){
-//                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-//                        String thisUserId =  snapshot.getKey();
-//                        DatabaseReference thisUserRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REF).child(thisUserId);
-//                        thisUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//                            @Override
-//                            public void onDataChange(DataSnapshot dataSnapshot) {
-//                                User thisUser = dataSnapshot.getValue(User.class);
-//                                mFriends.add(thisUser);
-//                                mFriendNames.add(thisUser.getUsername());
-//                                mFriendsAdapter.notifyDataSetChanged();
-//                            }
-//
-//                            @Override
-//                            public void onCancelled(DatabaseError databaseError) {
-//
-//                            }
-//                        });
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
-
 }

@@ -1,12 +1,15 @@
 package com.ewa.indecisiverps.ui;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,14 +30,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     public static final String TAG = LoginActivity.class.getSimpleName();
 
-    @Bind(R.id.loginButton)
-    Button mPasswordLoginButton;
-    @Bind(R.id.titleEditText)
-    EditText mEmailEditText;
-    @Bind(R.id.bodyEditText) EditText mPasswordEditText;
-    @Bind(R.id.registerTextView)
-    TextView mRegisterTextView;
+    @Bind(R.id.loginButton) Button mPasswordLoginButton;
+    @Bind(R.id.emailEditText) EditText mEmailEditText;
+    @Bind(R.id.passwordEditText) EditText mPasswordEditText;
+    @Bind(R.id.registerTextView) TextView mRegisterTextView;
     @Bind(R.id.firebaseLoginTextView) TextView mFirebaseLoginTextView;
+    @Bind(R.id.forgotPasswordTextView) TextView mForgotPasswordTextView;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -63,6 +64,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         };
         mRegisterTextView.setOnClickListener(this);
         mPasswordLoginButton.setOnClickListener(this);
+        mForgotPasswordTextView.setOnClickListener(this);
         createAuthProgressDialog();
         Typeface headingFont = Typeface.createFromAsset(getAssets(), "fonts/titan_one_regular.ttf");
         mFirebaseLoginTextView.setTypeface(headingFont);
@@ -76,6 +78,56 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mAuthProgressDialog.setCancelable(false);
     }
 
+    private void createPasswordResetDialog(){
+        LayoutInflater inflater = this.getLayoutInflater();
+
+        View dialogView = inflater.inflate(R.layout.password_reset_dialog_layout, null);
+        final EditText resetEmailEditText = (EditText) dialogView.findViewById(R.id.passwordResetEditText);
+        final AlertDialog resetDialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .setPositiveButton("Request Reset", null)
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                })
+                .create();
+        resetDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                Button button = ((AlertDialog) resetDialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String resetEmail = resetEmailEditText.getText().toString();
+                        Log.i(TAG, "onClick: " + resetEmail);
+                        boolean isGoodEmail =
+                                (resetEmail != null && android.util.Patterns.EMAIL_ADDRESS.matcher(resetEmail).matches());
+                        if(isGoodEmail){
+                            mAuth.sendPasswordResetEmail(resetEmail)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Toast.makeText(LoginActivity.this, "Reset instructions sent to email address", Toast.LENGTH_SHORT).show();
+                                                resetDialog.dismiss();
+                                            } else {
+                                                Toast.makeText(LoginActivity.this, "Something went wrong - please check your email address", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+
+                        } else {
+                            resetEmailEditText.setError("Not a valid email");
+                        }
+                    }
+                });
+            }
+        });
+        resetDialog.show();
+    }
+
 
     @Override
     public void onClick(View view) {
@@ -87,6 +139,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.loginButton:
                 loginWithPassword();
+                break;
+            case R.id.forgotPasswordTextView:
+                createPasswordResetDialog();
                 break;
         }
     }
