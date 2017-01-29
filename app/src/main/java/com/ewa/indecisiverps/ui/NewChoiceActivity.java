@@ -168,6 +168,14 @@ public class NewChoiceActivity extends AppCompatActivity implements View.OnClick
         TextView empty = (TextView) v.findViewById(android.R.id.empty);
         mListView.setEmptyView(empty);
         mListView.setAdapter(mFriendsAdapter);
+        // Add action buttons
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+        final AlertDialog dialog = builder.create();
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -178,19 +186,13 @@ public class NewChoiceActivity extends AppCompatActivity implements View.OnClick
                     mNewChoice.setPlayer2(opponent.getUsername());
                 }
                 mNewChoice.setOpponentPlayerId(opponent.getUserId());
+                dialog.dismiss();
                 Intent intent = new Intent(NewChoiceActivity.this, ResolveRoundActivity.class);
                 intent.putExtra("choice", Parcels.wrap(mNewChoice));
                 startActivity(intent);
             }
         });
-        // Add action buttons
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.cancel();
-            }
-        });
-        builder.create().show();
+        dialog.show();
     }
 
 }
