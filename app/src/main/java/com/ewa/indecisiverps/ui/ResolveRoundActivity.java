@@ -191,7 +191,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
                     mChoice.setStatus(Constants.STATUS_PENDING);
                 }
                 if(mUserId != null && mChoice.getPushId() == null){
-                    DatabaseReference pushRef = mChoiceRef.push();
+                    DatabaseReference pushRef = mChoiceRef.child(mChoice.getStatus()).push();
                     mChoice.setPushId(pushRef.getKey());
                     pushRef.setValue(mChoice);
                 }
@@ -252,7 +252,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         if(mAuth.getCurrentUser() != null){
             mUserId = mAuth.getCurrentUser().getUid();
             mUsername = mAuth.getCurrentUser().getDisplayName();
-            mChoiceRef = DatabaseUtil.getDatabase().getInstance().getReference("choices").child(mUserId);
+            mChoiceRef = DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_CHOICE_REF).child(mUserId);
             mPlayerNumber = mChoice.getPlayer1().equals(mUsername) ? 0: 1;
             mNotificationHelper = new NotificationHelper(this);
         } else {
@@ -269,7 +269,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
 
     //plays most recent round and triggers resolveSocialEndRound (note: this is where status is set to resolved if most recent round not a tie)
     private void showFinishedRound() {
-        mRoundRef = DatabaseUtil.getDatabase().getInstance().getReference("rounds").child(mChoice.getPushId());
+        mRoundRef = DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_ROUND_REF).child(mChoice.getPushId());
         mRoundRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -322,6 +322,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
 
                                 mGameButton.setEnabled(true);
                                 if(!mChoice.getWin().equals(Constants.STATUS_TIE)){
+                                    mChoiceRef.child(mChoice.getStatus()).child(mChoice.getPushId()).removeValue();
                                     mChoice.setStatus(Constants.STATUS_RESOLVED);
                                 }
                                 resolveSocialEndRound();
@@ -365,8 +366,9 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
             //if not coming from showFinishedRound, sets up choice variables to send to opponent so they can see finished round
             if(mChoice.getWin() == null){
                 mChoice.setWin(Constants.STATUS_TIE);
+                mChoiceRef.child(mChoice.getStatus()).child(mChoice.getPushId()).removeValue();
                 mChoice.setStatus(Constants.STATUS_PENDING);
-                mChoiceRef.child(mChoice.getPushId()).setValue(mChoice);
+                mChoiceRef.child(mChoice.getStatus()).child(mChoice.getPushId()).setValue(mChoice);
             } else {
                 //if coming from showFinishedRound, sets win to null in preparation for new round
                 mChoice.setWin(null);
@@ -387,13 +389,15 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
             //Currently not going to make this into an update hashmap despite the multiple operations because 1. it will only ever be at most two things at a time, 2. saving mChoice in its exact state at the time of the operation is vital to app's operation; in order to create an update hashmap that would have the same effect, mChoice would need to be converted into a hashmap of values instead of passed in directly
             if(!mChoice.getStatus().equals(Constants.STATUS_RESOLVED)){
                 String sendId = mChoice.getOpponentPlayerId().equals(mUserId) ? mChoice.getStartPlayerId() : mChoice.getOpponentPlayerId();
-                DatabaseReference opponentRef = DatabaseUtil.getDatabase().getInstance().getReference("choices").child(sendId).child(mChoice.getPushId());
-                opponentRef.setValue(mChoice);
+                DatabaseReference opponentRef = DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_CHOICE_REF).child(sendId);
+                opponentRef.child(Constants.STATUS_PENDING).child(mChoice.getPushId()).removeValue();
+                opponentRef.child(mChoice.getStatus()).child(mChoice.getPushId()).setValue(mChoice);
                 mNotificationHelper.sendNotificationToOpponent(mChoice.getOption1() + " vs " + mChoice.getOption2() + " has been resolved!", mChoice);
                 //set status to resolved at the end in order to save into current user's database
+                mChoiceRef.child(mChoice.getStatus()).child(mChoice.getPushId()).removeValue();
                 mChoice.setStatus(Constants.STATUS_RESOLVED);
             }
-            mChoiceRef.child(mChoice.getPushId()).setValue(mChoice);
+            mChoiceRef.child(mChoice.getStatus()).child(mChoice.getPushId()).setValue(mChoice);
             mWinningChoiceTextView.setText(mOptions[winPosition] + " wins!");
             mWinningChoiceTextView.setVisibility(View.VISIBLE);
             mGameButton.setText("New Decision");
@@ -413,17 +417,20 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         }
         mRound.setPlayer1Move(mMoveArray[0]);
         mRound.setPlayer2Move(mMoveArray[1]);
-        mRoundRef = DatabaseUtil.getDatabase().getInstance().getReference("rounds").child(mChoice.getPushId());
+        mRoundRef = DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_ROUND_REF).child(mChoice.getPushId());
         DatabaseReference pushRef = mRoundRef.push();
         if(!mChoice.getStatus().equals(Constants.STATUS_PENDING)){
             mChoice.setStatus(Constants.STATUS_PENDING);
         }
         mRound.setPushId(pushRef.getKey());
         pushRef.setValue(mRound);
-        mChoice.setStatus(Constants.STATUS_READY);
         String sendId = mChoice.getOpponentPlayerId().equals(mUserId) ? mChoice.getStartPlayerId() : mChoice.getOpponentPlayerId();
-        DatabaseReference opponentRef = DatabaseUtil.getDatabase().getInstance().getReference("choices").child(sendId).child(mChoice.getPushId());
-        opponentRef.setValue(mChoice);
+        DatabaseReference opponentRef = DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_CHOICE_REF).child(sendId);
+        if(mChoice.getWin() != null){
+            opponentRef.child(mChoice.getStatus()).child(mChoice.getPushId()).removeValue();
+        }
+        mChoice.setStatus(Constants.STATUS_READY);
+        opponentRef.child(mChoice.getStatus()).child(mChoice.getPushId()).setValue(mChoice);
         Toast.makeText(this, "Decision sent to opponent!", Toast.LENGTH_SHORT).show();
         mNotificationHelper.sendNotificationToOpponent(mUsername + " has started a round with you!", mChoice);
         Intent intent = new Intent(ResolveRoundActivity.this, MainActivity.class);
@@ -441,7 +448,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         mRound.setPlayer1Move(mMoveArray[0]);
         mRound.setPlayer2Move(mMoveArray[1]);
         if(mUserId != null){
-            mRoundRef = DatabaseUtil.getDatabase().getInstance().getReference("rounds").child(mChoice.getPushId());
+            mRoundRef = DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_ROUND_REF).child(mChoice.getPushId());
             DatabaseReference pushRef = mRoundRef.push();
             mRound.setPushId(pushRef.getKey());
             pushRef.setValue(mRound);
@@ -459,7 +466,8 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
             mChoice.setStatus(Constants.STATUS_RESOLVED);
             mChoice.setWin(mOptions[winPosition]);
             if(mUserId != null){
-                mChoiceRef.child(mChoice.getPushId()).setValue(mChoice);
+                mChoiceRef.child(Constants.STATUS_PENDING).child(mChoice.getPushId()).removeValue();
+                mChoiceRef.child(mChoice.getStatus()).child(mChoice.getPushId()).setValue(mChoice);
             }
             mWinningChoiceTextView.setText(mOptions[winPosition] + " wins!");
             mWinningChoiceTextView.setVisibility(View.VISIBLE);
@@ -536,7 +544,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void getOpponentMove() {
-        mRoundRef = DatabaseUtil.getDatabase().getInstance().getReference("rounds").child(mChoice.getPushId());
+        mRoundRef = DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_ROUND_REF).child(mChoice.getPushId());
         mRoundRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -618,7 +626,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
     protected void onStop() {
         super.onStop();
         if(mChoice.getMode()==1 && mChoice.getPushId() != null && mChoice.getStatus().equals(Constants.STATUS_PENDING)){
-            mChoiceRef.child(mChoice.getPushId()).removeValue();
+            mChoiceRef.child(mChoice.getStatus()).child(mChoice.getPushId()).removeValue();
         }
     }
 

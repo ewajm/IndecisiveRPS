@@ -74,6 +74,8 @@ public class NewChoiceActivity extends AppCompatActivity implements View.OnClick
             mChoiceOneEditText.setText(choice.getOption1());
             mChoiceTwoEditText.setText(choice.getOption2());
             mNewChoice = choice;
+            mNewChoice.setStatus(Constants.STATUS_PENDING);
+            mNewChoice.setWin(null);
         }
 
         mOpponent = Parcels.unwrap(getIntent().getParcelableExtra("opponent"));

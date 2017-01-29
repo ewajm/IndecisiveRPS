@@ -95,7 +95,7 @@ public class FirebaseChoiceListAdapter extends FirebaseRecyclerAdapter<Choice, C
         final Choice choice = mChoices.get(position);
         if(choice.getMode() == 2){
             String mOtherUserId = choice.getStartPlayerId().equals(mUserId) ? choice.getOpponentPlayerId() : choice.getStartPlayerId();
-            DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_CHOICE_REF).child(mOtherUserId).child(choice.getPushId()).addListenerForSingleValueEvent(new ValueEventListener() {
+            DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_CHOICE_REF).child(mOtherUserId).child(choice.getStatus()).child(choice.getPushId()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if(!dataSnapshot.exists()){

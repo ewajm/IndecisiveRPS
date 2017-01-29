@@ -4,16 +4,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ewa.indecisiverps.Constants;
-import com.ewa.indecisiverps.R;
+import com.ewa.indecisiverps.models.Choice;
 import com.ewa.indecisiverps.models.User;
 import com.ewa.indecisiverps.ui.NewChoiceActivity;
 import com.ewa.indecisiverps.utils.DatabaseUtil;
@@ -23,7 +18,6 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
@@ -108,13 +102,7 @@ public class FriendListAdapter  extends FirebaseRecyclerAdapter<User, FriendView
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //update children hashmap
-                                //update children hashmap
-                                HashMap<String, Object> deleteFriendMap = new HashMap<>();
-                                String currentUserPath = "/" + Constants.FIREBASE_USER_FRIEND_REF + "/" + mUserId + "/";
-                                String friendUserPath = "/" + Constants.FIREBASE_USER_FRIEND_REF + "/" + user.getUserId() + "/";
-                                deleteFriendMap.put(friendUserPath+ Constants.STATUS_RESOLVED + "/" +mUserId, null);
-                                deleteFriendMap.put(currentUserPath + Constants.STATUS_RESOLVED + "/" + user.getUserId(), null);
-                                DatabaseUtil.getDatabase().getInstance().getReference().updateChildren(deleteFriendMap);
+                                removeDatabaseAssociations(user.getUserId());
                                 mUsers.remove(user);
                                 if(mUsers.size() == 0){
                                    mEmptyView.setVisibility(View.VISIBLE);
@@ -125,6 +113,53 @@ public class FriendListAdapter  extends FirebaseRecyclerAdapter<User, FriendView
                         })
                         .setNegativeButton("No", null)
                         .show();
+            }
+        });
+    }
+
+    private void removeDatabaseAssociations(final String userId) {
+        final DatabaseReference pendingRef = DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_CHOICE_REF).child(mUserId).child(Constants.STATUS_PENDING);
+        final DatabaseReference opponentPendingRef = DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_CHOICE_REF).child(userId).child(Constants.STATUS_PENDING);
+        final DatabaseReference readyRef = DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_CHOICE_REF).child(mUserId).child(Constants.STATUS_READY);
+        final DatabaseReference opponentReadyRef = DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_CHOICE_REF).child(userId).child(Constants.STATUS_READY);
+        pendingRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Choice choice = snapshot.getValue(Choice.class);
+                    if(choice.getStartPlayerId().equals(userId) || choice.getOpponentPlayerId().equals(userId)){
+                        pendingRef.child(choice.getPushId()).removeValue();
+                        opponentReadyRef.child(choice.getPushId()).removeValue();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        readyRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Choice choice = snapshot.getValue(Choice.class);
+                    if(choice.getStartPlayerId().equals(userId) || choice.getOpponentPlayerId().equals(userId)){
+                        readyRef.child(choice.getPushId()).removeValue();
+                        opponentPendingRef.child(choice.getPushId()).removeValue();
+                    }
+                }
+                HashMap<String, Object> deleteFriendMap = new HashMap<>();
+                String currentUserPath = "/" + Constants.FIREBASE_USER_FRIEND_REF + "/" + mUserId + "/";
+                String friendUserPath = "/" + Constants.FIREBASE_USER_FRIEND_REF + "/" + userId + "/";
+                deleteFriendMap.put(friendUserPath+ Constants.STATUS_RESOLVED + "/" +mUserId, null);
+                deleteFriendMap.put(currentUserPath + Constants.STATUS_RESOLVED + "/" + userId, null);
+                DatabaseUtil.getDatabase().getInstance().getReference().updateChildren(deleteFriendMap);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }

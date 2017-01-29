@@ -98,10 +98,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Intent loginIntent = new Intent(this, LoginActivity.class);
                     startActivity(loginIntent);
                 } else {
-                    FirebaseAuth.getInstance().signOut();
-                    FirebaseMessaging.getInstance().unsubscribeFromTopic("user_" + mUserId );
                     mReadyGameQuery.removeEventListener(mReadyValueListener);
                     mUserInviteQuery.removeEventListener(mUserEventListeneer);
+                    FirebaseAuth.getInstance().signOut();
+                    FirebaseMessaging.getInstance().unsubscribeFromTopic("user_" + mUserId );
                 }
                 break;
             case R.id.decisionsButton:
@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void setUpNotificationListeners(){
         Log.i(TAG, "setUpNotificationListeners: subscribing!" + mUserId);
         FirebaseMessaging.getInstance().subscribeToTopic("user_" + mUserId);
-        mReadyGameQuery = DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_CHOICE_REF).child(mUserId).orderByChild("status").equalTo(Constants.STATUS_READY);
+        mReadyGameQuery = DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_CHOICE_REF).child(mUserId).child(Constants.STATUS_READY);
         mReadyValueListener = mReadyGameQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
