@@ -9,15 +9,10 @@ import android.widget.TextView;
 
 import com.ewa.indecisiverps.R;
 import com.ewa.indecisiverps.models.User;
-import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
-/**
- * Created by ewa on 12/21/2016.
- */
 
 public class FriendViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.friendIconImageView) ImageView mFriendIconImageView;

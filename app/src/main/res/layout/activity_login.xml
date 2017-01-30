@@ -19,9 +19,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Login"
+            android:text="@string/login"
             android:textColor="@color/colorPrimaryLight"
-            android:textSize="30dp"
+            android:textSize="30sp"
             android:layout_marginBottom="20dp"
             android:textStyle="bold"
             android:layout_gravity="center"
@@ -32,7 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/white"
-            android:hint="Email"
+            android:hint="@string/email"
             android:inputType="textEmailAddress"
             android:nextFocusDown="@+id/passwordEditText"
             android:padding="10dp"
@@ -48,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/white"
-            android:hint="Password"
+            android:hint="@string/password"
             android:inputType="textPassword"
             android:padding="10dp"
             android:textColor="@android:color/black"
@@ -63,7 +63,7 @@
             android:id="@+id/loginButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Log in"
+            android:text="@string/login"
             android:padding="15dp"
             android:layout_marginTop="10dp"
             android:textColor="@android:color/white" />
@@ -75,7 +75,7 @@
             android:textColor="@color/colorAccentDark"
             android:textStyle="bold"
             android:textSize="15sp"
-            android:text="Forgotten password? Reset it here!"
+            android:text="@string/forgotten_password"
             android:id="@+id/forgotPasswordTextView"
             android:layout_gravity="center_horizontal" />
 
@@ -86,7 +86,7 @@
             android:textColor="@color/colorAccentDark"
             android:textStyle="bold"
             android:textSize="15sp"
-            android:text="Don't have an account? Sign up here!"
+            android:text="@string/sign_up_here"
             android:id="@+id/registerTextView"
             android:layout_gravity="center_horizontal" />
 
@@ -99,7 +99,7 @@
             android:textColor="@color/colorPrimaryLight"
             android:textStyle="bold"
             android:textSize="20sp"
-            android:text="Why log in?!"
+            android:text="@string/why_log_in"
             android:layout_gravity="center_horizontal" />
         <TextView
             android:layout_width="wrap_content"
@@ -108,8 +108,9 @@
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:textSize="15sp"
-            android:text=" - Connect with others!"
-            android:layout_marginLeft="64dp" />
+            android:text="@string/connect_with_others"
+            android:layout_marginLeft="64dp"
+            android:layout_marginStart="64dp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -117,8 +118,9 @@
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:textSize="15sp"
-            android:text=" - Enable two player mode!!"
-            android:layout_marginLeft="64dp" />
+            android:text="@string/enable_two_player_mode"
+            android:layout_marginLeft="64dp"
+            android:layout_marginStart="64dp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -126,8 +128,9 @@
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:textSize="15sp"
-            android:text=" - Save your decisions!!!"
-            android:layout_marginLeft="64dp" />
+            android:text="@string/save_your_decisions"
+            android:layout_marginLeft="64dp"
+            android:layout_marginStart="64dp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -135,8 +138,9 @@
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:textSize="15sp"
-            android:text=" - Browse your old decisions!!!!"
-            android:layout_marginLeft="64dp" />
+            android:text="@string/browse_your_old_decisions"
+            android:layout_marginLeft="64dp"
+            android:layout_marginStart="64dp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -144,8 +148,9 @@
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:textSize="15sp"
-            android:text=" - Play them again!!!!!"
-            android:layout_marginLeft="64dp" />
+            android:text="@string/play_them_again"
+            android:layout_marginLeft="64dp"
+            android:layout_marginStart="64dp"/>
 
 
 

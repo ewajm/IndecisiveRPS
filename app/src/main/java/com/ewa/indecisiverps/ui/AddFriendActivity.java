@@ -1,10 +1,9 @@
 package com.ewa.indecisiverps.ui;
 
 import android.graphics.Typeface;
-import android.preference.PreferenceManager;
+import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -127,9 +126,6 @@ public class AddFriendActivity extends AppCompatActivity {
     private boolean isEmail(String email) {
         boolean isEmail =
                 (email != null && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches());
-        if (!isEmail) {
-            return false;
-        }
         return isEmail;
     }
 }

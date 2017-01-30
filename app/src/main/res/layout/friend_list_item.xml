@@ -11,6 +11,7 @@
         android:layout_width="0dp"
         android:layout_weight="1"
         android:id="@+id/friendIconImageView"
+        android:contentDescription="@string/icon_with_initial_of_user"
         android:scaleType="fitXY"
         android:layout_height="40dp" />
 
@@ -18,7 +19,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="5"
-        android:text="Username"
+        android:text="@string/username"
         android:layout_gravity="center"
         android:gravity="center"
         android:id="@+id/friendNameTextView"
@@ -29,6 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:src="@drawable/ic_action_refuse"
+        android:contentDescription="@string/x_icon_content_description"
         android:gravity="center"
         android:layout_gravity="center"
         android:id="@+id/removeFriendImageView"/>
@@ -37,6 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:src="@drawable/ic_action_go"
+        android:contentDescription="@string/arrow_icon_content_description"
         android:gravity="center"
         android:layout_gravity="center"
         android:id="@+id/decideNowImageView"/>

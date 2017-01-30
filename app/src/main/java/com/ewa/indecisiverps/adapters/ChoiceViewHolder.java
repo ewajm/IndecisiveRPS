@@ -1,24 +1,17 @@
 package com.ewa.indecisiverps.adapters;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ewa.indecisiverps.Constants;
 import com.ewa.indecisiverps.R;
 import com.ewa.indecisiverps.models.Choice;
 import com.ewa.indecisiverps.ui.DecisionsActivity;
-import com.ewa.indecisiverps.ui.NewChoiceActivity;
 import com.ewa.indecisiverps.ui.ResolveRoundActivity;
 import com.ewa.indecisiverps.utils.ChoiceHistoryDialog;
 
@@ -26,13 +19,6 @@ import org.parceler.Parcels;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
-import static android.R.id.message;
-import static com.google.android.gms.internal.zzs.TAG;
-
-/**
- * Created by ewa on 12/20/2016.
- */
 
 public class ChoiceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
     @Bind(R.id.decisionOptionsTextView) TextView mDecisionOptionsTextView;
@@ -55,7 +41,6 @@ public class ChoiceViewHolder extends RecyclerView.ViewHolder implements View.On
 
     @Override
     public void onClick(View view) {
-        Log.i("viewholder", "onClick: ");
         if(mChoice.getStatus().equals(Constants.STATUS_RESOLVED)){
             showChoiceHistoryDialog();
         } else if(mChoice.getStatus().equals(Constants.STATUS_READY)){

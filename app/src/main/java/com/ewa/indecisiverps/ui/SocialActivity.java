@@ -19,17 +19,11 @@ import com.ewa.indecisiverps.adapters.FriendViewHolder;
 import com.ewa.indecisiverps.adapters.InvitationViewHolder;
 import com.ewa.indecisiverps.adapters.InviteListAdapter;
 import com.ewa.indecisiverps.models.User;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -45,14 +39,8 @@ public class SocialActivity extends AppCompatActivity implements View.OnClickLis
     @Bind(R.id.emptyView) TextView mEmptyView;
     @Bind(R.id.goBackButton) Button mBackButton;
     String mCurrentUserId;
-    ArrayList<User> mInvites = new ArrayList<>();
-    ArrayList<User> mFriends = new ArrayList<>();
     InviteListAdapter mInviteAdapter;
     FriendListAdapter mFriendsAdapter;
-    private String mCurrentUserName;
-    private ValueEventListener mFriendsEventListener;
-    private Query mFriendsQuery;
-    private DatabaseReference mPendingFriendQuery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,11 +48,11 @@ public class SocialActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_social);
         ButterKnife.bind(this);
         mCurrentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        mCurrentUserName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-        mUsernameTextView.setText(mCurrentUserName);
+        String currentUserName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+        mUsernameTextView.setText(currentUserName);
         Typeface headingFont = Typeface.createFromAsset(getAssets(), "fonts/titan_one_regular.ttf");
         mUsernameTextView.setTypeface(headingFont);
-        String initial =mCurrentUserName.substring(0, 1);
+        String initial = currentUserName.substring(0, 1);
         String url = "https://dummyimage.com/80x80/0096a7/ffffff.png&text=" + initial;
         Picasso.with(this).load(url).fit().into(muUserIconImageView);
         mAddFriendButton.setOnClickListener(this);
@@ -73,12 +61,12 @@ public class SocialActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void createUserLists() {
-        mFriendsQuery = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(mCurrentUserId).child(Constants.STATUS_RESOLVED);
-        mPendingFriendQuery = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(mCurrentUserId).child(Constants.STATUS_PENDING);
-        mInviteAdapter = new InviteListAdapter(User.class, R.layout.invitation_list_item, InvitationViewHolder.class, mPendingFriendQuery, mInvitationsLinearLayout, this);
+        Query friendsQuery = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(mCurrentUserId).child(Constants.STATUS_RESOLVED);
+        DatabaseReference pendingFriendQuery = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(mCurrentUserId).child(Constants.STATUS_PENDING);
+        mInviteAdapter = new InviteListAdapter(User.class, R.layout.invitation_list_item, InvitationViewHolder.class, pendingFriendQuery, mInvitationsLinearLayout, this);
         mInvitationRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mInvitationRecyclerView.setAdapter(mInviteAdapter);
-        mFriendsAdapter = new FriendListAdapter(User.class, R.layout.friend_list_item, FriendViewHolder.class, mFriendsQuery, mEmptyView, this);
+        mFriendsAdapter = new FriendListAdapter(User.class, R.layout.friend_list_item, FriendViewHolder.class, friendsQuery, mEmptyView, this);
         mFriendsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mFriendsRecyclerView.setAdapter(mFriendsAdapter);
     }

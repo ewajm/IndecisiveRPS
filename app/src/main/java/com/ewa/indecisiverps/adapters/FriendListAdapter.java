@@ -26,16 +26,12 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * Created by ewa on 12/21/2016.
- */
 
 public class FriendListAdapter  extends FirebaseRecyclerAdapter<User, FriendViewHolder> {
     private final Query mRef;
     private final ChildEventListener mChildEventListener;
     private ArrayList<User> mUsers = new ArrayList<>();
     private Context mContext;
-    private FriendViewHolder mViewHolder;
     private String mUserId;
     private TextView mEmptyView;
 

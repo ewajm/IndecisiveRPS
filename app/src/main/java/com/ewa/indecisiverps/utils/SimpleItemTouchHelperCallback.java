@@ -6,7 +6,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import com.ewa.indecisiverps.adapters.ItemTouchHelperAdapter;
 
 /**
- * Created by ewa on 12/20/2016.
+ * required for most touch events
  */
 
 public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback{

@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:text="Choose Your Opponent"
+        android:text="@string/choose_your_opponent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/headingView"
@@ -21,8 +21,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@android:id/empty"
-        android:text="Please wait a moment"
-        android:textSize="16dp"
+        android:text="@string/please_wait_a_moment"
+        android:textSize="16sp"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/friendListView"/>
 </RelativeLayout>

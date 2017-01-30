@@ -1,27 +1,18 @@
 package com.ewa.indecisiverps.adapters;
 
         import android.content.Context;
-        import android.graphics.Typeface;
-        import android.support.v7.widget.RecyclerView;
-        import android.view.View;
-        import android.widget.ImageView;
-        import android.widget.TextView;
-        import android.widget.Toast;
+import android.graphics.Typeface;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-        import com.ewa.indecisiverps.Constants;
-        import com.ewa.indecisiverps.R;
-        import com.ewa.indecisiverps.models.User;
-        import com.google.firebase.auth.FirebaseAuth;
-        import com.google.firebase.database.DatabaseReference;
-        import com.google.firebase.database.FirebaseDatabase;
-        import com.squareup.picasso.Picasso;
+import com.ewa.indecisiverps.R;
+import com.ewa.indecisiverps.models.User;
+import com.squareup.picasso.Picasso;
 
-        import butterknife.Bind;
-        import butterknife.ButterKnife;
-
-/**
- * Created by ewa on 12/21/2016.
- */
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class InvitationViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.acceptRequestImageView) ImageView mAcceptRequestImageView;

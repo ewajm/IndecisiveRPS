@@ -3,13 +3,12 @@ package com.ewa.indecisiverps.ui;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -24,12 +23,7 @@ import com.ewa.indecisiverps.models.User;
 import com.ewa.indecisiverps.utils.DatabaseUtil;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 import org.parceler.Parcels;
 
@@ -48,12 +42,9 @@ public class NewChoiceActivity extends AppCompatActivity implements View.OnClick
     @Bind(R.id.impartialityModeCheckbox) CheckBox mImpartialityModeCheckbox;
     String mUserName;
     String mUserId;
-    private FirebaseAuth mAuth;
     private User mOpponent;
     ArrayList<User> mFriends = new ArrayList<>();
-    ArrayList<String> mFriendNames = new ArrayList<>();
     ListView mListView;
-    private FirebaseListAdapter mFriendsAdapter;
     private Choice mNewChoice;
 
     @Override
@@ -62,10 +53,10 @@ public class NewChoiceActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_new_choice);
         ButterKnife.bind(this);
 
-        mAuth = FirebaseAuth.getInstance();
-        if(mAuth.getCurrentUser() != null){
-            mUserName = mAuth.getCurrentUser().getDisplayName();
-            mUserId = mAuth.getCurrentUser().getUid();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if(auth.getCurrentUser() != null){
+            mUserName = auth.getCurrentUser().getDisplayName();
+            mUserId = auth.getCurrentUser().getUid();
         } else {
             mFriendButton.setEnabled(false);
         }
@@ -157,17 +148,17 @@ public class NewChoiceActivity extends AppCompatActivity implements View.OnClick
         builder.setView(v);
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference friendQuery = DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_USER_FRIEND_REF).child(userId).child(Constants.STATUS_RESOLVED);
-        mFriendsAdapter = new FirebaseListAdapter<User>(this, User.class, android.R.layout.simple_list_item_1, friendQuery) {
+        FirebaseListAdapter friendsAdapter = new FirebaseListAdapter<User>(this, User.class, android.R.layout.simple_list_item_1, friendQuery) {
             @Override
             protected void populateView(View v, User model, int position) {
-                ((TextView)v.findViewById(android.R.id.text1)).setText(model.getUsername());
+                ((TextView) v.findViewById(android.R.id.text1)).setText(model.getUsername());
                 mFriends.add(model);
             }
         };
         mListView = (ListView) v.findViewById(R.id.friendListView);
         TextView empty = (TextView) v.findViewById(android.R.id.empty);
         mListView.setEmptyView(empty);
-        mListView.setAdapter(mFriendsAdapter);
+        mListView.setAdapter(friendsAdapter);
         // Add action buttons
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override

@@ -1,16 +1,12 @@
 package com.ewa.indecisiverps.ui;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -26,13 +22,8 @@ import com.ewa.indecisiverps.utils.SimpleItemTouchHelperCallback;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
-import org.parceler.Parcels;
-
-import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -43,10 +34,8 @@ import butterknife.ButterKnife;
 public class DecisionsFragment extends Fragment implements OnStartDragListener {
     @Bind(R.id.decisionsRecyclerView) RecyclerView mDecisionRecyclerView;
     @Bind(R.id.emptyView) TextView mEmptyView;
-    private ArrayList<Choice> mChoiceArray = new ArrayList<>();
     private String mUserId;
     private FirebaseChoiceListAdapter mFirebaseAdapter;
-    private Query mChoiceRef;
     private ItemTouchHelper mItemTouchHelper;
     private String mStatus;
 
@@ -87,9 +76,9 @@ public class DecisionsFragment extends Fragment implements OnStartDragListener {
     }
 
     private void setUpFirebaseAdapter() {
-        mChoiceRef = DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_CHOICE_REF).child(mUserId).child(mStatus);
-        mFirebaseAdapter = new FirebaseChoiceListAdapter(Choice.class, R.layout.decision_list_item_layout, ChoiceViewHolder.class, mChoiceRef, this, getActivity());
-        mChoiceRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        Query choiceRef = DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_CHOICE_REF).child(mUserId).child(mStatus);
+        mFirebaseAdapter = new FirebaseChoiceListAdapter(Choice.class, R.layout.decision_list_item_layout, ChoiceViewHolder.class, choiceRef, this, getActivity());
+        choiceRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(!dataSnapshot.hasChildren()){

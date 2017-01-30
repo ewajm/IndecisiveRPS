@@ -1,6 +1,5 @@
 package com.ewa.indecisiverps.ui;
 
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -36,15 +35,12 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class ResolveRoundActivity extends AppCompatActivity implements View.OnClickListener{
-    public static final String TAG = ResolveRoundActivity.class.getSimpleName();
     private BottomSheetBehavior mBottomSheetBehavior1;
     @Bind(R.id.rockButton) ImageButton mRockButton;
     @Bind(R.id.scissorsButton) ImageButton mScissorsButton;
@@ -65,7 +61,6 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
     private ArrayList<Round> mRoundList = new ArrayList<>();
     private String[] mMoveArray;
     private ImageView mPlayersImageView;
-    private ObjectAnimator mSlidInAnimator;
     private ImageView mOpponentImageView;
     private String[] mOptions;
     private String mComputerMove;
@@ -83,7 +78,6 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
     private int mRockSound;
     private int mSoundToPlay;
     private boolean mSFX;
-    private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor mEditor;
     private NotificationHelper mNotificationHelper;
 
@@ -98,9 +92,9 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
         //choice is always coming from new choice activity or from ready section of decisions activity
         mChoice = Parcels.unwrap(getIntent().getParcelableExtra("choice"));
         mAuth = FirebaseAuth.getInstance();
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        mEditor = mSharedPreferences.edit();
-        mSFX = mSharedPreferences.getBoolean(Constants.PREFS_SFX_KEY, true);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mEditor = sharedPreferences.edit();
+        mSFX = sharedPreferences.getBoolean(Constants.PREFS_SFX_KEY, true);
         if(!mSFX){
             mSoundButton.setImageResource(R.drawable.ic_action_mute);
         }
@@ -439,7 +433,7 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
 
     //solo rounds are always resolved immediately and have two database transaction (one for round, one for choice)
     private void resolveSoloRound() {
-        int winPosition=0;
+        int winPosition;
         for(int i = 0; i < mMoveArray.length; i++){
             if(mMoveArray[i] == null){
                 mMoveArray[i] = mComputerMove;
@@ -514,15 +508,19 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
 
 
     private void setMoveImageAndSound(String move, ImageView targetView) {
-        if(move.equals(Constants.RPS_PAPER)){
-            targetView.setImageResource(R.drawable.paper2);
-            mSoundToPlay = mPaperSound;
-        } else if(move.equals(Constants.RPS_ROCK)){
-            targetView.setImageResource(R.drawable.rock);
-            mSoundToPlay = mRockSound;
-        } else {
-            targetView.setImageResource(R.drawable.scissors2);
-            mSoundToPlay = mScissorsSound;
+        switch (move) {
+            case Constants.RPS_PAPER:
+                targetView.setImageResource(R.drawable.paper2);
+                mSoundToPlay = mPaperSound;
+                break;
+            case Constants.RPS_ROCK:
+                targetView.setImageResource(R.drawable.rock);
+                mSoundToPlay = mRockSound;
+                break;
+            default:
+                targetView.setImageResource(R.drawable.scissors2);
+                mSoundToPlay = mScissorsSound;
+                break;
         }
     }
 
@@ -593,7 +591,6 @@ public class ResolveRoundActivity extends AppCompatActivity implements View.OnCl
 
     private void gameMove(){
         String[] rpsArray = {Constants.RPS_PAPER, Constants.RPS_ROCK, Constants.RPS_SCISSORS};
-        int[] rpsImageArray = {R.drawable.paper2, R.drawable.rock, R.drawable.scissors2};
         Random random = new Random();
         int compMove = random.nextInt(rpsArray.length);
         mComputerMove = rpsArray[compMove];

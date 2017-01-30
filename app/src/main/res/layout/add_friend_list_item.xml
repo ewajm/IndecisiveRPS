@@ -11,6 +11,7 @@
         android:layout_width="0dp"
         android:layout_weight="1"
         android:id="@+id/friendIconImageView"
+        android:contentDescription="@string/icon_with_initial_of_user"
         android:scaleType="fitXY"
         android:layout_height="40dp" />
     <LinearLayout
@@ -21,7 +22,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Username"
+            android:text="@string/username"
             android:id="@+id/friendNameTextView"
             android:textSize="18sp"
             android:layout_marginLeft="5dp"
@@ -30,7 +31,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Username"
+            android:text="@string/username"
             android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
             android:id="@+id/friendEmailTextView"
@@ -44,6 +45,7 @@
         android:layout_weight="1"
         android:src="@drawable/ic_action_add"
         android:gravity="center"
+        android:contentDescription="@string/plus_icon"
         android:layout_gravity="center"
         android:id="@+id/addFriendImageView"/>
 </LinearLayout>

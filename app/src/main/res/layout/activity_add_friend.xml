@@ -13,7 +13,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Who to add?"
+        android:text="@string/who_to_add"
         style="@style/SubHeading"
         android:id="@+id/addFriendHeadingTextView"/>
     <android.support.v7.widget.RecyclerView
@@ -27,6 +27,6 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="No results yet!"
+        android:text="@string/no_results_yet"
         android:id="@+id/emptyView"/>
 </RelativeLayout>

@@ -13,11 +13,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/signpost2"
+        android:contentDescription="@string/new_choice_bg_image_content_description"
         android:id="@+id/imageView2"
         android:scaleType="centerCrop" />
 
     <TextView
-        android:text="Start Deciding!"
+        android:text="@string/start_deciding"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/formLinearLayout"
@@ -43,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Choosing between: "
+            android:text="@string/choosing_between"
             android:textStyle="bold"
             android:textSize="18sp"/>
         <EditText
@@ -58,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="and "
+            android:text="@string/and_with_space"
             android:layout_marginTop="5dp"
             android:textStyle="bold"
             android:textSize="18sp"/>
@@ -73,7 +74,7 @@
             />
 
         <CheckBox
-            android:text="Total Impartiality Mode"
+            android:text="@string/total_impartiality_mode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/impartialityModeCheckbox"
@@ -89,14 +90,14 @@
             <Button
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Go Solo"
+                android:text="@string/go_solo"
                 android:id="@+id/soloButton"
                 android:layout_weight="1"
                 />
             <Button
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Grab a Friend"
+                android:text="@string/grab_a_friend"
                 android:id="@+id/friendButton"
                 android:layout_weight="1" />
         </LinearLayout>

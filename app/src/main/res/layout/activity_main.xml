@@ -12,6 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/bg"
+        android:contentDescription="@string/main_background_image_content_description"
         android:id="@+id/imageView"
         android:scaleType="centerCrop"
         android:layout_centerHorizontal="true"
@@ -21,7 +22,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="RPS"
+        android:text="@string/rps"
         android:id="@+id/headingTextView"
         style="@style/Heading"
         android:layout_alignParentTop="true"
@@ -33,7 +34,7 @@
         android:shadowRadius="2" />
 
     <Button
-        android:text="Decide Now"
+        android:text="@string/decide_now"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -44,7 +45,7 @@
         android:id="@+id/decideNowButton" />
 
     <Button
-        android:text="My Decisions"
+        android:text="@string/my_decisions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginRight="20dp"
@@ -57,7 +58,7 @@
         android:layout_centerHorizontal="true"/>
 
     <Button
-        android:text="Social"
+        android:text="@string/social"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginRight="20dp"
@@ -70,7 +71,7 @@
         android:layout_centerHorizontal="true" />
 
     <Button
-        android:text="Login"
+        android:text="@string/login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/socialButton"
@@ -82,7 +83,7 @@
         android:id="@+id/loginButton" />
 
     <Button
-        android:text="About"
+        android:text="@string/about"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginRight="20dp"
@@ -94,7 +95,7 @@
         android:layout_centerHorizontal="true" />
 
     <TextView
-        android:text="for the indecisive"
+        android:text="@string/for_the_indecisive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/subheaadingTextView"

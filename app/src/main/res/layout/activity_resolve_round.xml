@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/soundButton"
             android:src="@drawable/ic_action_sound"
+            android:contentDescription="@string/sound_icon_content_description"
             android:background="@android:color/transparent"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
@@ -55,12 +56,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
+                android:contentDescription="@string/placeholder_for_image_content_description"
                 android:id="@+id/option1MoveImageView"/>
         </LinearLayout>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="VS"
+            android:text="@string/vs"
             style="@style/SubHeading"
             android:id="@+id/vsTextView"
             android:layout_below="@+id/linearLayout1"
@@ -79,6 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
+                android:contentDescription="@string/placeholder_for_image_content_description"
                 android:id="@+id/option2MoveImageView"/>
             <TextView
                 android:layout_width="0dp"
@@ -118,14 +121,14 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Choose Move"
+            android:text="@string/choose_move"
             android:layout_gravity="bottom"
             android:id="@+id/gameButton"
             android:layout_above="@+id/cancelButton"/>
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cancel"
+            android:text="@string/cancel"
             android:layout_gravity="bottom"
             android:id="@+id/cancelButton"
             android:layout_alignParentBottom="true"/>
@@ -159,7 +162,6 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="100dp"
-                android:layout_below="@+id/headingTextView"
                 android:layout_marginTop="10dp"
                 android:id="@+id/buttonLinearLayout">
 
@@ -168,6 +170,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:src="@drawable/paper2"
+                    android:contentDescription="@string/paper_content_description"
                     android:scaleType="fitCenter"
                     android:background="@drawable/apptheme_btn_default_holo_light"
                     android:id="@+id/paperButton"/>
@@ -177,6 +180,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:src="@drawable/scissors2"
+                    android:contentDescription="@string/scissors_content_description"
                     android:scaleType="fitCenter"
                     android:background="@drawable/apptheme_btn_default_holo_light"
                     android:id="@+id/scissorsButton"/>
@@ -184,7 +188,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:layout_below="@id/buttonLinearLayout"
                 android:layout_marginTop="5dp"
                 android:weightSum="4"
                 >
@@ -198,6 +201,7 @@
                     android:padding="20dp"
                     android:layout_weight="2"
                     android:src="@drawable/rock"
+                    android:contentDescription="@string/rock_content_description"
                     android:scaleType="fitCenter"
                     android:background="@drawable/apptheme_btn_default_holo_light"
                     android:id="@+id/rockButton"/>

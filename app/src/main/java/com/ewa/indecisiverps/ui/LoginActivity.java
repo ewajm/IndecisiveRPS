@@ -4,11 +4,10 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -27,8 +26,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
-
-    public static final String TAG = LoginActivity.class.getSimpleName();
 
     @Bind(R.id.loginButton) Button mPasswordLoginButton;
     @Bind(R.id.emailEditText) EditText mEmailEditText;
@@ -82,7 +79,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         LayoutInflater inflater = this.getLayoutInflater();
 
         View dialogView = inflater.inflate(R.layout.password_reset_dialog_layout, null);
-        final EditText resetEmailEditText = (EditText) dialogView.findViewById(R.id.passwordResetEditText);
+        final EditText resetEmailEditText = (EditText) dialogView.findViewById(R.id.resetEmailEditText);
         final AlertDialog resetDialog = new AlertDialog.Builder(this)
                 .setView(dialogView)
                 .setPositiveButton("Request Reset", null)
@@ -96,12 +93,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         resetDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
-                Button button = ((AlertDialog) resetDialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                Button button = resetDialog.getButton(AlertDialog.BUTTON_POSITIVE);
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         String resetEmail = resetEmailEditText.getText().toString();
-                        Log.i(TAG, "onClick: " + resetEmail);
                         boolean isGoodEmail =
                                 (resetEmail != null && android.util.Patterns.EMAIL_ADDRESS.matcher(resetEmail).matches());
                         if(isGoodEmail){
@@ -165,7 +161,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         mAuthProgressDialog.dismiss();
                         if (!task.isSuccessful()) {
-                            Log.w(TAG, "signInWithEmail", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }

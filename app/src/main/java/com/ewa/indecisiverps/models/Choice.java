@@ -2,13 +2,6 @@ package com.ewa.indecisiverps.models;
 
 import org.parceler.Parcel;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-
-/**
- * Created by ewa on 12/19/2016.
- */
 @Parcel
 public class Choice {
     String option1;

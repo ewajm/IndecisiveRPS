@@ -1,7 +1,6 @@
 package com.ewa.indecisiverps.utils;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.ewa.indecisiverps.Constants;
 import com.ewa.indecisiverps.models.Choice;

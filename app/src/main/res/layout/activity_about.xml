@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/rps"
         android:id="@+id/rpsImageView"
+        android:contentDescription="@string/rpsimageview_description"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"/>
 
@@ -26,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/SubHeading"
-            android:text="About Indecisive RPS"
+            android:text="@string/about_indecisive_rps"
             android:gravity="center"
             android:id="@+id/aboutHeading"
             android:layout_marginTop="16dp"/>
@@ -39,7 +40,7 @@
             android:layout_margin="16dp"
             android:textColor="@color/colorAccentDark"
             android:id="@+id/aboutSubHeading"
-            android:text="Settle important dilemmas like 'tacos or pizza' by playing Rock Paper Scissors with a friend or against the app!"/>
+            android:text="@string/settle_important_dilemmas"/>
 
        <LinearLayout
            android:layout_width="match_parent"
@@ -58,7 +59,7 @@
                android:layout_height="wrap_content"
                android:textSize="16sp"
                android:textColor="@color/colorPrimaryText"
-               android:text="Create an account to play with a friend and record your decision history"/>
+               android:text="@string/create_an_account"/>
            <View
                android:layout_width="match_parent"
                android:layout_height="1dp"
@@ -70,7 +71,7 @@
                android:textSize="16sp"
                android:textColor="@color/colorPrimaryText"
                android:layout_marginBottom="5dp"
-               android:text="Otherwise just play a quick round without logging in"/>
+               android:text="@string/otherwise_just_play_a_quick_round"/>
            <View
                android:layout_width="match_parent"
                android:layout_height="1dp"
@@ -82,7 +83,7 @@
                android:textSize="16sp"
                android:textColor="@color/colorPrimaryText"
                android:layout_marginBottom="5dp"
-               android:text="The app will take care of assigning (and, more importantly, remembering) who gets which option"/>
+               android:text="@string/the_app_will_take_care_of"/>
            <View
                android:layout_width="match_parent"
                android:layout_height="1dp"
@@ -94,7 +95,7 @@
                android:textSize="16sp"
                android:textColor="@color/colorPrimaryText"
                android:layout_marginBottom="5dp"
-               android:text="No more debates along the lines of 'Wait, were you tacos or was I?'"/>
+               android:text="@string/no_more_debates"/>
            <View
                android:layout_width="match_parent"
                android:layout_height="1dp"
@@ -107,7 +108,7 @@
                 android:layout_margin="3dp"
                 android:textColor="@color/colorPrimaryText"
                 android:layout_marginBottom="5dp"
-                android:text="Just play a round and move on to the important tasks of taco (or pizza) acquisition and consumption"/>
+                android:text="@string/just_play_a_round_and_move_on_to_the_important"/>
              </LinearLayout>
         <TextView
             android:layout_width="match_parent"
@@ -116,7 +117,7 @@
             android:textSize="12sp"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:text="Credit for Sound Effects goes to PacDV and oblius (www.planetoblius.27south.com)"
+            android:text="@string/sound_effects_credit"
             android:layout_margin="5dp"/>
     </RelativeLayout>
 </RelativeLayout>

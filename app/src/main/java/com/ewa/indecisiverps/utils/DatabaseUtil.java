@@ -3,7 +3,7 @@ package com.ewa.indecisiverps.utils;
 import com.google.firebase.database.FirebaseDatabase;
 
 /**
- * Created by Ewa on 1/28/2017.
+ * Database wrapper to prevent errors from setPersistenceEnabled being called when a database already exists
  */
 
 public class DatabaseUtil {

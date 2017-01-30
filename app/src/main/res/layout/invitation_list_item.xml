@@ -11,6 +11,7 @@
         android:layout_width="0dp"
         android:layout_weight="1"
         android:id="@+id/friendIconImageView"
+        android:contentDescription="@string/icon_with_initial_of_user"
         android:scaleType="fitXY"
         android:layout_height="40dp" />
 
@@ -22,7 +23,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Username"
+            android:text="@string/username"
             android:id="@+id/fromNameTextView"
             android:textSize="18sp"
             android:layout_marginLeft="5dp"
@@ -31,7 +32,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="email"
+            android:text="@string/email"
             android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
             android:id="@+id/fromEmailTextView"
@@ -43,6 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:src="@drawable/ic_action_refuse"
+        android:contentDescription="@string/x_icon_content_description"
         android:gravity="center"
         android:layout_gravity="center"
         android:id="@+id/refuseRequestImageView"/>
@@ -51,6 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:src="@drawable/ic_action_accept"
+        android:contentDescription="@string/check_icon_content_description"
         android:gravity="center"
         android:layout_gravity="center"
         android:id="@+id/acceptRequestImageView"/>

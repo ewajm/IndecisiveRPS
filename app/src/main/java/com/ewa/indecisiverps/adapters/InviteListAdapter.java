@@ -1,15 +1,11 @@
 package com.ewa.indecisiverps.adapters;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.ewa.indecisiverps.Constants;
-import com.ewa.indecisiverps.R;
 import com.ewa.indecisiverps.models.User;
 import com.ewa.indecisiverps.utils.DatabaseUtil;
 import com.ewa.indecisiverps.utils.NotificationHelper;
@@ -19,8 +15,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
@@ -28,11 +22,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static android.R.attr.value;
-
-/**
- * Created by ewa on 12/21/2016.
- */
 
 public class InviteListAdapter extends FirebaseRecyclerAdapter<User, InvitationViewHolder>{
     private ArrayList<User> mUsers = new ArrayList<>();

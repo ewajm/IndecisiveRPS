@@ -15,7 +15,6 @@ import com.ewa.indecisiverps.Constants;
 import com.ewa.indecisiverps.R;
 import com.ewa.indecisiverps.models.Choice;
 import com.ewa.indecisiverps.models.Round;
-import com.ewa.indecisiverps.models.User;
 import com.ewa.indecisiverps.ui.NewChoiceActivity;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DatabaseReference;
@@ -24,22 +23,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.parceler.Parcels;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
 /**
- * Created by ewa on 12/21/2016.
+ * Gets rounds for choice and displays in dialog
  */
 
 public class ChoiceHistoryDialog extends DialogFragment implements View.OnClickListener {
-    ArrayList<User> mRounds = new ArrayList<>();
-    private ListView mRoundHistoryListView;
-    private TextView mOptionsTextView;
-    private TextView mPlayersTextView;
-    private TextView mWinnerTextView;
     private Button mDecideAgainButton;
-    private Button mCloseButton;
     private Choice mChoice;
 
     public ChoiceHistoryDialog() {
@@ -67,29 +59,29 @@ public class ChoiceHistoryDialog extends DialogFragment implements View.OnClickL
         super.onViewCreated(view, savedInstanceState);
         // Get field from view
         mChoice = Parcels.unwrap(getArguments().getParcelable("choice"));
-        mRoundHistoryListView = (ListView) view.findViewById(R.id.roundHistoryListView);
-        mOptionsTextView = (TextView) view.findViewById(R.id.optionsTextView);
-        mPlayersTextView = (TextView) view.findViewById(R.id.playersTextView);
-        mWinnerTextView = (TextView) view.findViewById(R.id.winnerTextView);
-        mCloseButton = (Button) view.findViewById(R.id.closeDialogButton);
+        ListView roundHistoryListView = (ListView) view.findViewById(R.id.roundHistoryListView);
+        TextView optionsTextView = (TextView) view.findViewById(R.id.optionsTextView);
+        TextView playersTextView = (TextView) view.findViewById(R.id.playersTextView);
+        TextView winnerTextView = (TextView) view.findViewById(R.id.winnerTextView);
+        Button closeButton = (Button) view.findViewById(R.id.closeDialogButton);
         mDecideAgainButton = (Button) view.findViewById(R.id.decideAgainButton);
         mDecideAgainButton.setOnClickListener(this);
-        mCloseButton.setOnClickListener(this);
-        mOptionsTextView.setText(mChoice.getOption1() + " vs " + mChoice.getOption2());
+        closeButton.setOnClickListener(this);
+        optionsTextView.setText(mChoice.getOption1() + " vs " + mChoice.getOption2());
         getDialog().requestWindowFeature(STYLE_NO_TITLE);
         getDialog().getWindow().setBackgroundDrawableResource(R.color.colorPrimaryTranslucent);
         if (mChoice.getPlayer1().equals("opponent") || mChoice.getPlayer2().equals("opponent")) {
-            mPlayersTextView.setText("Solo Mode");
+            playersTextView.setText(R.string.solo_mode);
         } else {
-            mPlayersTextView.setText("Players: " + mChoice.getPlayer1() + ", " + mChoice.getPlayer2());
+            playersTextView.setText("Players: " + mChoice.getPlayer1() + ", " + mChoice.getPlayer2());
         }
-        mWinnerTextView.setText(mChoice.getWin());
+        winnerTextView.setText(mChoice.getWin());
         DatabaseReference roundRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_ROUND_REF).child(mChoice.getPushId());
         FirebaseListAdapter<Round> firebaseAdapter = new FirebaseListAdapter<Round>(getActivity(), Round.class, android.R.layout.two_line_list_item, roundRef) {
             @Override
             protected void populateView(View v, Round model, int position) {
                 if(model.getTimestamp() == 0){
-                    ((TextView) v.findViewById(android.R.id.text1)).setText("Date Unknown");
+                    ((TextView) v.findViewById(android.R.id.text1)).setText(R.string.date_unknown);
                 } else {
                     String dateString = new SimpleDateFormat("MM/dd/yyyy h:mm a", Locale.getDefault()).format(new Date(model.getTimestamp()));
                     ((TextView) v.findViewById(android.R.id.text1)).setText(dateString);
@@ -97,7 +89,7 @@ public class ChoiceHistoryDialog extends DialogFragment implements View.OnClickL
                 ((TextView) v.findViewById(android.R.id.text2)).setText(mChoice.getPlayer1() + ": " + model.getPlayer1Move() + " vs " + mChoice.getPlayer2() + ": " + model.getPlayer2Move());
             }
         };
-        mRoundHistoryListView.setAdapter(firebaseAdapter);
+        roundHistoryListView.setAdapter(firebaseAdapter);
     }
 
     @Override

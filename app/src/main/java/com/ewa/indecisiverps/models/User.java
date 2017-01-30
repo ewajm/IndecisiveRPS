@@ -2,10 +2,6 @@ package com.ewa.indecisiverps.models;
 
 import org.parceler.Parcel;
 
-/**
- * Created by ewa on 12/21/2016.
- */
-
 @Parcel
 public class User {
     String username;

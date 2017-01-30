@@ -1,17 +1,8 @@
 package com.ewa.indecisiverps.adapters;
 
-import android.animation.Animator;
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.graphics.Color;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
-import android.view.View;
-import android.view.ViewPropertyAnimator;
 
 import com.ewa.indecisiverps.Constants;
-import com.ewa.indecisiverps.R;
 import com.ewa.indecisiverps.models.Choice;
 import com.ewa.indecisiverps.utils.DatabaseUtil;
 import com.ewa.indecisiverps.utils.OnStartDragListener;
@@ -20,17 +11,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import org.parceler.Parcels;
-
 import java.util.ArrayList;
-
-/**
- * Created by ewa on 12/20/2016.
- */
 
 public class FirebaseChoiceListAdapter extends FirebaseRecyclerAdapter<Choice, ChoiceViewHolder> implements ItemTouchHelperAdapter{
     private Query mRef;
@@ -39,7 +23,6 @@ public class FirebaseChoiceListAdapter extends FirebaseRecyclerAdapter<Choice, C
     private ChildEventListener mChildEventListener;
     private ArrayList<Choice> mChoices;
     private String mUserId;
-    private int mOrientation;
 
     public FirebaseChoiceListAdapter(Class<Choice> modelClass, int modelLayout,
                                    Class<ChoiceViewHolder> viewHolderClass,

@@ -29,7 +29,7 @@
         style="@style/Heading"
         />
     <TextView
-        android:text="Round History"
+        android:text="@string/round_history"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/roundHistoryTextView"
@@ -55,14 +55,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/closeDialogButton"
-            android:text="Close"
+            android:text="@string/close"
             style="@style/ButtonAppTheme"/>
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/decideAgainButton"
-            android:text="Decide Again"
+            android:text="@string/decide_again"
             style="@style/ButtonAppTheme"/>
     </LinearLayout>
 </LinearLayout>

@@ -5,7 +5,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,7 +16,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -26,7 +24,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private static final String TAG = MainActivity.class.getSimpleName();
     @Bind(R.id.headingTextView) TextView mHeadingTextView;
     @Bind(R.id.subheaadingTextView) TextView mSubheadingTextView;
     @Bind(R.id.decideNowButton) Button mDecideNowButton;
@@ -42,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ValueEventListener mReadyValueListener;
     private Query mUserInviteQuery;
     private ValueEventListener mUserEventListeneer;
-    static boolean isInitialized = false;
 
 
     @Override
@@ -62,13 +58,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (user != null) {
                     mUserName =  user.getDisplayName();
                     mUserId = user.getUid();
-                    mLoginButton.setText("Logout");
+                    mLoginButton.setText(R.string.logout);
                     mDecisionsButton.setVisibility(View.VISIBLE);
                     mSocialButton.setVisibility(View.VISIBLE);
                     setUpNotificationListeners();
 
                 } else {
-                    mLoginButton.setText("Login");
+                    mLoginButton.setText(R.string.login);
                     mDecisionsButton.setVisibility(View.GONE);
                     mSocialButton.setVisibility(View.GONE);
                 }
@@ -133,7 +129,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void setUpNotificationListeners(){
-        Log.i(TAG, "setUpNotificationListeners: subscribing!" + mUserId);
         FirebaseMessaging.getInstance().subscribeToTopic("user_" + mUserId);
         mReadyGameQuery = DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_CHOICE_REF).child(mUserId).child(Constants.STATUS_READY);
         mReadyValueListener = mReadyGameQuery.addValueEventListener(new ValueEventListener() {
