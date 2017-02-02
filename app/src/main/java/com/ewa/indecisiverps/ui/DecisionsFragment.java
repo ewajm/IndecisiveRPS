@@ -77,7 +77,13 @@ public class DecisionsFragment extends Fragment implements OnStartDragListener {
 
     private void setUpFirebaseAdapter() {
         Query choiceRef = DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_CHOICE_REF).child(mUserId).child(mStatus);
-        mFirebaseAdapter = new FirebaseChoiceListAdapter(Choice.class, R.layout.decision_list_item_layout, ChoiceViewHolder.class, choiceRef, this, getActivity());
+        int layoutId;
+        if(mStatus.equals(Constants.STATUS_RESOLVED)){
+            layoutId = R.layout.decision_list_item_layout;
+        } else {
+            layoutId = R.layout.decision_opponent_list_item_layout;
+        }
+        mFirebaseAdapter = new FirebaseChoiceListAdapter(Choice.class, layoutId, ChoiceViewHolder.class, choiceRef, this, getActivity());
         choiceRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

@@ -14,6 +14,7 @@ import com.ewa.indecisiverps.models.Choice;
 import com.ewa.indecisiverps.ui.DecisionsActivity;
 import com.ewa.indecisiverps.ui.ResolveRoundActivity;
 import com.ewa.indecisiverps.utils.ChoiceHistoryDialog;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.parceler.Parcels;
 
@@ -22,12 +23,16 @@ import butterknife.ButterKnife;
 
 public class ChoiceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
     @Bind(R.id.decisionOptionsTextView) TextView mDecisionOptionsTextView;
+    TextView mOpponentView;
     Choice mChoice;
     Context mContext;
 
     public ChoiceViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
+        if(itemView.findViewById(R.id.opponentTextView) != null){
+            mOpponentView = (TextView) itemView.findViewById(R.id.opponentTextView);
+        }
         mContext = itemView.getContext();
         itemView.setOnClickListener(this);
     }
@@ -35,6 +40,10 @@ public class ChoiceViewHolder extends RecyclerView.ViewHolder implements View.On
     public void bindChoice(Choice choice) {
         mChoice = choice;
         mDecisionOptionsTextView.setText(mChoice.getOption1() + " VS " + mChoice.getOption2());
+        if(mOpponentView != null){
+            String opponent = FirebaseAuth.getInstance().getCurrentUser().getDisplayName().equals(mChoice.getPlayer1()) ? mChoice.getPlayer2() : mChoice.getPlayer1();
+            mOpponentView.setText(String.format(mContext.getString(R.string.opponent_label), opponent));
+        }
         Typeface headingFont = Typeface.createFromAsset(mContext.getAssets(), "fonts/titan_one_regular.ttf");
         mDecisionOptionsTextView.setTypeface(headingFont);
     }

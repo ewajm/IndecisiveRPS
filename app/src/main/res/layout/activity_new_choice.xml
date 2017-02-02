@@ -52,6 +52,8 @@
             android:layout_height="wrap_content"
             android:background="@android:color/white"
             android:padding="10dp"
+            android:inputType="textAutoCorrect|textCapSentences"
+            android:nextFocusDown="@+id/choiceTwoEditText"
             android:hint="Option 1"
             android:id="@+id/choiceOneEditText"
             android:layout_marginTop="5dp"/>
@@ -69,6 +71,9 @@
             android:background="@android:color/white"
             android:padding="10dp"
             android:hint="Option 2"
+            android:inputType="textAutoCorrect|textCapSentences"
+            android:nextFocusDown="@+id/impartialityModeCheckbox"
+            android:imeOptions="actionDone"
             android:id="@+id/choiceTwoEditText"
             android:layout_marginTop="5dp"
             />

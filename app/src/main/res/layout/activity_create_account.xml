@@ -22,12 +22,14 @@
             android:layout_height="wrap_content"
             android:background="@android:color/white"
             android:hint="@string/name"
-            android:nextFocusDown="@+id/passwordEditText"
+            android:inputType="textPersonName"
+            android:nextFocusDown="@+id/emailEditText"
             android:padding="10dp"
             android:layout_marginBottom="10dp"
             android:textColor="@android:color/black"
             android:textColorHint="@color/colorDivider"
             android:textSize="20sp"
+            android:imeOptions="actionNext"
             android:layout_marginRight="5dp"
             android:layout_marginLeft="5dp"/>
 
@@ -40,13 +42,19 @@
             android:inputType="textEmailAddress"
             android:nextFocusDown="@+id/passwordEditText"
             android:padding="10dp"
-            android:layout_marginBottom="10dp"
             android:textColor="@android:color/black"
             android:textColorHint="@color/colorDivider"
             android:textSize="20sp"
             android:layout_marginRight="5dp"
             android:layout_marginLeft="5dp"/>
 
+        <CheckBox
+            android:text="@string/make_email_private"
+            android:checked="true"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/privateEmailCheckBox"/>
         <EditText
             android:id="@+id/passwordEditText"
             android:layout_width="match_parent"
@@ -54,7 +62,7 @@
             android:background="@android:color/white"
             android:hint="@string/password"
             android:inputType="textPassword"
-            android:nextFocusDown="@+id/passwordEditText"
+            android:nextFocusDown="@+id/confirmPasswordEditText"
             android:padding="10dp"
             android:layout_marginBottom="10dp"
             android:textColor="@android:color/black"
@@ -70,7 +78,7 @@
             android:background="@android:color/white"
             android:hint="@string/confirm_password"
             android:inputType="textPassword"
-            android:nextFocusDown="@+id/passwordEditText"
+            android:nextFocusDown="@+id/createUserButton"
             android:padding="10dp"
             android:layout_marginBottom="10dp"
             android:textColor="@android:color/black"

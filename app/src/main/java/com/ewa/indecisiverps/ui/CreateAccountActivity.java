@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +36,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
     @Bind(R.id.confirmPasswordEditText) EditText mConfirmPasswordEditText;
     @Bind(R.id.loginTextView) TextView mLoginTextView;
     @Bind(R.id.createAccountTextView) TextView mCreateAccountTextView;
+    @Bind(R.id.privateEmailCheckBox) CheckBox mPrivateEmailCheckBox;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private ProgressDialog mAuthProgressDialog;
@@ -157,7 +159,12 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             DatabaseReference userRef = DatabaseUtil.getDatabase().getInstance().getReference(Constants.FIREBASE_USER_REF);
-                            User newUser = new User(user.getDisplayName(), user.getUid(), user.getEmail());
+                            User newUser;
+                            if(mPrivateEmailCheckBox.isChecked()){
+                                newUser = new User(user.getDisplayName(), user.getUid(), "");
+                            } else {
+                                newUser = new User(user.getDisplayName(), user.getUid(), user.getEmail());
+                            }
                             userRef.child(user.getUid()).setValue(newUser);
                         }
                     }

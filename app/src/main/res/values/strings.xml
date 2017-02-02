@@ -79,4 +79,6 @@
     <string name="choose_move">Choose Move</string>
     <string name="cancel">Cancel</string>
     <string name="empty_friend_list">looks like you need to find some people!</string>
+    <string name="make_email_private">Make Email Private</string>
+    <string name="opponent_label">Opponent: %s</string>
 </resources>
