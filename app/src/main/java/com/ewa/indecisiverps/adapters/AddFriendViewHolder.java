@@ -27,7 +27,6 @@ public class AddFriendViewHolder extends RecyclerView.ViewHolder implements View
     private final View mItemView;
     @Bind(R.id.addFriendImageView) ImageView mAddFriendImageView;
     @Bind(R.id.friendIconImageView) ImageView mFriendIconImageView;
-    @Bind(R.id.friendEmailTextView) TextView mFriendEmailTextView;
     @Bind(R.id.friendNameTextView) TextView mFriendNameTextView;
     User mUser;
     Context mContext;
@@ -81,7 +80,6 @@ public class AddFriendViewHolder extends RecyclerView.ViewHolder implements View
 
             }
         });
-        mFriendEmailTextView.setText(mUser.getEmail());
         Typeface headingFont = Typeface.createFromAsset(mContext.getAssets(), "fonts/titan_one_regular.ttf");
         mFriendNameTextView.setTypeface(headingFont);
         String initial = mUser.getUsername().substring(0, 1);

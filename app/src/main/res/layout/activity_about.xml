@@ -71,18 +71,6 @@
                android:textSize="16sp"
                android:textColor="@color/colorPrimaryText"
                android:layout_marginBottom="5dp"
-               android:text="@string/otherwise_just_play_a_quick_round"/>
-           <View
-               android:layout_width="match_parent"
-               android:layout_height="1dp"
-               android:layout_margin="3dp"
-               android:background="@android:color/darker_gray"/>
-           <TextView
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:textSize="16sp"
-               android:textColor="@color/colorPrimaryText"
-               android:layout_marginBottom="5dp"
                android:text="@string/the_app_will_take_care_of"/>
            <View
                android:layout_width="match_parent"
@@ -119,5 +107,13 @@
             android:gravity="center"
             android:text="@string/sound_effects_credit"
             android:layout_margin="5dp"/>
+        <Button
+            android:text="Privacy Policy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:id="@+id/privacyPolicyButton" android:layout_below="@+id/listLinearLayout"
+            android:layout_centerHorizontal="true"/>
     </RelativeLayout>
 </RelativeLayout>

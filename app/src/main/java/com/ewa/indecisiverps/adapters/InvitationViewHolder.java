@@ -18,7 +18,6 @@ public class InvitationViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.acceptRequestImageView) ImageView mAcceptRequestImageView;
     @Bind(R.id.refuseRequestImageView) ImageView mRefuseRequestImageView;
     @Bind(R.id.friendIconImageView) ImageView mFriendIconImageView;
-    @Bind(R.id.fromEmailTextView) TextView mFromEmailTextView;
     @Bind(R.id.fromNameTextView) TextView mFromNameTextView;
     User mUser;
     Context mContext;
@@ -31,7 +30,6 @@ public class InvitationViewHolder extends RecyclerView.ViewHolder {
 
     public void bindUser(User user) {
         mUser = user;
-        mFromEmailTextView.setText(mUser.getEmail());
         mFromNameTextView.setText(mUser.getUsername());
         Typeface headingFont = Typeface.createFromAsset(mContext.getAssets(), "fonts/titan_one_regular.ttf");
         mFromNameTextView.setTypeface(headingFont);

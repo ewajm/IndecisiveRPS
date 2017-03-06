@@ -98,6 +98,7 @@ public class ChoiceHistoryDialog extends DialogFragment implements View.OnClickL
             Intent playAgainIntent = new Intent(getActivity(), NewChoiceActivity.class);
             playAgainIntent.putExtra("choice", Parcels.wrap(mChoice));
             getActivity().startActivity(playAgainIntent);
+            getDialog().cancel();
         } else {
             getDialog().cancel();
         }

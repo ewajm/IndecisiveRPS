@@ -14,31 +14,17 @@
         android:contentDescription="@string/icon_with_initial_of_user"
         android:scaleType="fitXY"
         android:layout_height="40dp" />
-    <LinearLayout
+    <TextView
         android:layout_width="0dp"
-        android:layout_weight="6"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/username"
-            android:id="@+id/friendNameTextView"
-            android:textSize="18sp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginStart="5dp"
-            android:textColor="@color/colorAccentDark"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/username"
-            android:layout_marginLeft="5dp"
-            android:layout_marginStart="5dp"
-            android:id="@+id/friendEmailTextView"
-            android:textSize="14sp"
-            android:textColor="@color/colorAccentDark"/>
-    </LinearLayout>
-
+        android:text="@string/username"
+        android:id="@+id/friendNameTextView"
+        android:textSize="24sp"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="6"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        android:textColor="@color/colorAccentDark"/>
     <ImageView
         android:layout_width="0dp"
         android:layout_height="wrap_content"

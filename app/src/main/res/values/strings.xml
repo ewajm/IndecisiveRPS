@@ -9,8 +9,7 @@
     <string name="rpsimageview_description">Diagram of Rock Paper Scissors rules</string>
     <string name="about_indecisive_rps">About Indecisive RPS</string>
     <string name="settle_important_dilemmas">Settle important dilemmas like \'tacos or pizza\' by playing Rock Paper Scissors with a friend or against the app!</string>
-    <string name="create_an_account">Create an account to play with a friend and record your decision history</string>
-    <string name="otherwise_just_play_a_quick_round">Otherwise just play a quick round without logging in</string>
+    <string name="create_an_account">Create an account to play with a friend and record your decision history, or just play a quick round without logging in</string>
     <string name="the_app_will_take_care_of">The app will take care of assigning (and, more importantly, remembering) who gets which option</string>
     <string name="no_more_debates">No more debates along the lines of \'Wait, were you tacos or was I?\'</string>
     <string name="just_play_a_round_and_move_on_to_the_important">Just play a round and move on to the important tasks of taco (or pizza) acquisition and consumption</string>
@@ -55,7 +54,7 @@
     <string name="name">Name</string>
     <string name="search">Search</string>
     <string name="rps">RPS</string>
-    <string name="no_results_yet">No results yet!</string>
+    <string name="add_friend_search_info">Search by username or email!</string>
     <string name="decide_now">Decide Now</string>
     <string name="choosing_between">Choosing between:</string>
     <string name="my_decisions">My Decisions</string>
@@ -81,4 +80,109 @@
     <string name="empty_friend_list">looks like you need to find some people!</string>
     <string name="make_email_private">Make Email Private</string>
     <string name="opponent_label">Opponent: %s</string>
+    <string name="bulleted_list">
+        <li>as required by law, such as to comply with a subpoena, or similar legal process;</li>\n
+        <li>when we believe in good faith that disclosure is necessary to protect our rights, protect your safety or the safety of others, investigate fraud, or respond to a government request;</li>\n
+        <li>in the unlikely event that Manekej Apps iis involved in a merger, acquisition, or sale of all or a portion of its assets, you will be notified via email and/or a prominent notice on our Web site of any change in ownership or uses of this information, as well as any choices you may have regarding this information.</li>
+    </string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="privacy_policy_date">Last updated: 3/6/2017</string>
+    <string name="privacy_para_1">This privacy policy governs the use of the software application
+        Indecisive RPS (“Application”) for mobile devices that was created by Manekej Apps.. The
+        Application is a simple decision helper that uses Rock Paper Scissor to help the user make
+        decisions with other users or by themselves.
+    </string>
+    <string name="privacy_para_2">This page informs you of our policies regarding the collection,
+        use and disclosure of Personal Information we receive from users of the Application.
+    </string>
+    <string name="privacy_para_3">We use your Personal Information only for providing and improving
+        the Application. By using the Application, you agree to the collection and use of
+        information in accordance with this policy.
+    </string>
+    <string name="information_collection_and_use">Information Collection And Use</string>
+    <string name="information_collection_para_1">The Application obtains the information you provide
+        when you download and register the Application. Registration is optional. However, please
+        keep in mind that you may not be able to use some of the features offered by the Application
+        unless you register.
+    </string>
+    <string name="information_collection_para_2">When you register with us and use the Application,
+        you generally provide (a) an email address, user name, and password; (b) information you
+        provide us when you contact us for help; (e) information you enter into our system when
+        using the Application, i.e. the decisions that are being made.
+    </string>
+    <string name="log_data">Log Data</string>
+    <string name="log_data_para_1">In addition to the above, the Application uses a third party
+        service, FirebaseAnalytics, to collect certain information automatically, including, but not
+        limited to, the type of mobile device you use, your mobile devices unique device ID, the IP
+        address of your mobile device, your mobile operating system, the type of mobile Internet
+        browsers you use, and information about the way you use the Application.
+    </string>
+    <string name="log_data_para_2">For more about what information FirebaseAnalytics collects,
+        please see Firebase Help (https://support.google.com/firebase/answer/6318039) and Google’s
+        Privacy Policy (https://www.google.com/intl/en/policies/privacy/)
+    </string>
+    <string name="communications">Communications</string>
+    <string name="communications_para">We may use the information you provided us to contact your
+        from time to time to provide you with important information, required notices and marketing
+        promotions.
+    </string>
+    <string name="third_party_access">Third-Party Access</string>
+    <string name="third_party_para_1">We may disclose User Provided and Automatically Collected
+        Information:
+    </string>
+    <string name="opt_out_rights">Opt-out rights</string>
+    <string name="opt_out_para">You can stop all collection of information by the Application easily
+        by uninstalling the Application. You may use the standard uninstall processes as may be
+        available as part of your mobile device or via the mobile application marketplace or
+        network. In addition you may opt out by checking the checkbox at the bottom of this page.
+    </string>
+    <string name="data_retention_policy">Data Retention Policy, Managing Your Information</string>
+    <string name="data_retention_para">We will retain User Provided data for as long as you use the
+        Application and for a reasonable time thereafter. If you’d like us to delete User Provided
+        Data that you have provided via the Application, please contact us at manekejapps@gmail.com
+        and we will respond in a reasonable time. Please note that some or all of the User Provided
+        Data may be required in order for the Application to function properly.
+    </string>
+    <string name="children">Children</string>
+    <string name="children_para">We do not use the Application to knowingly solicit data from or
+        market to children under the age of 13. If a parent or guardian becomes aware that his or
+        her child has provided us with information without their consent, he or she should contact
+        us manekejapps@gmail.com. We will delete such information from our files within a reasonable
+        time.
+    </string>
+    <string name="your_consent">Your Consent</string>
+    <string name="your_consent_para">By using the Application, you are consenting to our processing
+        of your information as set forth in this Privacy Policy now and as amended by us.
+        \'Processing,\' means using or touching information in any way, including, but not limited
+        to, collecting, storing, deleting, using, combining and disclosing information, all of which
+        activities will take place in the United States. If you reside outside the United States
+        your information will be transferred, processed and stored there under United States privacy
+        standards.
+    </string>
+    <string name="security">Security</string>
+    <string name="security_para">The security of your Personal Information is important to us, but
+        remember that no method of transmission over the Internet, or method of electronic storage,
+        is 100% secure. While we strive to use commercially acceptable means to protect your
+        Personal Information, we cannot guarantee its absolute security.
+    </string>
+    <string name="changes">Changes To This Privacy Policy</string>
+    <string name="changes_para_1">This Privacy Policy is effective as of March 6, 2017 and will
+        remain in effect except with respect to any changes in its provisions in the future, which
+        will be in effect immediately after being posted on this page.
+    </string>
+    <string name="changes_para_2">We reserve the right to update or change our Privacy Policy at any
+        time and you should check this Privacy Policy periodically. Your continued use of the
+        Service after we post any modifications to the Privacy Policy on this page will constitute
+        your acknowledgment of the modifications and your consent to abide and be bound by the
+        modified Privacy Policy.
+    </string>
+    <string name="changes_para_3">If we make any material changes to this Privacy Policy, we will
+        notify you either through the email address you have provided us, or by placing a prominent
+        notice on our application.
+    </string>
+    <string name="contact_us">Contact Us</string>
+    <string name="contact_us_para">If you have any questions about this Privacy Policy, please
+        contact us.
+    </string>
+    <string name="opt_out_of_analytics">Opt out of analytics</string>
 </resources>
