@@ -8,23 +8,48 @@
     <string name="title_activity_social">Your social stuff</string>
     <string name="rpsimageview_description">Diagram of Rock Paper Scissors rules</string>
     <string name="about_indecisive_rps">About Indecisive RPS</string>
-    <string name="settle_important_dilemmas">Settle important dilemmas like \'tacos or pizza\' by playing Rock Paper Scissors with a friend or against the app!</string>
-    <string name="create_an_account">Create an account to play with a friend and record your decision history, or just play a quick round without logging in</string>
-    <string name="the_app_will_take_care_of">The app will take care of assigning (and, more importantly, remembering) who gets which option</string>
-    <string name="no_more_debates">No more debates along the lines of \'Wait, were you tacos or was I?\'</string>
-    <string name="just_play_a_round_and_move_on_to_the_important">Just play a round and move on to the important tasks of taco (or pizza) acquisition and consumption</string>
-    <string name="sound_effects_credit">Credit for Sound Effects goes to PacDV and oblius (www.planetoblius.27south.com)</string>
+    <string name="settle_important_dilemmas">Settle important dilemmas like \'tacos or pizza\' by
+        playing Rock Paper Scissors with a friend or against the app!
+    </string>
+    <string name="create_an_account">Create an account to play with a friend and record your
+        decision history, or just play a quick round without logging in
+    </string>
+    <string name="the_app_will_take_care_of">The app will take care of assigning (and, more
+        importantly, remembering) who gets which option
+    </string>
+    <string name="no_more_debates">No more debates along the lines of \'Wait, were you tacos or was
+        I?\'
+    </string>
+    <string name="just_play_a_round_and_move_on_to_the_important">Just play a round and move on to
+        the important tasks of taco (or pizza) acquisition and consumption
+    </string>
+    <string name="sound_effects_credit">Credit for Sound Effects goes to PacDV and oblius
+        (www.planetoblius.27south.com)
+    </string>
     <string name="icon_with_initial_of_user">icon with initial of user</string>
     <string name="username">Username</string>
     <string name="plus_icon">plus icon for adding friends</string>
-    <string name="x_icon_content_description">X icon for refusing friend request or removing friend</string>
-    <string name="arrow_icon_content_description">arrow icon for starting a decision with this friend</string>
-    <string name="main_background_image_content_description">background image of person at crossroads unsure where to go</string>
-    <string name="social_background_image_content_description">background image of a crowd of people</string>
-    <string name="new_choice_bg_image_content_description">background image of signpost with excessive amount of signs</string>
-    <string name="sound_icon_content_description">sound icon for muting and turning sound on</string>
+    <string name="x_icon_content_description">X icon for refusing friend request or removing
+        friend
+    </string>
+    <string name="arrow_icon_content_description">arrow icon for starting a decision with this
+        friend
+    </string>
+    <string name="main_background_image_content_description">background image of person at
+        crossroads unsure where to go
+    </string>
+    <string name="social_background_image_content_description">background image of a crowd of
+        people
+    </string>
+    <string name="new_choice_bg_image_content_description">background image of signpost with
+        excessive amount of signs
+    </string>
+    <string name="sound_icon_content_description">sound icon for muting and turning sound on
+    </string>
     <string name="check_icon_content_description">check icon for accepting friend request</string>
-    <string name="placeholder_for_image_content_description">placeholder for image of move selected</string>
+    <string name="placeholder_for_image_content_description">placeholder for image of move
+        selected
+    </string>
     <string name="paper_content_description">pieces of paper</string>
     <string name="scissors_content_description">scissors</string>
     <string name="rock_content_description">a rock</string>
@@ -82,8 +107,14 @@
     <string name="opponent_label">Opponent: %s</string>
     <string name="bulleted_list">
         <li>as required by law, such as to comply with a subpoena, or similar legal process;</li>\n
-        <li>when we believe in good faith that disclosure is necessary to protect our rights, protect your safety or the safety of others, investigate fraud, or respond to a government request;</li>\n
-        <li>in the unlikely event that Manekej Apps iis involved in a merger, acquisition, or sale of all or a portion of its assets, you will be notified via email and/or a prominent notice on our Web site of any change in ownership or uses of this information, as well as any choices you may have regarding this information.</li>
+        <li>when we believe in good faith that disclosure is necessary to protect our rights,
+            protect your safety or the safety of others, investigate fraud, or respond to a
+            government request;</li>\n
+        <li>in the unlikely event that Manekej Apps iis involved in a merger, acquisition, or sale
+            of all or a portion of its assets, you will be notified via email and/or a prominent
+            notice on our Web site of any change in ownership or uses of this information, as well
+            as any choices you may have regarding this information.
+        </li>
     </string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="privacy_policy_date">Last updated: 3/6/2017</string>

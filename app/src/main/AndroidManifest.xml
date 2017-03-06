@@ -11,39 +11,44 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.MainActivity"
-            android:theme="@style/AppThemeNoBar"
-            android:screenOrientation="portrait">
+            android:name=".ui.SplashActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.NewChoiceActivity"
-                  android:screenOrientation="portrait">
+        <activity
+            android:name=".ui.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoBar">
+        </activity>
+        <activity
+            android:name=".ui.NewChoiceActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ewa.indecisiverps.ui.MainActivity"/>
         </activity>
         <activity
             android:name=".ui.ResolveRoundActivity"
-            android:theme="@style/AppThemeNoBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoBar"/>
         <activity
             android:name=".ui.LoginActivity"
-            android:theme="@style/AppThemeNoBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoBar"/>
         <activity
             android:name=".ui.CreateAccountActivity"
-            android:theme="@style/AppThemeNoBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoBar"/>
         <activity
             android:name=".ui.DecisionsActivity"
             android:label="@string/title_activity_decisions"
             android:parentActivityName=".ui.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ewa.indecisiverps.ui.MainActivity"/>
@@ -52,20 +57,22 @@
             android:name=".ui.SocialActivity"
             android:label="@string/title_activity_social"
             android:parentActivityName=".ui.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ewa.indecisiverps.ui.MainActivity"/>
         </activity>
-        <activity android:name=".ui.AddFriendActivity"
-                  android:screenOrientation="portrait">
+        <activity
+            android:name=".ui.AddFriendActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ewa.indecisiverps.ui.SocialActivity"/>
         </activity>
-        <activity android:name=".ui.AboutActivity"
-                  android:screenOrientation="portrait">
+        <activity
+            android:name=".ui.AboutActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ewa.indecisiverps.ui.MainActivity"/>
